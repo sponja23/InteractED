@@ -1,0 +1,12 @@
+:root {
+    --blue: #2196f3;
+}
+
+.input-field input:focus + label {
+    color: var(--blue) !important;
+}
+
+.input-field input:focus {
+    border-bottom: 1px solid var(--blue) !important;
+    box-shadow: 0 1px 0 0 var(--blue) !important
+}

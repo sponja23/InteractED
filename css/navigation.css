@@ -1,0 +1,76 @@
+:root {
+    --placeholder-color: #707070;
+}
+
+nav .logo {
+    display: inline-block;
+    position: absolute;
+    width: 15%;
+    text-align: center;
+    font-size: 2rem;
+    font-family: and_black;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    nav .logo {
+        width: 20%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    nav .logo {
+        margin-left: 5%;
+    }
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: var(--placeholder-color);
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: var(--placeholder-color);
+    opacity: 1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: var(--placeholder-color);
+    opacity: 1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--placeholder-color);
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: var(--placeholder-color);
+}
+
+#search {
+    color: black;
+}
+
+#search-form {
+    display: inline-block;
+    height: calc(100% - 20px);
+    width: 70%;
+    margin-left: 15%;
+    background-color: #f5f5f5;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    #search-form {
+        width: 60%;
+        margin-left: 20%;
+    }
+}
+
+#search-icon {
+    margin-top: -22px;
+    color: #717171;
+}
+
+#search-close-icon {
+    margin-top: -10px;
+}
+
+@media only screen and (max-width: 600px) {
+    #login {
+        margin-right: 0;
+    }
+}
