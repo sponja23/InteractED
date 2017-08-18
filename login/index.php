@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+    	<meta charset="utf-8">
+
     	<title></title>
 
     	<?php require "../include/head.html"; ?>
 
-        <link rel="stylesheet" type="text/css" href="../css/input.css">
+        <link rel="stylesheet" href="../css/input.css">
     </head>
     <body>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 810" preserveAspectRatio="xMinYMin slice" style="position: absolute; width: 100%; height: 100%;">

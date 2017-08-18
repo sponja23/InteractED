@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title></title>
+		<meta charset="utf-8">
+
+		<title>InteractED</title>
 
 		<?php require "include/head.html"; ?>
 
-		<link rel="stylesheet" type="text/css" href="css/navigation.css">
-		<link rel="stylesheet" type="text/css" href="css/input.css">
-		<link rel="stylesheet" type="text/css" href="css/font.css">
+		<link rel="stylesheet" href="css/navigation.css">
+		<link rel="stylesheet" href="css/input.css">
+		<link rel="stylesheet" href="css/font.css">
 	</head>
 	<body style="background-color: #fafafa;">
 		<!-- Navigation -->
