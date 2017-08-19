@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,7 +14,7 @@
     </head>
     <body style="background-color: #fafafa;">
         <!-- Navigation -->
-        <?php require "components/navigation.html"; ?>
+        <?php require "components/navigation.php"; ?>
 
         <div class="container">
             <h5>Recientes</h5>

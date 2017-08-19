@@ -1,5 +1,5 @@
 :root {
-    --placeholder-color: #707070;
+    --placeholder-color: #a0a0a0
 }
 
 nav .logo {
@@ -41,8 +41,15 @@ nav .logo {
     color: var(--placeholder-color);
 }
 
+#search:focus {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
 #search {
     color: black;
+    background-color: #e5e5e5;
+    border-radius: 4px;
 }
 
 #search-form {
@@ -50,7 +57,6 @@ nav .logo {
     height: calc(100% - 20px);
     width: 70%;
     margin-left: 15%;
-    background-color: #f5f5f5;
 }
 
 @media only screen and (min-width: 600px) and (max-width: 992px) {
@@ -62,7 +68,7 @@ nav .logo {
 
 #search-icon {
     margin-top: -22px;
-    color: #717171;
+    color: #8e8e8e;
 }
 
 #search-close-icon {

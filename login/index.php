@@ -27,14 +27,16 @@
                         <div class="card-content black-text">
                             <img style="width: 100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2000px-Google_2015_logo.svg.png">
                             <h1 style="font-size: 24px; font-weight: 400; line-height: 32px; margin: 0">Iniciar sesi&oacute;n</h1>
-                            <div class="input-field" style="margin-top: 10%; margin-bottom: 10%;">
-                                <input id="last_name" type="email" class="validate">
-                                <label for="last_name">Correo electr&oacute;nico</label>
+                            <div class="input-field" style="margin-top: 10%;">
+                                <input id="email" type="email" class="validate">
+                                <label for="email">Correo electr&oacute;nico</label>
                             </div>
-                            <a class="waves-effect btn-flat blue-text">Registrarse</a>
-                            <div style="display: inline; float: right;">
-                                <a class="waves-effect waves-light btn blue" style="">Siguiente</a>
+                            <div class="input-field" style="margin-bottom: 10%;">
+                                <input id="password" type="password">
+                                <label for="password">Contrase&ntilde;a</label>
                             </div>
+                            <a class="btn-flat blue-text waves-effect">Registrarse</a>
+                            <a id="next" class="btn blue waves-effect waves-light right">Siguiente</a>
                         </div>
                     </div>
                 </div>
@@ -42,5 +44,27 @@
         </div>
 
         <?php require "../include/scripts.html"; ?>
+
+        <script>
+            $( "#next" ).click(function() {
+                var Email = $( "#email" ).val();
+                var Password = $( "#password" ).val();
+
+                $.ajax({
+                    url: "login.php",
+                    type: "POST",
+                    data: { Email: Email, Password: Password } ,
+                    success: function (response) {
+                        if (response == '1')
+                            window.location.replace("../");
+                        else
+                            alert("Error");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
