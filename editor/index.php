@@ -5,7 +5,7 @@
 
 		<title>Test</title>
 
-		<?php require "include/head.html"; ?>
+		<?php require "../include/head.html"; ?>
 
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css">
 	    <link rel="stylesheet" href="page_editor.css">
@@ -49,7 +49,7 @@
 
         </div>
 
-        <?php require "include/scripts.html"; ?>
+        <?php require "../include/scripts.html"; ?>
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="page_editor.js"></script>

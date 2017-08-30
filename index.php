@@ -11,6 +11,13 @@
         <link rel="stylesheet" href="css/navigation.css">
         <link rel="stylesheet" href="css/input.css">
         <link rel="stylesheet" href="css/font.css">
+
+        <style>
+            .item:hover {
+                cursor: pointer;
+                cursor: hand;
+            }
+        </style>
     </head>
     <body style="background-color: #fafafa;">
         <!-- Navigation -->
@@ -20,7 +27,7 @@
             <h5>Recientes</h5>
             <div class="row">
                 <div class="col s12 m3">
-                    <div class="card">
+                    <div class="card hoverable item" id="1">
                         <div class="card-image">
                             <img src="https://i.ytimg.com/vi/2OgLKz9yQ0Q/hqdefault.jpg?custom=true&w=246&h=138&stc=true&jpg444=true&jpgq=90&sp=68&sigh=IE1JFDEOZl_4r872Wlo5ydYUKjc">
                         </div>
@@ -31,7 +38,7 @@
                     </div>
                 </div>
                 <div class="col s12 m3">
-                    <div class="card">
+                    <div class="card hoverable item" id="1">
                         <div class="card-image">
                             <img src="https://i.ytimg.com/vi/2OgLKz9yQ0Q/hqdefault.jpg?custom=true&w=246&h=138&stc=true&jpg444=true&jpgq=90&sp=68&sigh=IE1JFDEOZl_4r872Wlo5ydYUKjc">
                         </div>
@@ -42,7 +49,7 @@
                     </div>
                 </div>
                 <div class="col s12 m3">
-                    <div class="card">
+                    <div class="card hoverable item" id="1">
                         <div class="card-image">
                             <img src="https://i.ytimg.com/vi/2OgLKz9yQ0Q/hqdefault.jpg?custom=true&w=246&h=138&stc=true&jpg444=true&jpgq=90&sp=68&sigh=IE1JFDEOZl_4r872Wlo5ydYUKjc">
                         </div>
@@ -53,7 +60,7 @@
                     </div>
                 </div>
                 <div class="col s12 m3">
-                    <div class="card">
+                    <div class="card hoverable item" id="1">
                         <div class="card-image">
                             <img src="https://i.ytimg.com/vi/2OgLKz9yQ0Q/hqdefault.jpg?custom=true&w=246&h=138&stc=true&jpg444=true&jpgq=90&sp=68&sigh=IE1JFDEOZl_4r872Wlo5ydYUKjc">
                         </div>
@@ -68,7 +75,7 @@
             <h5>Recomendados</h5>
             <div class="row">
                 <div class="col s12 m3">
-                    <div class="card">
+                    <div class="card hoverable item" id="1">
                         <div class="card-image">
                             <img src="https://i.ytimg.com/vi/2OgLKz9yQ0Q/hqdefault.jpg?custom=true&w=246&h=138&stc=true&jpg444=true&jpgq=90&sp=68&sigh=IE1JFDEOZl_4r872Wlo5ydYUKjc">
                         </div>
@@ -79,7 +86,7 @@
                     </div>
                 </div>
                 <div class="col s12 m3">
-                    <div class="card">
+                    <div class="card hoverable item" id="1">
                         <div class="card-image">
                             <img src="https://i.ytimg.com/vi/2OgLKz9yQ0Q/hqdefault.jpg?custom=true&w=246&h=138&stc=true&jpg444=true&jpgq=90&sp=68&sigh=IE1JFDEOZl_4r872Wlo5ydYUKjc">
                         </div>
@@ -90,7 +97,7 @@
                     </div>
                 </div>
                 <div class="col s12 m3">
-                    <div class="card">
+                    <div class="card hoverable item" id="1">
                         <div class="card-image">
                             <img src="https://i.ytimg.com/vi/2OgLKz9yQ0Q/hqdefault.jpg?custom=true&w=246&h=138&stc=true&jpg444=true&jpgq=90&sp=68&sigh=IE1JFDEOZl_4r872Wlo5ydYUKjc">
                         </div>
@@ -101,7 +108,7 @@
                     </div>
                 </div>
                 <div class="col s12 m3">
-                    <div class="card">
+                    <div class="card hoverable item" id="1">
                         <div class="card-image">
                             <img src="https://i.ytimg.com/vi/2OgLKz9yQ0Q/hqdefault.jpg?custom=true&w=246&h=138&stc=true&jpg444=true&jpgq=90&sp=68&sigh=IE1JFDEOZl_4r872Wlo5ydYUKjc">
                         </div>
@@ -115,5 +122,11 @@
         </div>
 
         <?php require "include/scripts.html"; ?>
+
+        <script>
+            $( ".item" ).click(function() {
+                window.location.href = "posts/" + $(this).attr("id");
+            });
+        </script>
     </body>
 </html>
