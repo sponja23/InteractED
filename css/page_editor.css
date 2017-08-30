@@ -1,0 +1,30 @@
+#image_create_dialog > .preview {
+	width: 50%;
+	float: left;
+	display: inline-block;
+	padding: 70px;
+}
+
+.button-collapse {
+	position: fixed;
+}
+
+#image_create_dialog .image {
+	margin: auto;
+	display: block;
+}
+
+#image_create_dialog > .parameters {
+	width: 50%;
+	float: left;
+	display: inline-block;
+}
+
+.input {
+	width: 70%;
+	vertical-align: right;
+}
+
+.param-title {
+	text-align: left;
+}
