@@ -11,7 +11,14 @@
 	    <link rel="stylesheet" href="page_editor.css">
 	</head>
 	<body>
-        <a href="#" data-activates="slide-out" class="button-collapse" style="float: left;"><i class="material-icons">menu</i></a>
+        <nav>
+            <div class="nav-wrapper white">
+                <ul id="nav-mobile" class="left">
+                    <li><a href="#" data-activates="slide-out" id="sideNav-button" style="float: left;"><i class="material-icons blue-text">menu</i></a></li>
+                </ul>
+                <a href="../" class="logo blue-text">InteractED</a>
+            </div>
+        </nav>
 
         <ul id="slide-out" class="side-nav">
             <li><div class="flow-text" style="text-align: center; padding: 5px 0">Edit Page</div></li>

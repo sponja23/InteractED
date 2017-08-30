@@ -40,9 +40,7 @@ var nextID = 0;
 var currentlyEditing = $("body");
 
 $(document).ready(function() {
-    $(".button-collapse").sideNav({
-        draggable: true
-    });
+    $("#sideNav-button").sideNav();
     $(".collapsible").collapsible();
     initDialogs();
 });

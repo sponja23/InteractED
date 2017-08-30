@@ -1,3 +1,9 @@
+.logo {
+    font-size: 2rem;
+    font-family: and_black;
+    padding-left: 10px;
+}
+
 #image_create_dialog > .preview {
     width: 50%;
     float: left;
