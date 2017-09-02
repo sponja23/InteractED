@@ -1,39 +1,7 @@
-// TODO: fix draggable
-
 var elementTypes = {};
 elementTypes["image"] = {
     name: "image",
-    tag: "<img>",
-    createDialogID: "#image_create_dialog",
-    createDialogOptions: {
-        autoOpen: false,
-        resizable: false,
-        modal: true,
-        title: "Crear Imagen",
-        height: 500,
-        width: 720,
-        buttons: {
-            "Crear": function() {
-                createElement("image");
-                $(this).dialog("close");
-            }
-        }
-    },
-    editDialogID: "#image_edit_dialog",
-    editDialogOptions: {
-        autoOpen: false,
-        resizable: false,
-        modal: true,
-        title: "Editar Imagen",
-        height: 500,
-        width: 700,
-        buttons: {
-            "Listo": function() {
-                saveElement("image");
-                $(this).dialog("close");
-            }
-        }
-    }
+    tag: "<img>"
 }
 
 var nextID = 0;
@@ -48,15 +16,38 @@ $(document).ready(function() {
 function initDialogs() {
     for(var type in elementTypes) {
         if(elementTypes.hasOwnProperty(type)) {
-            $(elementTypes[type].createDialogID).dialog(elementTypes[type].createDialogOptions);
-            $(elementTypes[type].editDialogID).dialog(elementTypes[type].editDialogOptions);
+            $("#" + elementTypes[type].name + "-create-dialog").modal({
+                dismissible: true
+            });
+            $("#" + elementTypes[type].name + "-edit-dialog").modal({
+                dismissible: true
+            });
+            $("#" + elementTypes[type].name + "-create-button").click(function(){
+                createElement(elementTypes[type].name);
+            });
+            $("#" + elementTypes[type].name + "-edit-button").click(function(){
+                saveEdit();
+            });
+            $("." + elementTypes[type].name + "-create-cancel").click(function(){
+                emptyParameters("#" + elementTypes[type].name + "-create-dialog");
+            });
+            $("." + elementTypes[type].name + "-edit-cancel").click(function(){
+                emptyParameters("#" + elementTypes[type].name + "-edit-dialog");
+            });
+
         }
     }
 }
 
+function emptyParameters(id) {
+    $(id + " .parameters .input").each(function(){
+        $(this).val('').blur();
+    });
+}
+
 function openCreateDialog(type) {
-    $(elementTypes[type].createDialogID).dialog("open");
-    $(".button-collapse").sideNav("hide");
+    $("#" + elementTypes[type].name + "-create-dialog").modal("open");
+    $(".sideNav-button").sideNav("hide");
 }
 
 function createWrapper($inner) {
@@ -79,7 +70,7 @@ function createWrapper($inner) {
 
 function createElement(type) {
     var attributes = {};
-    $(elementTypes[type].createDialogID + " > .parameters .input").each(function(){
+    $("#" + elementTypes[type].name + "-create-dialog .parameters .input").each(function(){
         attributes[$(this).data("content")] = $(this).val();
     });
     attributes["data-type"] = elementTypes[type].name;
@@ -88,14 +79,16 @@ function createElement(type) {
     for(var attribute in attributes) {
         console.log(attribute + ": " + attributes[attribute])
     }
-    console.log($element.attr("width"));
+    emptyParameters("#" + elementTypes[type].name + "-create-dialog");
     createWrapper($element);
 }
+
+
 
 function openEditDialog($object) {
     currentlyEditing = $object;
     var type = $object.data("type");
-    $(elementTypes[type].editDialogID).dialog("open");
+    $("#" + elementTypes[type].name + "-edit-dialog").modal("open");
 }
 
 function saveEdit() {
