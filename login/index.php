@@ -30,11 +30,11 @@
                             <h1 style="font-size: 24px; font-weight: 400; line-height: 32px; margin: 0">Iniciar sesi&oacute;n</h1>
                             <div class="input-field" style="margin-top: 10%;">
                                 <input id="user" type="text">
-                                <label for="user">Usuario o correo electr&oacute;nico</label>
+                                <label for="user" data-error="Debe ingresar un usuario o correo electr&oacute;nico">Usuario o correo electr&oacute;nico</label>
                             </div>
                             <div class="input-field" style="margin-bottom: 10%;">
                                 <input id="password" type="password">
-                                <label for="password">Contrase&ntilde;a</label>
+                                <label for="password" data-error="Debe ingresar una contrase&ntilde;a">Contrase&ntilde;a</label>
                             </div>
                             <a class="btn-flat blue-text waves-effect">Registrarse</a>
                             <a id="next" class="btn blue waves-effect waves-light right">Siguiente</a>
@@ -51,20 +51,30 @@
                 var User = $( "#user" ).val();
                 var Password = $( "#password" ).val();
 
-                $.ajax({
-                    url: "login.php",
-                    type: "POST",
-                    data: { User: User, Password: Password } ,
-                    success: function (response) {
-                        if (response == '1')
-                            window.location.replace("../");
-                        else
-                            alert("Error");
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
-                    }
-                });
+                if (User == "")
+                    $( "#user" ).addClass("validate invalid").focus();
+                else if (Password == "")
+                    $( "#password" ).addClass("validate invalid").focus();
+                else
+                    $.ajax({
+                        url: "login.php",
+                        type: "POST",
+                        data: { User: User, Password: Password } ,
+                        success: function (response) {
+                            if (response == '1')
+                                window.history.back();
+                            else
+                                alert("Error");
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+            });
+
+            $( "#user, #password" ).on('input', function() {
+                if ($(this).val() != "")
+                    $(this).removeClass("validate valid invalid");
             });
         </script>
     </body>
