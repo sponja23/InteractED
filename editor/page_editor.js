@@ -41,40 +41,28 @@ function initDialogs() {
     }
 }
 
+$("#image_create_preview").on("load", function() {
+    $("#image-" + modalType + "-width").focus().val($preview.width()).blur();
+    $("#image-" + modalType + "-height").focus().val($preview.height()).blur();
+})
+
 function updatePreview(modalType) {
     var $url = $("#image-" + modalType + "-url");
-    if($url.val().match(/\.(jpeg|jpg|gif|png)$/) != null) {
+    var $preview = $("#image-" + modalType + "-preview");
+    if($url.val() == "") {
+        $url.removeClass("invalid").removeClass("valid");
+        $preview.attr("src", "no_image_selected.gif");
+    }
+    else if($url.val().match(/\.(jpeg|jpg|gif|png)$/) != null) {
         console.log("A");
         $url.removeClass("invalid").addClass("valid");
-        var $preview = $("#image-" + modalType + "-preview");
         $preview.attr("src", $url.val());
-        $("#image-" + modalType + "-width").val($preview.attr("width").slice(0,$preview.attr("width").length()));
-        $("#image-" + modalType + "-height").val($preview.attr("height").slice(0,$preview.attr("height").length()));
-
     }
     else {
         console.log("AA");
         $url.removeClass("valid").addClass("invalid");
+        $preview.attr("src", "no_image_selected.gif");
     }
-    /*
-    console.log("A");
-    $("<img />", {
-        src: $url.val(),
-        load: function() {
-            console.log("A");
-            $url.removeClass("invalid");
-            $url.addClass("valid");
-            var $preview = $("#image-" + modalType + "-preview"); 
-            $preview.attr("src", $url.val());
-            $("#image-" + modalType + "-width").val($preview.attr("width"));
-            $("#image-" + modalType + "-height").val($preview.attr("height"));
-        },
-        error: function() {
-            $url.removeClass("valid");
-            $url.addClass("invalid");
-        }
-    });
-    */
 }
 
 function emptyParameters(id) {

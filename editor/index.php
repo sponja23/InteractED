@@ -48,7 +48,7 @@
                 </div>
                 <div class="row valign-wrapper center-align">
                     <div class="col s6 preview">
-                        <img id="image-create-preview" src="http://www.allensguide.com/img/no_image_selected.gif" width="200px" height="200px"/>
+                        <img id="image-create-preview" src="no_image_selected.gif"/>
                     </div>
                     <div class="col s6 parameters">
                         <div class="input-field">
