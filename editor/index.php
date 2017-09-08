@@ -55,12 +55,10 @@
                             <input id="image-create-url" type="url" data-content="src" class="input validate">
                             <label for="image-create-url">Source</label>
                         </div>
-                        <br>
                         <div class="input-field">
                             <input id="image-create-width" type="number" data-content="width" class="input validate">
                             <label for="image-create-width">Width</label>
                         </div>
-                        <br>
                         <div class="input-field">
                             <input id="image-create-height" type="number" data-content="height" class="input validate">
                             <label for="image-create-height">Height</label>
