@@ -21,7 +21,8 @@ function initDialogs() {
                 endingTop: '50%'
             });
             $("#" + elementTypes[type].name + "-edit-dialog").modal({
-                dismissible: true
+                dismissible: true,
+                endingTop: '50%'
             });
             $("#" + elementTypes[type].name + "-create-button").click(function(){
                 createElement(elementTypes[type].name);
@@ -38,6 +39,42 @@ function initDialogs() {
 
         }
     }
+}
+
+function updatePreview(modalType) {
+    var $url = $("#image-" + modalType + "-url");
+    if($url.val().match(/\.(jpeg|jpg|gif|png)$/) != null) {
+        console.log("A");
+        $url.removeClass("invalid").addClass("valid");
+        var $preview = $("#image-" + modalType + "-preview");
+        $preview.attr("src", $url.val());
+        $("#image-" + modalType + "-width").val($preview.attr("width").slice(0,$preview.attr("width").length()));
+        $("#image-" + modalType + "-height").val($preview.attr("height").slice(0,$preview.attr("height").length()));
+
+    }
+    else {
+        console.log("AA");
+        $url.removeClass("valid").addClass("invalid");
+    }
+    /*
+    console.log("A");
+    $("<img />", {
+        src: $url.val(),
+        load: function() {
+            console.log("A");
+            $url.removeClass("invalid");
+            $url.addClass("valid");
+            var $preview = $("#image-" + modalType + "-preview"); 
+            $preview.attr("src", $url.val());
+            $("#image-" + modalType + "-width").val($preview.attr("width"));
+            $("#image-" + modalType + "-height").val($preview.attr("height"));
+        },
+        error: function() {
+            $url.removeClass("valid");
+            $url.addClass("invalid");
+        }
+    });
+    */
 }
 
 function emptyParameters(id) {
@@ -94,9 +131,4 @@ function openEditDialog($object) {
 
 function saveEdit() {
 
-}
-
-function showDropdown(eventArgs, $father) {
-    var start_x = e.pageX;
-    var start_y = e.pageY;
 }
