@@ -7,7 +7,6 @@
 
         <?php require "../include/head.html"; ?>
 
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css">
         <link rel="stylesheet" href="../css/input.css">
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="page_editor.css">
@@ -42,10 +41,10 @@
         </ul>
 
         <div id="dialogs">
-            <div id="image-create-dialog" class="modal">
+            <div id="image-create-dialog" class="modal valign-modal">
                 <div class="modal-content">
                 <div class="row">
-                    <h2>Crear Imagen</h2>
+                    <h4>Crear Imagen</h4>
                 </div>
                 <div class="row valign-wrapper center-align">
                     <div class="col s6 preview">
@@ -53,17 +52,17 @@
                     </div>
                     <div class="col s6 parameters">
                         <div class="input-field">
-                            <input id="image-create-url" type="text" data-content="src" class="input">
+                            <input id="image-create-url" type="url" data-content="src" class="input validate">
                             <label for="image-create-url">Source</label>
                         </div>
                         <br>
                         <div class="input-field">
-                            <input id="image-create-width" type="text" data-content="width" class="input">
+                            <input id="image-create-width" type="number" data-content="width" class="input validate">
                             <label for="image-create-width">Width</label>
                         </div>
                         <br>
                         <div class="input-field">
-                            <input id="image-create-height" type="text" data-content="height" class="input">
+                            <input id="image-create-height" type="number" data-content="height" class="input validate">
                             <label for="image-create-height">Height</label>
                         </div>
                     </div>

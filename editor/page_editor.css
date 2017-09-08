@@ -3,3 +3,7 @@
     font-family: and_black;
     padding-left: 10px;
 }
+
+.valign-modal {
+    transform: translateY(-50%) !important;
+}

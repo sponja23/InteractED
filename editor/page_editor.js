@@ -17,7 +17,8 @@ function initDialogs() {
     for(var type in elementTypes) {
         if(elementTypes.hasOwnProperty(type)) {
             $("#" + elementTypes[type].name + "-create-dialog").modal({
-                dismissible: true
+                dismissible: true,
+                endingTop: '50%'
             });
             $("#" + elementTypes[type].name + "-edit-dialog").modal({
                 dismissible: true
