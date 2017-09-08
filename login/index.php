@@ -8,6 +8,7 @@
         <?php require "../include/head.html"; ?>
 
         <link rel="stylesheet" href="../css/input.css">
+        <link rel="stylesheet" href="../css/font.css">
     </head>
     <body>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 810" preserveAspectRatio="xMinYMin slice" style="position: absolute; width: 100%; height: 100%;">
@@ -25,11 +26,11 @@
                 <div class="col s12 m6 offset-m3">
                     <div class="card">
                         <div class="card-content black-text">
-                            <img style="width: 100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2000px-Google_2015_logo.svg.png">
+                            <span style="font-size: 1.5rem; font-family: and_black;" class="blue-text">InteractED</span>
                             <h1 style="font-size: 24px; font-weight: 400; line-height: 32px; margin: 0">Iniciar sesi&oacute;n</h1>
                             <div class="input-field" style="margin-top: 10%;">
-                                <input id="email" type="email" class="validate">
-                                <label for="email">Correo electr&oacute;nico</label>
+                                <input id="user" type="text">
+                                <label for="user">Usuario o correo electr&oacute;nico</label>
                             </div>
                             <div class="input-field" style="margin-bottom: 10%;">
                                 <input id="password" type="password">
@@ -47,13 +48,13 @@
 
         <script>
             $( "#next" ).click(function() {
-                var Email = $( "#email" ).val();
+                var User = $( "#user" ).val();
                 var Password = $( "#password" ).val();
 
                 $.ajax({
                     url: "login.php",
                     type: "POST",
-                    data: { Email: Email, Password: Password } ,
+                    data: { User: User, Password: Password } ,
                     success: function (response) {
                         if (response == '1')
                             window.location.replace("../");
