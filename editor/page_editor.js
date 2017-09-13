@@ -1,7 +1,18 @@
 var elementTypes = {};
 elementTypes["image"] = {
     name: "image",
-    tag: "<img>"
+    tag: "<img>",
+    attributes: ["src", "width", "height"],
+    createDialogReady: function() {
+        emptyParameters("#" + elementTypes["image"].name + "-create-dialog");
+        invalidateImage();
+    },
+    createFunction: function() {
+        createImage();
+    },
+    editDialogReady: function() {
+
+    }
 }
 
 var nextID = 0;
@@ -18,55 +29,102 @@ function initDialogs() {
         if(elementTypes.hasOwnProperty(type)) {
             $("#" + elementTypes[type].name + "-create-dialog").modal({
                 dismissible: true,
-                endingTop: '50%'
+                endingTop: '50%',
+                ready: function() {
+                    elementType[type].createDialogReady();
+                }
             });
             $("#" + elementTypes[type].name + "-edit-dialog").modal({
                 dismissible: true,
-                endingTop: '50%'
+                endingTop: '50%',
+                ready: function() {
+                    elementTypes[type].editDialogReady();
+                }
             });
             $("#" + elementTypes[type].name + "-create-button").click(function(){
-                createElement(elementTypes[type].name);
+                elementTypes[type].createFunction();
             });
             $("#" + elementTypes[type].name + "-edit-button").click(function(){
                 saveEdit();
             });
-            $("." + elementTypes[type].name + "-create-cancel").click(function(){
-                emptyParameters("#" + elementTypes[type].name + "-create-dialog");
-            });
-            $("." + elementTypes[type].name + "-edit-cancel").click(function(){
-                emptyParameters("#" + elementTypes[type].name + "-edit-dialog");
-            });
-
         }
     }
+    
 }
 
-$("#image_create_preview").on("load", function() {
-    $("#image-" + modalType + "-width").focus().val($preview.width()).blur();
-    $("#image-" + modalType + "-height").focus().val($preview.height()).blur();
-})
+// function updatePreview(modalType) {
+//     var $url = $("#image-" + modalType + "-url");
+//     var $preview = $("#image-" + modalType + "-preview > img");
+//     if($url.val().match(/\.(jpeg|jpg|gif|png|bmp|tiff)$/) != null) {
+//         $preview.removeClass("adjust-width adjust-height");
+//         $url.removeClass("invalid").addClass("valid");
+//         $preview.attr("src", $url.val());
+
+//         var tmpImg = new Image();
+//         tmpImg.src = $url.val();
+
+//         $(tmpImg).one('load',function(){
+//             $("#image-" + modalType + "-dialog .width").html(tmpImg.width + "px");
+//             $("#image-" + modalType + "-dialog .height").html(tmpImg.height + "px");
+
+//             if(tmpImg.width > tmpImg.height)
+//                 $preview.addClass("adjust-width");
+//             else
+//                 $preview.addClass("adjust-height");
+//         });
+//     }
+//     else {
+//         if($url.val() == "")
+//             $url.removeClass("invalid").removeClass("valid");
+//         else
+//             $url.removeClass("valid").addClass("invalid");
+
+//         $preview.attr("src", "no_image_selected.gif");
+//     }
+// }
 
 function updatePreview(modalType) {
-    var $url = $("#image-" + modalType + "-url");
-    var $preview = $("#image-" + modalType + "-preview");
-    if($url.val() == "") {
+    var $url = $("#image-" + modalType + "-src");
+    var $preview = $("#image-" + modalType + "-preview > img");
+
+    var tmpImg = new Image();
+    tmpImg.src = $url.val();
+
+    $(tmpImg).one('load', function() {
+        if (tmpImg.width == 0 || tmpImg.height == 0)
+            invalidateImage(modalType);
+        else {
+            $url.removeClass("invalid").addClass("valid");
+            $preview.attr("src", $url.val());
+
+            $("#image-create-width").html(tmpImg.width);
+            $("#image-create-height").html(tmpImg.height);
+
+            if(tmpImg.width > tmpImg.height)
+                $preview.addClass("adjust-width").removeClass("adjust-height");
+            else
+                $preview.addClass("adjust-height").removeClass("adjust-width");
+        }
+    });
+
+    $(tmpImg).one("error", function() {
+        invalidateImage(modalType);
+    });
+}
+
+function invalidateImage(modalType) {
+    $url = $("#image-" + modalType + "-src");
+
+    if($url.val() == "")
         $url.removeClass("invalid").removeClass("valid");
-        $preview.attr("src", "no_image_selected.gif");
-    }
-    else if($url.val().match(/\.(jpeg|jpg|gif|png)$/) != null) {
-        console.log("A");
-        $url.removeClass("invalid").addClass("valid");
-        $preview.attr("src", $url.val());
-    }
-    else {
-        console.log("AA");
+    else
         $url.removeClass("valid").addClass("invalid");
-        $preview.attr("src", "no_image_selected.gif");
-    }
+
+    $("#image-" + modalType + "-preview > img").attr("src", "no_image_selected.gif");
 }
 
 function emptyParameters(id) {
-    $(id + " .parameters .input").each(function(){
+    $(id + " .input").each(function(){
         $(this).val('').blur();
     });
 }
@@ -94,17 +152,29 @@ function createWrapper($inner) {
     $newElement.appendTo($("#content"));
 }
 
+function createImage() {
+    var attributes = {
+        "src": $("#" + elementTypes["image"].name + "-create-src").val(),
+        "width": $("#" + elementTypes["image"].name + "-create-width").html(),
+        "height": $("#" + elementTypes["image"].name + "-create-height").html(),
+        "data-type": elementTypes["image"].name
+    };
+
+    var $element = $(elementTypes["image"].tag).attr(attributes);
+    emptyParameters("#" + elementTypes["image"].name + "-create-dialog");
+    createWrapper($element);
+}
+
 function createElement(type) {
     var attributes = {};
-    $("#" + elementTypes[type].name + "-create-dialog .parameters .input").each(function(){
+    $("#" + elementTypes[type].name + "-create-dialog .input").each(function(){
         attributes[$(this).data("content")] = $(this).val();
     });
     attributes["data-type"] = elementTypes[type].name;
     var $element = $(elementTypes[type].tag).attr(attributes);
     console.log("Created image: ");
-    for(var attribute in attributes) {
+    for(var attribute in attributes)
         console.log(attribute + ": " + attributes[attribute])
-    }
     emptyParameters("#" + elementTypes[type].name + "-create-dialog");
     createWrapper($element);
 }

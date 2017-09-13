@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
 
-        <title>Test</title>
+        <title>Edit page</title>
 
         <?php require "../include/head.html"; ?>
 
@@ -42,13 +42,35 @@
 
         <div id="dialogs">
             <div id="image-create-dialog" class="modal valign-modal">
-                <div class="modal-content">
-                <div class="row">
+                <div class="modal-content row">
                     <h4>Crear Imagen</h4>
+                    <div class="valign-wrapper">
+                        <div id="image-create-preview" class="valign-wrapper">
+                            <img src="no_image_selected.gif" />
+                        </div>
+                        <p><strong>Width:</strong><br><span id="image-create-width">200</span>px<br><br><strong>Height:</strong><br><span id="image-create-height">200</span>px</p>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="image-create-src" type="url" data-content="src" onchange="updatePreview('create')" class="input">
+                        <label for="image-create-url">Source</label>
+                    </div>
                 </div>
-                <div class="row valign-wrapper center-align">
-                    <div class="col s6 preview">
-                        <img id="image-create-preview" src="no_image_selected.gif"/>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" class="image-create-cancel">Cancelar</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-button">Crear</a>
+                </div>
+            </div>
+        </div>
+
+
+
+            <!--
+
+                <div class="center-align">
+                    <div class="preview">
+                        <div id="image-create-preview" class="valign-wrapper">
+                            <img src="no_image_selected.gif" />
+                        </div>
                     </div>
                     <div class="col s6 parameters">
                         <div class="input-field">
@@ -71,6 +93,7 @@
                 </div>
             </div>
         </div>
+        -->
 
         <div id="content">
 

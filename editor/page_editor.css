@@ -7,3 +7,20 @@
 .valign-modal {
     transform: translateY(-50%) !important;
 }
+
+#image-create-preview {
+    width: 300px !important;
+    height: 300px !important;
+}
+
+#image-create-preview > img {
+    margin: auto;
+}
+
+.adjust-width {
+    max-width: 100%;
+}
+
+.adjust-height {
+    max-height: 100%;
+}
