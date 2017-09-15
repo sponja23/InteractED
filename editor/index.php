@@ -13,9 +13,9 @@
     </head>
     <body>
         <nav>
-            <div class="nav-wrapper white">
+            <div id="side-nav" class="nav-wrapper white">
                 <ul id="nav-mobile" class="left">
-                    <li><a href="#" data-activates="slide-out" id="sideNav-button" style="float: left;"><i class="material-icons blue-text">menu</i></a></li>
+                    <li><a href="#" data-activates="slide-out" id="side-nav-button" style="float: left;"><i class="material-icons blue-text">menu</i></a></li>
                 </ul>
                 <a href="../" class="logo blue-text">InteractED</a>
             </div>
@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <div id="content" onclick="unselectElement()">
+        <div id="content" onclick="if(!dragging) unselectElement();">
 
         </div>
 

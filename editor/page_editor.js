@@ -18,13 +18,21 @@ elementTypes["image"] = {
 }
 
 var nextID = 0;
-var selectedElement = $("#content");
-var dragging = false;
+var $selectedElement = $("#content");
+var dragging = false, clicking_object = false;
 
 $(document).ready(function() {
-    $("#sideNav-button").sideNav();
+    $("#content").css({
+        "height" : ($(window).height() - $("#side-nav").height()) + "px",
+        "width" : "100%"
+    });
+    $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
     initDialogs();
+});
+
+$(window).on("resize", function() {
+    $("#content").css("height", ($(window).height() - $("#side-nav").height()) + "px");
 });
 
 function initDialogs() {
@@ -113,9 +121,6 @@ function openCreateDialog(type) {
 
 function createWrapper($inner) {
     var $newElement = $("<div></div>").html($inner);
-    $newElement.click(function(e) {
-        showDropdown(e, this);
-    });
     $newElement.draggable({
         snap: true,
         scroll: false,
@@ -127,13 +132,15 @@ function createWrapper($inner) {
         "float": "left"
     })
     $newElement.on({
-        "mousedown" : function() {
+        "mousedown" : function(e) {
             if(!dragging) {
-                selectElement($(this));
+                console.log($(e.target));
+                selectElement($(e.target));
                 dragging = true;
+                e.stopPropagation();
             }
         },
-        "mouseup" : function() {
+        "mouseup" : function(e) {
             dragging = false;
         }
     });
@@ -168,13 +175,32 @@ function createElement(type) {
 
 function selectElement($element) {
     unselectElement();
-    selectedElement = $element;
-    $element.css("border", "20px solid blue");
+    console.log("selecting element");
+    if($selectedElement.attr("id") != $element.attr("id")) {
+        $selectedElement = $element;
+        $selectedElement.addClass("selected");
+        /*
+        $selectedElement.css({
+            "width" : ($selectedElement.width() + 10) + "px",
+            "height" : ($selectedElement.height() + 10) + "px",
+            "border" : "5px solid blue"
+        });
+        */
+    }
 }
 
 function unselectElement() {
-    $selectedElement.css("border", "none");
-    selectedElement = $("#content");
+    console.log("unselecting");
+    if($selectedElement != $("#content"))
+        $selectedElement.removeClass("selected");
+        /*
+        $selectedElement.css({
+            "width" : ($selectedElement.width() - 10) + "px",
+            "height" : ($selectedElement.height() - 10) + "px",
+            "border" : "none"
+        });
+        */
+    $selectedElement = $("#content");
 }
 
 function editButtonClick() {
