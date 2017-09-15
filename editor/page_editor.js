@@ -132,9 +132,12 @@ function createWrapper($inner) {
         "float": "left"
     })
     $newElement.on({
+        "click" : function(e) {
+            selectElement($(e.target));
+            e.stopPropagation();
+        },
         "mousedown" : function(e) {
             if(!dragging) {
-                console.log($(e.target));
                 selectElement($(e.target));
                 dragging = true;
                 e.stopPropagation();
