@@ -23,24 +23,38 @@
 
         <ul id="slide-out" class="side-nav">
             <li><div class="flow-text" style="text-align: center; padding: 5px 0">Edit Page</div></li>
+            <li><a id="edit-page" class="waves-effect waves-light" onclick="openEditPageDialog()">Propiedades de la página</a></li>
             <li class="no-padding">
                 <ul class="collapsible collapsible-accordion">
                     <li>
                         <a class="collapsible-header">Crear...<i class="material-icons">arrow_drop_down</i></a>
                         <div class="collapsible-body">
                             <ul>
-                                <li><a id="#create-text" class="waves-effect waves-light" onclick="openCreateDialog('text')">Crear Texto</a></li>
-                                <li><a id="#create-image" class="waves-effect waves-light" onclick="openCreateDialog('image')">Crear Imagen</a></li>
-                                <li><a id="#create-video" class="waves-effect waves-light" onclick="openCreateDialog('video')">Crear Video</a></li>
-                                <li><a id="#create-custom" class="waves-effect waves-light" onclick="openCreateDialog('custom')">Crear Custom</a></li>
+                                <li><a id="create-text" class="waves-effect waves-light" onclick="openCreateDialog('text')">Crear Texto</a></li>
+                                <li><a id="create-image" class="waves-effect waves-light" onclick="openCreateDialog('image')">Crear Imagen</a></li>
+                                <li><a id="create-video" class="waves-effect waves-light" onclick="openCreateDialog('video')">Crear Video</a></li>
+                                <li><a id="create-custom" class="waves-effect waves-light" onclick="openCreateDialog('custom')">Crear Custom</a></li>
                             </ul>
                         </div>
                     </li>
                 </ul>
             </li>
         </ul>
-
+        
+        <!--
+        <div class="fixed-action-btn" onclick="editButtonClick()">
+            <a href="#" class="btn-floating btn-large blue">
+                <i class="large material-icons">mode_edit</i>
+            </a>
+        </div>
+        -->
+        
         <div id="dialogs">
+            <div id="edit-page-dialog" class="modal valign-modal">
+                <div class="modal-content row">
+                    <h4>Editar propiedades de página</h4>
+                </div>
+            </div>
             <div id="image-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
                     <h4>Crear Imagen</h4>
@@ -48,10 +62,10 @@
                         <div id="image-create-preview" class="valign-wrapper">
                             <img src="no_image_selected.gif" />
                         </div>
-                        <p><strong>Width:</strong><br><span id="image-create-width">200</span>px<br><br><strong>Height:</strong><br><span id="image-create-height">200</span>px</p>
+                        <p id="image-create-lengths"><strong>Width:</strong><br><span id="image-create-width" class="input" data-parameter="width">200</span>px<br><br><strong>Height:</strong><br><span id="image-create-height" class="input" data-parameter="height">200</span>px</p>
                     </div>
                     <div class="input-field col s12">
-                        <input id="image-create-src" type="url" data-content="src" onchange="updatePreview('create')" class="input">
+                        <input id="image-create-src" type="url" data-content="src" onchange="updatePreview('create')" class="input" data-parameter="src">
                         <label for="image-create-url">Source</label>
                     </div>
                 </div>
@@ -62,40 +76,7 @@
             </div>
         </div>
 
-
-
-            <!--
-
-                <div class="center-align">
-                    <div class="preview">
-                        <div id="image-create-preview" class="valign-wrapper">
-                            <img src="no_image_selected.gif" />
-                        </div>
-                    </div>
-                    <div class="col s6 parameters">
-                        <div class="input-field">
-                            <input id="image-create-url" type="url" data-content="src" onchange="updatePreview('create')" class="input">
-                            <label for="image-create-url">Source</label>
-                        </div>
-                        <div class="input-field">
-                            <input id="image-create-width" type="number" data-content="width" class="input validate">
-                            <label for="image-create-width">Width</label>
-                        </div>
-                        <div class="input-field">
-                            <input id="image-create-height" type="number" data-content="height" class="input validate">
-                            <label for="image-create-height">Height</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" class="image-create-cancel">Cancelar</a>
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-button">Crear</a>
-                </div>
-            </div>
-        </div>
-        -->
-
-        <div id="content">
+        <div id="content" onclick="unselectElement()">
 
         </div>
 

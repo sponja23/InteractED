@@ -17,6 +17,10 @@
     margin: auto;
 }
 
+#image-create-lengths {
+	margin-left: 20px;
+}
+
 .adjust-width {
     max-width: 100%;
 }
