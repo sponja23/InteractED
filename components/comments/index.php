@@ -1,8 +1,8 @@
 <div id="top-divider" class="divider hide"></div>
     <div id="comments"></div>
-<div id="bottom-divider" class="divider"></div>
+<div id="bottom-divider" class="divider hide"></div>
 
-<div id="comment-box" class="row">
+<div id="comment-box" class="row hide">
     <div class="input-field col s12">
         <div class="comment-wrapper">
             <img class="circle publish-image" <?= 'src="' . $_SESSION["Image"] . '"' ?>>

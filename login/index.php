@@ -36,6 +36,9 @@
                                 <input id="password" type="password">
                                 <label for="password" data-error="Debe ingresar una contrase&ntilde;a">Contrase&ntilde;a</label>
                             </div>
+                            <div id="error-message" style="margin-bottom: 5%; margin-top: -10%;">
+                                <label class="red-text">&nbsp;</label>
+                            </div>
                             <a class="btn-flat blue-text waves-effect">Registrarse</a>
                             <a id="next" class="btn blue waves-effect waves-light right">Siguiente</a>
                         </div>
@@ -47,6 +50,8 @@
         <?php require "../include/scripts.html"; ?>
 
         <script>
+            $( "#user" ).focus();
+
             $( "#next" ).click(function() {
                 var User = $( "#user" ).val();
                 var Password = $( "#password" ).val();
@@ -64,7 +69,7 @@
                             if (response == '1')
                                 window.history.back();
                             else
-                                alert("Error");
+                                $( "#error-message label" ).html("Usuario y/o contrase&ntilde;a incorrecta");
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log(textStatus, errorThrown);
@@ -73,8 +78,16 @@
             });
 
             $( "#user, #password" ).on('input', function() {
+                $( "#error-message label" ).html("&nbsp;");
+
                 if ($(this).val() != "")
                     $(this).removeClass("validate valid invalid");
+            });
+
+            $( "#user, #password" ).keypress(function(e) {
+                if(e.which == 13) {
+                    $( "#next" ).trigger( "click" );
+                }
             });
         </script>
     </body>

@@ -1,3 +1,6 @@
+var Path = window.location.href;
+var PostID = Path.substring(Path.lastIndexOf('=') + 1, Path.length);
+
 var LoadedComments = "";
 
 $( document ).ready(function() {
@@ -8,54 +11,36 @@ $( document ).ready(function() {
     }, 5000);
 });
 
-if (typeof UserCode === 'undefined' || UserCode === null || UserCode <= 0) {
-    $( "#bottom-divider" ).addClass( "hide" );
-    $( "#comment-box" ).addClass( "hide" );
-}
-else {
-    $( "#comment" ).on('input', function() {
-        if( !$(this).val() ) {
-            $( "#publish" ).addClass( "disabled" );
+$.ajax({
+    url: "../login/status.php",
+    type: "POST",
+    success: function (response) {
+        if (response == 1) {
+            $( "#bottom-divider" ).removeClass( "hide" );
+            $( "#comment-box" ).removeClass( "hide" );
+
+            $( "#comment" ).on('input', function() {
+                if( !$(this).val() ) {
+                    $( "#publish" ).addClass( "disabled" );
+                }
+                else {
+                    $( "#publish" ).removeClass( "disabled" );
+                }
+            });
+
+            $( "#publish" ).click(function() {
+                UploadComment($( "#comment" ).val().replace(/\n/g, "<br>"));
+            });
         }
-        else {
-            $( "#publish" ).removeClass( "disabled" );
-        }
-    });
-
-    $( "#publish" ).click(function() {
-        var Comment = $( "#comment" ).val().replace(/\n/g, "<br>");
-
-        $.ajax({
-            url: "../../components/comments/UploadComment.php",
-            type: "POST",
-            data: { PostID: PostID, UserCode: UserCode, Comment: Comment } ,
-            success: function (response) {
-                var Data = JSON.parse(response);
-
-                $( "#top-divider" ).removeClass( "hide" );
-
-                $( "#comments" ).append(
-                    "<div class=\"comment-wrapper\">" +
-                        "<img class=\"circle comment-image\" src=\"" + Data.Image + "\">" +
-                        "<p class=\"comment-text\">" + "<strong>" + Data.Name + "</strong>" + "<br>" + Comment + "</p>" +
-                    "</div>"
-                );
-
-                $( "#comment" ).val("").css("height", "auto");
-                $( "#publish" ).addClass( "disabled" );
-
-                LoadedComments += Data.CommentID + ';';
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
-    });
-}
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log(textStatus, errorThrown);
+    }
+});
 
 function LoadComments(PostID, DownloadedComments) {
     $.ajax({
-        url: "../../components/comments/GetComments.php",
+        url: "../components/comments/GetComments.php",
         type: "POST",
         data: { PostID: PostID, DownloadedComments: DownloadedComments } ,
         success: function (response) {
@@ -89,6 +74,34 @@ function LoadComments(PostID, DownloadedComments) {
                     }
                 }
             }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+    });
+}
+
+function UploadComment(Comment) {
+    $.ajax({
+        url: "../components/comments/UploadComment.php",
+        type: "POST",
+        data: { PostID: PostID, Comment: Comment } ,
+        success: function (response) {
+            var Data = JSON.parse(response);
+
+            $( "#top-divider" ).removeClass( "hide" );
+
+            $( "#comments" ).append(
+                "<div class=\"comment-wrapper\">" +
+                    "<img class=\"circle comment-image\" src=\"" + Data.Image + "\">" +
+                    "<p class=\"comment-text\">" + "<strong>" + Data.Name + "</strong>" + "<br>" + Comment + "</p>" +
+                "</div>"
+            );
+
+            $( "#comment" ).val("").css("height", "auto");
+            $( "#publish" ).addClass( "disabled" );
+
+            LoadedComments += Data.CommentID + ';';
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);

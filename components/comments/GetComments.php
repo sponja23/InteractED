@@ -1,12 +1,12 @@
 <?php
-if (!file_exists("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".comments")) {
-    file_put_contents("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".comments", '{"LastID":0}');
-    $Comments = json_decode("../../posts/" . $_POST['PostID'] . "/" . file_get_contents($_POST['PostID'] . ".comments"));
+if (!file_exists("../../post/comments/" . $_POST['PostID'] . ".comments")) {
+    file_put_contents("../../post/comments/" . $_POST['PostID'] . ".comments", '{"LastID":0}');
+    $Comments = json_decode("../../post/comments/" . $_POST['PostID'] . ".comments");
     $Data = array('Comments' => $Comments, 'UserData' => null);
     echo json_encode($Data);
 }
 else {
-    $Comments = json_decode(file_get_contents("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".comments"), true);
+    $Comments = json_decode(file_get_contents("../../post/comments/" . $_POST['PostID'] . ".comments"), true);
 
     if ($_POST['DownloadedComments'] != "") {
         $DownloadedComments = explode(';', $_POST['DownloadedComments']);

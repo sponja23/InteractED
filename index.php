@@ -125,7 +125,7 @@
 
         <script>
             $( ".item" ).click(function() {
-                window.location.href = "posts/" + $(this).attr("id");
+                window.location.href = "post?id=" + $(this).attr("id");
             });
         </script>
     </body>

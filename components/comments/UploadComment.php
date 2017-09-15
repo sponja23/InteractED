@@ -1,13 +1,15 @@
 <?php
-if (file_exists("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".comments")) {
-    $Comments = json_decode(file_get_contents("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".comments"), true);
+session_start();
+
+if (file_exists("../../post/comments/" . $_POST['PostID'] . ".comments")) {
+    $Comments = json_decode(file_get_contents("../../post/comments/" . $_POST['PostID'] . ".comments"), true);
 
     $Comments["LastID"] = intval($Comments["LastID"]) + 1;
 
-    $Comments[$Comments["LastID"]]["UserCode"] = $_POST['UserCode'];
+    $Comments[$Comments["LastID"]]["UserCode"] = $_SESSION['UserCode'];
     $Comments[$Comments["LastID"]]["Comment"] = $_POST['Comment'];
 
-    file_put_contents("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".comments", json_encode($Comments));
+    file_put_contents("../../post/comments/" . $_POST['PostID'] . ".comments", json_encode($Comments));
 
     $conn = new mysqli("localhost", "root", "root", "InteractED");
 
@@ -15,7 +17,7 @@ if (file_exists("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".c
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SELECT Name, Image FROM Users WHERE UserCode=" . $_POST['UserCode'];
+    $sql = "SELECT Name, Image FROM Users WHERE UserCode=" . $_SESSION['UserCode'];
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -25,6 +27,6 @@ if (file_exists("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".c
     }
 }
 else {
-    file_put_contents("../../posts/" . $_POST['PostID'] . "/" . $_POST['PostID'] . ".comments", '{"LastID":0}');
+    file_put_contents("../../post/comments/" . $_POST['PostID'] . ".comments", '{"LastID":0}');
 }
 ?>
