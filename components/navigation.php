@@ -23,11 +23,11 @@
                 echo '        <p class="black-text" style="margin-right: 20px; line-height: 25px;"><strong>' . $_SESSION["Name"] . '</strong><br>' . $_SESSION["Email"] . '</p>';
                 echo '    </div>';
                 echo '    <li><a href="#!" class="black-text"><i class="material-icons grey-text">account_circle</i>Mi cuenta</a></li>';
-                echo '    <li><a href="login/logout.php" class="black-text"><i class="material-icons grey-text">exit_to_app</i>Salir</a></li>';
+                echo '    <li><a href="/InteractED/login/logout.php" class="black-text"><i class="material-icons grey-text">exit_to_app</i>Salir</a></li>';
                 echo '</ul>';
             }
             else {
-                echo '<li><a href="login" id="login" class="btn-flat blue-text waves-effect">Acceder</a></li>';
+                echo '<li><a href="/InteractED/login" id="login" class="btn-flat blue-text waves-effect">Acceder</a></li>';
             }
             ?>
         </ul>

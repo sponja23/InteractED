@@ -1,0 +1,42 @@
+.input-field textarea {
+    border-bottom: none !important;
+}
+
+.input-field textarea:focus {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+#comment {
+    margin-top: -15px;
+}
+
+#publish {
+    float: right;
+    margin-top: -42px;
+}
+
+.comment-wrapper {
+    display: flex;
+}
+
+.comment-image {
+    width: 36px;
+    height: 36px;
+    margin-right: 15px;
+    margin-top: 18px;
+    flex-basis: 36px;
+}
+
+.comment-text {
+    word-break: break-word;
+    word-wrap: break-word;
+    flex-basis: 100%;
+}
+
+.publish-image {
+    width: 24px;
+    height: 24px;
+    margin-right: 16px;
+    margin-top: -4px;
+}
