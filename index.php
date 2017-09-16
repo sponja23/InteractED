@@ -9,7 +9,6 @@
         <?php require "include/head.html"; ?>
 
         <link rel="stylesheet" href="css/navigation.css">
-        <link rel="stylesheet" href="css/input.css">
         <link rel="stylesheet" href="css/font.css">
 
         <style>
@@ -19,7 +18,7 @@
             }
         </style>
     </head>
-    <body style="background-color: #fafafa;">
+    <body class="grey lighten-5">
         <!-- Navigation -->
         <?php require "components/navigation.php"; ?>
 

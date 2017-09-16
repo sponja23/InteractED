@@ -1,9 +1,9 @@
 <nav>
     <div class="nav-wrapper white">
-        <a href="#" class="logo blue-text">InteractED</a>
-        <form id="search-form" class="hide-on-small-only">
+        <a href="/InteractED" class="logo blue-text">InteractED</a>
+        <form action="/InteractED/search" method="GET" id="search-form" class="hide-on-small-only">
             <div class="input-field">
-                <input id="search" type="search" placeholder="Buscar en InteractED" class="autocomplete">
+                <input id="search" name="q" type="search" placeholder="Buscar en InteractED" class="autocomplete">
                 <label class="label-icon" for="search"><i class="material-icons" id="search-icon">search</i></label>
                 <i class="material-icons" id="search-close-icon">close</i>
             </div>

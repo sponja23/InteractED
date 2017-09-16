@@ -11,11 +11,7 @@ if (file_exists("../../post/comments/" . $_POST['PostID'] . ".comments")) {
 
     file_put_contents("../../post/comments/" . $_POST['PostID'] . ".comments", json_encode($Comments));
 
-    $conn = new mysqli("localhost", "root", "root", "InteractED");
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    require "../../include/connect.php";
 
     $sql = "SELECT Name, Image FROM Users WHERE UserCode=" . $_SESSION['UserCode'];
     $result = $conn->query($sql);

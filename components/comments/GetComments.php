@@ -23,11 +23,7 @@ else {
     }
 
     if (intval($Comments["LastID"]) > 0 && $Users != null) {
-        $conn = new mysqli("localhost", "root", "root", "InteractED");
-
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+        require "../../include/connect.php";
 
         $Users = array_values(array_unique($Users));
 
