@@ -2,8 +2,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-
         <title>InteractED</title>
 
         <?php require "include/head.html"; ?>
@@ -19,7 +17,6 @@
         </style>
     </head>
     <body class="grey lighten-5">
-        <!-- Navigation -->
         <?php require "components/navigation.php"; ?>
 
         <div class="container">

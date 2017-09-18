@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-
         <title>Edit page</title>
 
         <?php require "../include/head.html"; ?>

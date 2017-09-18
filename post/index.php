@@ -2,8 +2,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-
         <title>Titulo</title>
 
         <?php require "../include/head.html"; ?>
@@ -12,7 +10,7 @@
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../components/comments/comments.css">
     </head>
-    <body>
+    <body class="grey lighten-5">
         <?php require "../components/navigation.php"; ?>
 
         <div class="container">

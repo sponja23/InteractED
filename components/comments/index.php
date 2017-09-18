@@ -5,7 +5,7 @@
 <div id="comment-box" class="row hide">
     <div class="input-field col s12">
         <div class="comment-wrapper">
-            <img class="circle publish-image" <?= 'src="' . $_SESSION["Image"] . '"' ?>>
+            <img class="circle publish-image" src=<?= '"' . $_SESSION["Image"] . '"' ?>>
             <textarea id="comment" class="materialize-textarea" placeholder="Agregar un comentario..."></textarea>
         </div>
     </div>
