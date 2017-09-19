@@ -6,7 +6,7 @@
 
         <?php require "include/head.html"; ?>
 
-        <link rel="stylesheet" href="css/navigation.css">
+        <link rel="stylesheet" href="components/navigation/navigation.css">
         <link rel="stylesheet" href="css/font.css">
 
         <style>
@@ -17,7 +17,7 @@
         </style>
     </head>
     <body class="grey lighten-5">
-        <?php require "components/navigation.php"; ?>
+        <?php require "components/navigation/navigation.php"; ?>
 
         <div class="container">
             <h5>Recientes</h5>
@@ -118,6 +118,8 @@
         </div>
 
         <?php require "include/scripts.html"; ?>
+
+        <script src="components/navigation/navigation.js"></script>
 
         <script>
             $( ".item" ).click(function() {

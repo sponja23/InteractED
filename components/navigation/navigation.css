@@ -80,3 +80,8 @@ nav .logo {
         margin-right: 0;
     }
 }
+
+#mobile-search input:focus {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}

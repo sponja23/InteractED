@@ -6,12 +6,12 @@
 
         <?php require "../include/head.html"; ?>
 
-        <link rel="stylesheet" href="../css/navigation.css">
+        <link rel="stylesheet" href="../components/navigation/navigation.css">
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../components/comments/comments.css">
     </head>
     <body class="grey lighten-5">
-        <?php require "../components/navigation.php"; ?>
+        <?php require "../components/navigation/navigation.php"; ?>
 
         <div class="container">
             <p>Hola, soy un post</p>
@@ -19,6 +19,8 @@
         </div>
 
         <?php require "../include/scripts.html"; ?>
+
+        <script src="../components/navigation/navigation.js"></script>
 
         <script src="../components/comments/comments.js"></script>
     </body>
