@@ -21,7 +21,7 @@
                 <?php
                 session_start();
 
-                if (isset($_SESSION["Name"]) && isset($_SESSION["Image"]) && isset($_SESSION["Email"])) {
+                if (isset($_SESSION["UserCode"])) {
                     echo '<li><i id="search-mobile-icon" class="material-icons grey-text hide-on-med-and-up" style="margin-right: 15px;">search</i></li>';
                     echo '<li><i class="material-icons grey-text">notifications</i></li>';
                     echo '<li><img class="dropdown-button circle" width="40px" height="40px" style="margin-right: 20px; margin-left: 15px; vertical-align: middle;" src="' . $_SESSION["Image"] . '" data-belowOrigin="true" data-constrainWidth="false" data-activates="dropdown1"></li>';
