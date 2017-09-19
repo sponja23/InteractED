@@ -41,7 +41,7 @@ nav .logo {
     color: var(--placeholder-color);
 }
 
-#search:focus {
+#search:focus, #mobile-search input:focus {
     border-bottom: none !important;
     box-shadow: none !important;
 }
@@ -79,9 +79,4 @@ nav .logo {
     #login {
         margin-right: 0;
     }
-}
-
-#mobile-search input:focus {
-    border-bottom: none !important;
-    box-shadow: none !important;
 }
