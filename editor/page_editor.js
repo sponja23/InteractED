@@ -119,37 +119,6 @@ function openCreateDialog(type) {
     $(".sideNav-button").sideNav("hide");
 }
 
-function createWrapper($inner) {
-    var $newElement = $("<div></div>").html($inner);
-    $newElement.draggable({
-        snap: true,
-        scroll: false,
-    });
-    $newElement.attr("id", "object-" + nextID++);
-    $newElement.css({
-        "width": $inner.attr("width") + "px",
-        "height": $inner.attr("height") + "px",
-        "float": "left"
-    })
-    $newElement.on({
-        "click" : function(e) {
-            selectElement($(e.target));
-            e.stopPropagation();
-        },
-        "mousedown" : function(e) {
-            if(!dragging) {
-                selectElement($(e.target));
-                dragging = true;
-                e.stopPropagation();
-            }
-        },
-        "mouseup" : function(e) {
-            dragging = false;
-        }
-    });
-    $newElement.appendTo($("#content"));
-}
-
 function createElement(type) {
     var parameter_attributes = { "data-type" : elementTypes["image"].name };
 
@@ -171,45 +140,74 @@ function createElement(type) {
             alert("Parameter error");
     });
 
-    var $element = $(elementTypes["image"].tag).attr(parameter_attributes);
+    var $element = $(elementTypes["image"].tag).attr(parameter_attributes).addClass("inner");
     emptyParameters("#image-create-dialog");
     createWrapper($element);
 }
 
+function createWrapper($inner) {
+    var $newElement = $("<div></div>").html($inner);
+    $newElement.draggable({
+        snap: true,
+        scroll: false,
+        containment: "#content"
+    });
+    $newElement.attr("id", "object-" + nextID++);
+    $newElement.css({
+        "width": $inner.attr("width") + "px",
+        "height": $inner.attr("height") + "px",
+        "float": "left",
+        "position": "absolute !important"
+    });
+    $newElement.children().css({
+        "width": "100%",
+        "height": "100%"
+    });
+    $newElement.on({
+        "click" : function(e) {
+            selectElement($(e.target));
+            e.stopPropagation();
+        },
+        "mousedown" : function(e) {
+            if(!dragging) {
+                selectElement($(e.target));
+                dragging = true;
+                e.stopPropagation();
+            }
+        },
+        "mouseup" : function(e) {
+            dragging = false;
+        }
+    });
+    $newElement.appendTo($("#content"));
+}
 function selectElement($element) {
     unselectElement();
     console.log("selecting element");
     if($selectedElement.attr("id") != $element.attr("id")) {
         $selectedElement = $element;
         $selectedElement.addClass("selected");
-        /*
-        $selectedElement.css({
-            "width" : ($selectedElement.width() + 10) + "px",
-            "height" : ($selectedElement.height() + 10) + "px",
-            "border" : "5px solid blue"
-        });
-        */
     }
 }
 
 function unselectElement() {
     console.log("unselecting");
-    if($selectedElement != $("#content"))
+    if($selectedElement[0].id != "#content")
         $selectedElement.removeClass("selected");
-        /*
-        $selectedElement.css({
-            "width" : ($selectedElement.width() - 10) + "px",
-            "height" : ($selectedElement.height() - 10) + "px",
-            "border" : "none"
-        });
-        */
     $selectedElement = $("#content");
 }
 
 function editButtonClick() {
+    if($selectedElement[0].id != "#content")
+        openEditDialog($selectedElement.data("type"));
+    else
+        openEditPageDialog();
+}
 
+function openEditDialog(type) {
+    console.log("Editing " + type + ": " + $selectedElement.attr("id"));
 }
 
 function openEditPageDialog() {
-
+    console.log("Editing page");
 }

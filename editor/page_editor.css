@@ -32,3 +32,10 @@
 .adjust-height {
     max-height: 100%;
 }
+
+.handle {
+    width: 5px;
+    height: 5px;
+    bottom: -5px;
+    right: -5px;
+}

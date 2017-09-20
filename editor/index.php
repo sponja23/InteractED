@@ -5,6 +5,7 @@
 
         <?php require "../include/head.html"; ?>
 
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css">
         <link rel="stylesheet" href="../css/input.css">
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="page_editor.css">
@@ -39,13 +40,11 @@
             </li>
         </ul>
         
-        <!--
         <div class="fixed-action-btn" onclick="editButtonClick()">
             <a href="#" class="btn-floating btn-large blue">
                 <i class="large material-icons">mode_edit</i>
             </a>
         </div>
-        -->
         
         <div id="dialogs">
             <div id="edit-page-dialog" class="modal valign-modal">
@@ -68,8 +67,18 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" class="image-create-cancel">Cancelar</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-cancel">Cancelar</a>
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-button">Crear</a>
+                </div>
+            </div>
+            <div id="image-edit-dialog" class="modal valign-modal">
+                <div class="modal-content row">
+                    <h4>Editar Imagen</h4>
+
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-edit-cancel">Cancelar</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-edit-button">Guardar</a>
                 </div>
             </div>
         </div>
