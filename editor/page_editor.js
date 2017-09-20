@@ -152,12 +152,22 @@ function createWrapper($inner) {
         scroll: false,
         containment: "#content"
     });
-    $newElement.attr("id", "object-" + nextID++);
+    $newElement.children(".handle").hide();
+    $newElement.attr({
+        "id": "object-" + nextID,
+        "data-type": $inner.data("type")
+    });
     $newElement.css({
         "width": $inner.attr("width") + "px",
         "height": $inner.attr("height") + "px",
         "float": "left",
         "position": "absolute !important"
+    });
+    $newElement.append($("<div id='handle-" + nextID + "' class='handle ui-resizable-handle ui-resizable-se'></div>")).resizable({
+        handles: {
+            "se": "#handle-" + nextID
+        },
+        aspectRatio: $newElement.width() / $newElement.height()
     });
     $newElement.children().css({
         "width": "100%",
@@ -165,12 +175,12 @@ function createWrapper($inner) {
     });
     $newElement.on({
         "click" : function(e) {
-            selectElement($(e.target));
+            selectElement($(this));
             e.stopPropagation();
         },
         "mousedown" : function(e) {
             if(!dragging) {
-                selectElement($(e.target));
+                selectElement($(this));
                 dragging = true;
                 e.stopPropagation();
             }
@@ -180,6 +190,7 @@ function createWrapper($inner) {
         }
     });
     $newElement.appendTo($("#content"));
+    nextID++;
 }
 function selectElement($element) {
     unselectElement();
@@ -187,13 +198,16 @@ function selectElement($element) {
     if($selectedElement.attr("id") != $element.attr("id")) {
         $selectedElement = $element;
         $selectedElement.addClass("selected");
+        $selectedElement.children(".handle").show();
     }
 }
 
 function unselectElement() {
     console.log("unselecting");
-    if($selectedElement[0].id != "#content")
+    if($selectedElement[0].id != "#content") {
         $selectedElement.removeClass("selected");
+        $selectedElement.children(".handle").hide();
+    }
     $selectedElement = $("#content");
 }
 
