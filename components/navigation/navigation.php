@@ -20,18 +20,25 @@
             <ul class="right">
                 <?php
                 if (isset($_SESSION["UserCode"])) {
-                    echo '<li><i id="search-mobile-icon" class="material-icons grey-text hide-on-med-and-up" style="margin-right: 15px;">search</i></li>';
-                    echo '<li><i class="material-icons grey-text">notifications</i></li>';
-                    echo '<li><img class="dropdown-button circle" width="40px" height="40px" style="margin-right: 20px; margin-left: 15px; vertical-align: middle;" src="' . $_SESSION["Image"] . '" data-belowOrigin="true" data-constrainWidth="false" data-activates="dropdown1"></li>';
+                    echo '<li><i id="search-mobile-icon" class="material-icons grey-text hide-on-med-and-up" style="margin-right: 15px;">search</i></li>
+                          <li><i class="material-icons grey-text dropdown-button option" data-belowOrigin="true" data-constrainWidth="false" data-activates="Notifications">notifications</i></li>
+                          <li><img class="dropdown-button circle option" width="40px" height="40px" style="margin-right: 20px; margin-left: 15px; vertical-align: middle;" src="' . $_SESSION["Image"] . '" data-belowOrigin="true" data-constrainWidth="false" data-activates="Account"></li>
 
-                    echo '<ul id="dropdown1" class="dropdown-content">';
-                    echo '    <div class="valign-wrapper grey lighten-3">';
-                    echo '        <img class="circle" width="50px" height="50px" style="margin-left: 20px; margin-right: 20px;" src="' . $_SESSION["Image"] . '">';
-                    echo '        <p class="black-text" style="margin-right: 20px; line-height: 25px;"><strong>' . $_SESSION["Name"] . '</strong><br>' . $_SESSION["Email"] . '</p>';
-                    echo '    </div>';
-                    echo '    <li><a href="#!" class="black-text"><i class="material-icons grey-text">account_circle</i>Mi cuenta</a></li>';
-                    echo '    <li><a href="/InteractED/login/logout.php" class="black-text"><i class="material-icons grey-text">exit_to_app</i>Salir</a></li>';
-                    echo '</ul>';
+                          <ul id="Account" class="dropdown-content">
+                              <div class="valign-wrapper grey lighten-3">
+                                  <img class="circle" width="50px" height="50px" style="margin-left: 20px; margin-right: 20px;" src="' . $_SESSION["Image"] . '">
+                                  <p class="black-text" style="margin-right: 20px; line-height: 25px;"><strong>' . $_SESSION["Name"] . '</strong><br>' . $_SESSION["Email"] . '</p>
+                              </div>
+                              <li><a href="#!" class="black-text"><i class="material-icons grey-text">account_circle</i>Mi cuenta</a></li>
+                              <li><a href="/InteractED/login/logout.php" class="black-text"><i class="material-icons grey-text">exit_to_app</i>Salir</a></li>
+                          </ul>
+
+                          <ul id="Notifications" class="dropdown-content" style="transform: translateY(-15px);">
+                              <div class="valign-wrapper grey lighten-3">
+                                  <h2 class="black-text" style="font-size: 1.2rem; font-weight: 400; line-height: 1rem; margin-left: 16px;">Notificaciones</h2>
+                                  <i class="material-icons" style="margin-left: 310px; margin-right: 16px; color: #959595;">settings</i>
+                              </div>
+                          </ul>';
                 }
                 else {
                     echo '<li><a href="/InteractED/login" id="login" class="btn-flat blue-text waves-effect">Acceder</a></li>';

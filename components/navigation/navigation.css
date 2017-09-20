@@ -82,3 +82,8 @@ nav .logo {
         margin-right: 0;
     }
 }
+
+.option:hover {
+    cursor: pointer;
+    cursor: hand;
+}
