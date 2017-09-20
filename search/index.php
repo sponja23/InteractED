@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,7 +22,6 @@
         </style>
     </head>
     <body class="grey lighten-5">
-        <!-- Navigation -->
         <?php require "../components/navigation/navigation.php"; ?>
 
         <div class="container">

@@ -19,8 +19,6 @@
             </form>
             <ul class="right">
                 <?php
-                session_start();
-
                 if (isset($_SESSION["UserCode"])) {
                     echo '<li><i id="search-mobile-icon" class="material-icons grey-text hide-on-med-and-up" style="margin-right: 15px;">search</i></li>';
                     echo '<li><i class="material-icons grey-text">notifications</i></li>';
