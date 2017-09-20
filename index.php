@@ -7,7 +7,6 @@
         <?php require "include/head.html"; ?>
 
         <link rel="stylesheet" href="components/navigation/navigation.css">
-        <link rel="stylesheet" href="css/font.css">
 
         <style>
             .item:hover {
