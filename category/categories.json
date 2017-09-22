@@ -1,0 +1,34 @@
+{
+	"root": {
+		"parent" : "none",
+		"children" : ["Mathematics", "Literature", "Technology", "History"]
+	},
+	"Mathematics": {
+		"parent" : "root",
+		"children" : ["Calculus", "Algebra", "Geometry"]
+	},
+	"Literature": {
+		"parent" : "root",
+		"children" : []
+	},
+	"Technology": {
+		"parent" : "root",
+		"children" : []
+	},
+	"History": {
+		"parent" : "root",
+		"children" : []
+	},
+	"Calculus": {
+		"parent" : "Mathematics",
+		"children" : []
+	},
+	"Algebra": {
+		"parent" : "Mathematics",
+		"children" : []
+	},
+	"Geometry": {
+		"parent" : "Mathematics",
+		"children" : []
+	}
+}
