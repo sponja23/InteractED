@@ -14,13 +14,14 @@ function readFile() {
 // Saves the tree into the server
 function writeFile() {
     $.ajax({
-        url: "uploadCategories.php",
+        url: "UploadCategories.php",
         type: "POST",
-        data: {
-            categories: JSON.stringify(category_tree)
-        },
+        data: { categories: JSON.stringify(category_tree) } ,
         success: function(data) {
             console.log(data);
+        }
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
         }
     });
 }
