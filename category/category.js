@@ -19,7 +19,7 @@ function writeFile() {
         data: { categories: JSON.stringify(category_tree) } ,
         success: function(data) {
             console.log(data);
-        }
+        },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
         }
