@@ -44,9 +44,9 @@ function LoadComments(PostID, DownloadedComments) {
         type: "POST",
         data: { PostID: PostID, DownloadedComments: DownloadedComments } ,
         success: function (response) {
-            var Data = JSON.parse(response);
+            if (response != "") {
+                var Data = JSON.parse(response);
 
-            if (Data.Comments.LastID != '0') {
                 $( "#top-divider" ).removeClass( "hide" );
 
                 for (Entry in Data.Comments) {

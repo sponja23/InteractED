@@ -1,12 +1,8 @@
 <?php
-if (!file_exists("../../post/comments/" . $_POST['PostID'] . ".comments")) {
-    file_put_contents("../../post/comments/" . $_POST['PostID'] . ".comments", '{"LastID":0}');
-    $Comments = json_decode("../../post/comments/" . $_POST['PostID'] . ".comments");
-    $Data = array('Comments' => $Comments, 'UserData' => null);
-    echo json_encode($Data);
-}
-else {
-    $Comments = json_decode(file_get_contents("../../post/comments/" . $_POST['PostID'] . ".comments"), true);
+$File = "../../post/comments/" . $_POST['PostID'] . ".comments";
+
+if (file_exists($File)) {
+    $Comments = json_decode(file_get_contents($File), true);
 
     if ($_POST['DownloadedComments'] != "") {
         $DownloadedComments = explode(';', $_POST['DownloadedComments']);
@@ -46,10 +42,10 @@ else {
         $UserData = json_decode(substr($UserData, 0, -1) . '}', true);
 
         $Data = array("Comments" => $Comments, "UserData" => $UserData);
-    }
-    else
-        $Data = array("Comments" => $Comments, "UserData" => null);
 
-    echo json_encode($Data);
+        echo json_encode($Data);
+    }
 }
+else
+    file_put_contents($File, '{"LastID":0}');
 ?>

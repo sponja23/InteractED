@@ -1,15 +1,18 @@
 <?php
 session_start();
 
-if (file_exists("../../post/comments/" . $_POST['PostID'] . ".comments")) {
-    $Comments = json_decode(file_get_contents("../../post/comments/" . $_POST['PostID'] . ".comments"), true);
+$File = "../../post/comments/" . $_POST['PostID'] . ".comments";
+
+if (file_exists($File)) {
+    $Comments = json_decode(file_get_contents($File), true);
 
     $Comments["LastID"] = intval($Comments["LastID"]) + 1;
+    $LastID = $Comments["LastID"];
 
-    $Comments[$Comments["LastID"]]["UserCode"] = $_SESSION['UserCode'];
-    $Comments[$Comments["LastID"]]["Comment"] = $_POST['Comment'];
+    $Comments[$LastID]["UserCode"] = $_SESSION['UserCode'];
+    $Comments[$LastID]["Comment"] = $_POST['Comment'];
 
-    file_put_contents("../../post/comments/" . $_POST['PostID'] . ".comments", json_encode($Comments));
+    file_put_contents($File, json_encode($Comments));
 
     require "../../include/connect.php";
 
@@ -18,11 +21,10 @@ if (file_exists("../../post/comments/" . $_POST['PostID'] . ".comments")) {
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo '{"Name":"' . $row['Name'] . '","Image":"' . $row['Image'] . '","CommentID":"' . $Comments["LastID"] . '"}';
+            echo '{"CommentID":"' . $LastID . '","Name":"' . $row['Name'] . '","Image":"' . $row['Image'] . '"}';
         }
     }
 }
-else {
-    file_put_contents("../../post/comments/" . $_POST['PostID'] . ".comments", '{"LastID":0}');
-}
+else
+    file_put_contents($File, '{"LastID":0}');
 ?>
