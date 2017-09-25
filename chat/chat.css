@@ -1,0 +1,80 @@
+.input-field textarea {
+    border-bottom: none !important;
+}
+
+.input-field textarea:focus {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+#message-box-card {
+    padding: 10px 15px;
+    border-radius: 20px;
+}
+
+#message-box-row {
+    margin-bottom: 0;
+}
+
+#message-box-wrapper {
+    margin-top: 0;
+    margin-bottom: -6px;
+}
+
+#message-box {
+    height: 1.5rem;
+    min-height: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+#publish {
+    margin: 0 10px 0 -5px;
+}
+
+.enabled:hover {
+    cursor: pointer;
+    cursor: hand;
+}
+
+.disabled:hover {
+    cursor: default;
+}
+
+.message-card {
+    max-width: 90%;
+    padding: 10px;
+    margin: 0 0 .8rem 0;
+    border-radius: 10px;
+}
+
+.message-text {
+    word-wrap: break-word;
+}
+
+#card {
+    border-radius: 10px;
+}
+
+#title {
+    margin: -24px -24px 16px -24px;
+    height: 64px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#back {
+    font-size: 30px;
+    margin-left: 24px;
+    vertical-align: middle;
+}
+
+#image {
+    margin-left: 10px;
+    height: 40px;
+}
+
+#user {
+    font-size: 26px;
+    margin-left: 10px;
+}
