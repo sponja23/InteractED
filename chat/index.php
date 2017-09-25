@@ -1,28 +1,38 @@
+<?php
+session_start();
+
+require "../include/connect.php";
+
+$sql = 'SELECT Name, Image FROM Users WHERE UserCode="' . $_GET["id"] . '"';
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $Name = $row['Name'];
+        $Image = $row['Image'];
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
     <head>
         <title>Chat</title>
 
-        <meta charset="utf-8">
+        <?php require "../include/head.html"; ?>
 
-        <!--Import Google Icon Font-->
-        <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
-
-        <!--Import materialize.css-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-
-        <!--Let browser know website is optimized for mobile and don't allow resizing on mobile-->
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+        <link rel="stylesheet" href="../components/navigation/navigation.css">
         <link rel="stylesheet" href="chat.css">
     </head>
     <body class="grey lighten-5">
+        <?php require "../components/navigation/navigation.php"; ?>
+
         <div class="container">
             <div id="card" class="card-panel blue">
                 <div id="title" class="col s12 blue darken-3 valign-wrapper">
-                    <a href="#"><i id="back" class="material-icons white-text">arrow_back</i></a>
-                    <img id="image" class="circle" src="https://lh3.googleusercontent.com/-lKI-x6oWTNs/AAAAAAAAAAI/AAAAAAAAAAA/ACnBePbz_cEtXffDDO3RdqA400SfVq7PPg/s32-c-mo/photo.jpg">
-                    <p id="user" class="white-text">Usuario</p>
+                    <a href="../chats"><i id="back" class="material-icons white-text">arrow_back</i></a>
+                    <img id="image" class="circle" src=<?= '"' . $Image . '"' ?>>
+                    <p id="user" class="white-text"><?= $Name ?></p>
                 </div>
 
                 <div id="messages" class="row"></div>
@@ -38,10 +48,9 @@
             </div>
         </div>
 
-        <!--Import jQuery before materialize.js-->
-        <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+        <?php require "../include/scripts.html"; ?>
 
+        <script src="../components/navigation/navigation.js"></script>
         <script src="chat.js"></script>
     </body>
 </html>

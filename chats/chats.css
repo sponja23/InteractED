@@ -1,0 +1,23 @@
+#chats {
+    padding: 0;
+}
+
+.chat {
+    padding: 10px 24px;
+}
+
+.chat:hover {
+    cursor: pointer;
+    cursor: hand;
+    background-color: #eee;
+}
+
+.image {
+    width: 45px;
+    height: 45px;
+    vertical-align: middle;
+}
+
+.text {
+    margin-left: 15px;
+}
