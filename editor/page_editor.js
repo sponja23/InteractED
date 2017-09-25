@@ -1,7 +1,7 @@
 var elementTypes = {};
 elementTypes["image"] = {
     name: "image",
-    tag: "<img>",
+    tag: "<img />",
     attributes: {
         "src" : "input",
         "width" : "label",
@@ -23,8 +23,7 @@ var dragging = false, clicking_object = false;
 
 $(document).ready(function() {
     $("#content").css({
-        "height" : ($(window).height() - $("#side-nav").height()) + "px",
-        "width" : "100%"
+        "height" : ($(window).height() - $("#side-nav").height()) + "px"
     });
     $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
@@ -169,6 +168,7 @@ function createWrapper($inner) {
         },
         aspectRatio: $newElement.width() / $newElement.height()
     });
+    $newElement.addClass("object " + elementTypes[type].name);
     $newElement.children().css({
         "width": "100%",
         "height": "100%"
@@ -224,4 +224,42 @@ function openEditDialog(type) {
 
 function openEditPageDialog() {
     console.log("Editing page");
+}
+
+function savePage() {
+    console.log("Saving...");
+    var $content = $("<div id=content></div>");
+    $("#content").children(".object").each(function() {
+        var type = $(this).data("type");
+        var $elem = $(elementTypes[type].tag);
+        var $inner = $(this).children(".inner");
+        $elem.css({
+            "position": "relative",
+            "left": $(this).css("left"),
+            "top": $(this).css("top")
+        });
+        for(var attribute in elementTypes[type].attributes) {
+            if(elementTypes[type].attributes.hasOwnProperty(attribute)) {
+                if(attribute == "width")
+                    $elem.width($inner.width());
+                else if(attribute == "height")
+                    $elem.height($inner.height());
+                else
+                    $elem.attr(attribute, $inner.attr(attribute));
+            }
+        }
+        $content.append($elem);
+    });
+
+    $.ajax({
+        url: "save_page.php",
+        type: "POST",
+        data: { content: $content[0].outerHTML },
+        success: function() {
+            console.log("saved");
+        },
+        error: function() {
+            console.log("saving error");
+        }
+    })
 }

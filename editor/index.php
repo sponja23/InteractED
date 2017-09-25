@@ -41,7 +41,7 @@
             </li>
         </ul>
         
-        <div class="fixed-action-btn" onclick="editButtonClick()">
+        <div class="fixed-action-btn" onclick="editButtonClick(); savePage()">
             <a href="#" class="btn-floating btn-large blue">
                 <i class="large material-icons">mode_edit</i>
             </a>
@@ -84,7 +84,7 @@
             </div>
         </div>
 
-        <div id="content" onclick="if(!dragging) unselectElement();">
+        <div id="content" class="container" onclick="if(!dragging) unselectElement();">
 
         </div>
 
