@@ -168,7 +168,7 @@ function createWrapper($inner) {
         },
         aspectRatio: $newElement.width() / $newElement.height()
     });
-    $newElement.addClass("object " + elementTypes[type].name);
+    $newElement.addClass("object " + elementTypes[$inner.data("type")].name);
     $newElement.children().css({
         "width": "100%",
         "height": "100%"
@@ -250,6 +250,8 @@ function savePage() {
         }
         $content.append($elem);
     });
+
+    console.log($content[0].outerHTML);
 
     $.ajax({
         url: "save_page.php",

@@ -6,6 +6,7 @@
 
 .valign-modal {
     transform: translateY(-50%) !important;
+    max-height: 100% !important;
 }
 
 #image-create-preview {
@@ -41,4 +42,3 @@
     right: -5px;
     background: blue;
 }
-
