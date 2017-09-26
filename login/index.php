@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>Iniciar sesion</title>
 
         <?php require "../include/head.html"; ?>
 
@@ -38,7 +38,7 @@
                             <div id="error-message">
                                 <label class="red-text">&nbsp;</label>
                             </div>
-                            <a class="btn-flat blue-text waves-effect">Registrarse</a>
+                            <a href="../register" class="btn-flat blue-text waves-effect">Registrarse</a>
                             <a id="next" class="btn blue waves-effect waves-light right">Siguiente</a>
                         </div>
                     </div>
