@@ -1,12 +1,29 @@
 <?php
     if(!isset($_SESSION["UserCode"]))
-        header("www.interacted.com");
+        header("Location: ../");
+    else {
+        include "../include/connect.php";
+        $sql = "SELECT * FROM Articles A
+                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
+                INNER JOIN Users U ON ER.UserCode = U.UserCode
+                WHERE A.PostID = " . $_GET["id"] . " AND U.UserCode = " . $_SESSION["UserCode"];
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $_SESSION[$_GET["id"] . "-Title"] = $row["Title"];
+                $_SESSION[$_GET["id"] . "-Category"] = $row["Category"];
+            }
+        }
+        else {
+            header("Location: ../");
+        }
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Edit page</title>
+        <title>Editar <?= $_SESSION[$_GET["id"] . "-Title"]?></title>
 
         <?php require "../include/head.html"; ?>
 
@@ -108,6 +125,9 @@
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="../category/category.js"></script>
+        <script>
+            var category = <?= $_SESSION[$_GET["id"] . "-Category"]?>
+        </script>
         <script src="page_editor.js"></script>
 
     </body>

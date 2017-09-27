@@ -281,5 +281,5 @@ function savePage() {
         error: function() {
             console.log("saving error");
         }
-    })
+    });
 }
