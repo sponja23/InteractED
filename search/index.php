@@ -26,39 +26,11 @@
 
         <div class="container">
             <?php
-            $search = $_GET["q"];
+            include "search.php";
+            $Search = new Search();
 
-            require "../include/connect.php";
-
-            $sql = 'SELECT * FROM Articles WHERE Title LIKE "%' . $search . '%" OR Creator LIKE "%' . $search . '%" OR Tags LIKE "%' . $search . '%" OR Text LIKE "%' . $search . '%"';
-
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                echo '<p class="results">' . $result->num_rows . ' resultados</p>';
-
-                while($row = $result->fetch_assoc()) {
-                    echo '<div class="col s12">
-                              <div class="card horizontal hoverable item" id="' . $row['PostID'] . '">
-                                  <div class="card-image" style="width: 192px;">
-                                      <img src="' . $row['Image'] . '">
-                                  </div>
-                                  <div class="card-stacked">
-                                      <div class="card-content">
-                                          <strong>' . $row['Title'] . '</strong>
-                                          <p>' . $row['Creator'] . '</p>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>';
-                }
-            }
-            else
-                echo '<p class="results">No hay resultados para <b>' . $search . '</b></p>';
-
-            $conn->close();
+            $Search->SearchQuery(trim($_GET["q"]), 20);
             ?>
-        </div>
 
         <?php require "../include/scripts.html"; ?>
 
