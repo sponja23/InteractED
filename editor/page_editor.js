@@ -1,4 +1,5 @@
 var elementTypes = {};
+
 elementTypes["image"] = {
     name: "image",
     tag: "<img />",
@@ -15,11 +16,13 @@ elementTypes["image"] = {
     editDialogClose: function() {
         console.log("close edit");
     }
-}
+};
+
+var categories;
 
 var nextID = 0;
 var $selectedElement = $("#content");
-var dragging = false, clicking_object = false;
+var dragging = false;
 
 $(document).ready(function() {
     $("#content").css({
@@ -27,6 +30,19 @@ $(document).ready(function() {
     });
     $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
+    category.loadTree();
+    categories = category.getCategories();
+    var category_image = {};
+    /*
+    NOT IMPLEMENTED
+    for(var cat in categories)
+        category_image[cat] = "../category/images/" + cat + ".jpg";
+    $("#page-edit-category").autocomplete({
+        data: category_image,
+        limit: 10,
+        minLength: 1
+    });
+    */
     initDialogs();
 });
 
@@ -212,7 +228,7 @@ function unselectElement() {
 }
 
 function editButtonClick() {
-    if($selectedElement[0].id != "#content")
+    if($selectedElement[0].id != "content")
         openEditDialog($selectedElement.data("type"));
     else
         openEditPageDialog();
@@ -256,7 +272,9 @@ function savePage() {
     $.ajax({
         url: "save_page.php",
         type: "POST",
-        data: { content: $content[0].outerHTML },
+        data: {
+            content: $content[0].outerHTML
+        },
         success: function() {
             console.log("saved");
         },

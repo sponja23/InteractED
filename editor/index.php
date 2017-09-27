@@ -1,3 +1,7 @@
+<?php
+    if(!isset($_SESSION["UserCode"]))
+        header("www.interacted.com");
+?>
 
 <!DOCTYPE html>
 <html>
@@ -51,6 +55,18 @@
             <div id="edit-page-dialog" class="modal valign-modal">
                 <div class="modal-content row">
                     <h4>Editar propiedades de página</h4>
+                    <div class="input-field col s6">
+                        <input id="page-edit-name" type="text" class="input">
+                        <label for="page-edit-name">Nombre</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="page-edit-category" type="text" class="autocomplete">
+                        <label for="page-edit-category">Categoría</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="page-edit-cancel">Cancelar</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="page-edit-done">Guardar</a>
                 </div>
             </div>
             <div id="image-create-dialog" class="modal valign-modal">
@@ -63,7 +79,7 @@
                         <p id="image-create-lengths"><strong>Width:</strong><br><span id="image-create-width" class="input" data-parameter="width">200</span>px<br><br><strong>Height:</strong><br><span id="image-create-height" class="input" data-parameter="height">200</span>px</p>
                     </div>
                     <div class="input-field col s12">
-                        <input id="image-create-src" type="url" data-content="src" onchange="updatePreview('create')" class="input" data-parameter="src">
+                        <input id="image-create-src" type="url" onchange="updatePreview('create')" class="input" data-parameter="src">
                         <label for="image-create-url">Source</label>
                     </div>
                 </div>
@@ -91,6 +107,8 @@
         <?php require "../include/scripts.html"; ?>
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script src="../category/category.js"></script>
         <script src="page_editor.js"></script>
+
     </body>
 </html>
