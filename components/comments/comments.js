@@ -53,24 +53,14 @@ function LoadComments(PostID, DownloadedComments) {
                     if (Entry != "LastID") {
                         LoadedComments += Entry + ';';
 
-                        var Name = Data.UserData[Data.Comments[Entry].UserCode].Name;
-                        var Image = Data.UserData[Data.Comments[Entry].UserCode].Image;
+                        var ID = Data.Comments[Entry].UserCode;
                         var Comment = Data.Comments[Entry].Comment;
+
+                        var Name = Data.UserData[ID].Name;
+                        var Image = "../images/" + ID + '.' + Data.UserData[ID].Extension;
                         //var Time = "3 h"
 
-                        $( "#comments" ).append(
-                            "<div class=\"comment-wrapper\">" +
-                                "<img class=\"circle comment-image\" src=\"" + Image + "\">" +
-                                //"<div style=\"width: 100%;\">" +
-                                    "<p class=\"comment-text\">" +
-                                        "<strong>" + Name + "</strong>" +
-                                        //"<span style=\"float: right; color: #757575;\">" + Time + "</span>" +
-                                        "<br>" +
-                                        Comment +
-                                    "</p>" +
-                                //"</div>" +
-                            "</div>"
-                        );
+                        AddComment(Image, Name, Comment);
                     }
                 }
             }
@@ -91,12 +81,7 @@ function UploadComment(Comment) {
 
             $( "#top-divider" ).removeClass( "hide" );
 
-            $( "#comments" ).append(
-                "<div class=\"comment-wrapper\">" +
-                    "<img class=\"circle comment-image\" src=\"" + Data.Image + "\">" +
-                    "<p class=\"comment-text\">" + "<strong>" + Data.Name + "</strong>" + "<br>" + Comment + "</p>" +
-                "</div>"
-            );
+            AddComment("../images/" + Data.Image, Data.Name, Comment);
 
             $( "#comment" ).val("").css("height", "auto");
             $( "#publish" ).addClass( "disabled" );
@@ -107,4 +92,22 @@ function UploadComment(Comment) {
             console.log(textStatus, errorThrown);
         }
     });
+}
+
+function AddComment(Image, Name, Comment) {
+    $( "#comments" ).append(
+        '<div class="comment-wrapper">' +
+            '<div class="comment-image-wrapper">' +
+                '<img class="circle comment-image" src="' + Image + '">' +
+            '</div>' +
+          //'<div style="width: 100%;">'' +
+            '<p class="comment-text">' +
+                '<strong>' + Name + '</strong>' +
+              //'<span style="float: right; color: #757575;">' + Time + '</span>' +
+                '<br>' +
+                Comment +
+            '</p>' +
+          //'</div>' +
+        '</div>'
+    );
 }

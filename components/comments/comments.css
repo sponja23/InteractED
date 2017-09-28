@@ -20,11 +20,16 @@
     display: flex;
 }
 
-.comment-image {
+.comment-image-wrapper {
     width: 36px;
     height: 36px;
     margin-right: 15px;
     margin-top: 18px;
+}
+
+.comment-image {
+    width: 36px;
+    height: 36px;
 }
 
 .comment-text {
@@ -33,9 +38,14 @@
     flex-basis: 100%;
 }
 
-.publish-image {
+.image-wrapper {
     width: 24px;
     height: 24px;
     margin-right: 16px;
     margin-top: -4px;
+}
+
+.publish-image {
+    width: 24px;
+    height: 24px;
 }

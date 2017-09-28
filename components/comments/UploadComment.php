@@ -16,12 +16,13 @@ if (file_exists($File)) {
 
     require "../../include/connect.php";
 
-    $sql = "SELECT Name, Image FROM Users WHERE UserCode=" . $_SESSION['UserCode'];
+    $sql = "SELECT Name FROM Users WHERE UserCode=" . $_SESSION['UserCode'];
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo '{"CommentID":"' . $LastID . '","Name":"' . $row['Name'] . '","Image":"' . $row['Image'] . '"}';
+            $Image = basename(glob("../../images/" . $_SESSION['UserCode'] . ".*")[0]);
+            echo '{"CommentID":"' . $LastID . '","Name":"' . $row['Name'] . '","Image":"' . $Image . '"}';
         }
     }
 }

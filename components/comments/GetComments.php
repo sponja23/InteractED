@@ -23,7 +23,7 @@ if (file_exists($File)) {
 
         $Users = array_values(array_unique($Users));
 
-        $sql = "SELECT UserCode, Name, Image FROM Users WHERE UserCode=" . $Users[0];
+        $sql = "SELECT UserCode, Name FROM Users WHERE UserCode=" . $Users[0];
 
         for ($i = 1; $i < count($Users); $i++) {
             $sql .= " OR UserCode=" . $Users[$i];
@@ -33,11 +33,11 @@ if (file_exists($File)) {
 
         $UserData = '{';
 
-        if ($result->num_rows > 0) {
+        if ($result->num_rows > 0)
             while ($row = $result->fetch_assoc()) {
-                $UserData .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Image":"' . $row['Image'] . '"},';
+                $Extension = pathinfo(glob("../../images/" . $row["UserCode"] . ".*")[0])['extension'];
+                $UserData .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Extension":"' . $Extension . '"},';
             }
-        }
 
         $UserData = json_decode(substr($UserData, 0, -1) . '}', true);
 
