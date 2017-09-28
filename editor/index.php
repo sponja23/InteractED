@@ -1,4 +1,6 @@
+
 <?php
+	/*
 	session_start();
     if(!isset($_SESSION["UserCode"]))
         header("Location: ../");
@@ -16,15 +18,16 @@
                 $_SESSION[$_GET["id"] . "-Category"] = $row["Category"];
             }
         }
-        else {
+        else
             header("Location: ../");
-        }
+    }
+    */
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Editar <?= $_SESSION[$_GET["id"] . "-Title"]?></title>
+        <title>Editar <!-- <?= $_SESSION[$_GET["id"] . "-Title"]?> --> </title>
 
         <?php require "../include/head.html"; ?>
 
@@ -126,9 +129,11 @@
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="../category/category.js"></script>
+		<!--
         <script>
-            var category = <?= $_SESSION[$_GET["id"] . "-Category"]?>
+            var currentCategory = <?=  $_SESSION[$_GET["id"] . "-Category"]?>
         </script>
+    	-->
         <script src="page_editor.js"></script>
 
     </body>
