@@ -50,7 +50,11 @@
                         echo "Error al registrarse, por favor intente de nuevo";
                         break;
                     case 3:
-                        echo "Su cuenta se cre&oacute; correctamente";
+                        $_SESSION["UserCode"] = $conn->insert_id;
+                        $_SESSION["Name"] = $Name;
+                        $_SESSION["Image"] = "/InteractED/images/" . basename(glob("../../images/" . $conn->insert_id . ".*")[0]);
+                        $_SESSION["Email"] = $Email;
+                        header("Location: ../../");
                         break;
                     default:
                         echo "Error desconocido, por favor intente de nuevo";
