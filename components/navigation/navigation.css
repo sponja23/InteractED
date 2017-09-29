@@ -73,6 +73,10 @@ nav .logo {
     color: #8e8e8e;
 }
 
+.input-field input[type=search]:focus ~ #search-close-icon {
+    color: #8e8e8e !important;
+}
+
 #search-close-icon {
     margin-top: -10px;
 }
