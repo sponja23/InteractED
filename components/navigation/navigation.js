@@ -1,10 +1,10 @@
-$( "#search-mobile-icon" ).click(function() {
-    $( "#mobile-search" ).removeClass("hide");
-    $( "#navigation" ).addClass("hide");
-    $( "#mobile-search-box" ).focus();
+$( ".toggle-search" ).click(function() {
+    $( ".logo" ).toggleClass( "hide" );
+    $( "#right-buttons" ).toggleClass( "hide" );
+    $( "#search-form" ).toggleClass( "hide-on-small-only" );
+    $( "#search" ).focus();
 });
 
-$( "#search-mobile-back" ).click(function() {
-    $( "#mobile-search" ).addClass("hide");
-    $( "#navigation" ).removeClass("hide");
+$( "#search-close-icon" ).click(function() {
+    $( "#search" ).val("").focus();
 });

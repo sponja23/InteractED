@@ -4,7 +4,7 @@
     --placeholder-color: #a0a0a0
 }
 
-nav .logo {
+.logo {
     display: inline-block;
     position: absolute;
     width: 15%;
@@ -14,13 +14,13 @@ nav .logo {
 }
 
 @media only screen and (min-width: 600px) and (max-width: 992px) {
-    nav .logo {
+    .logo {
         width: 20%;
     }
 }
 
 @media only screen and (max-width: 600px) {
-    nav .logo {
+    .logo {
         margin-left: 5%;
     }
 }
@@ -43,42 +43,72 @@ nav .logo {
     color: var(--placeholder-color);
 }
 
+@media only screen and (max-width: 600px) {
+    #search {
+        width: 80%;
+        padding-left: 3rem;
+    }
+}
+
+@media only screen and (min-width: 601px) {
+    #search {
+        color: black;
+        background-color: #e5e5e5;
+        border-radius: 4px;
+    }
+}
+
 #search:focus, #mobile-search input:focus {
     border-bottom: none !important;
     box-shadow: none !important;
 }
 
-#search {
-    color: black;
-    background-color: #e5e5e5;
-    border-radius: 4px;
+#search:focus ~ #search-close-icon {
+    color: #8e8e8e;
 }
 
 #search-form {
-    display: inline-block;
-    height: calc(100% - 20px);
-    width: 70%;
-    margin-left: 15%;
+    margin: 0 auto;
+    width: 90%;
 }
 
-@media only screen and (min-width: 600px) and (max-width: 992px) {
+@media only screen and (min-width: 601px) {
+    #search-form {
+        display: inline-block;
+        height: calc(100% - 20px);
+    }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 992px) {
     #search-form {
         width: 60%;
         margin-left: 20%;
     }
 }
 
+@media only screen and (min-width: 993px) {
+    #search-form {
+        width: 70%;
+        margin-left: 15%;
+    }
+}
+
 #search-icon {
     margin-top: -22px;
+    margin-left: 0.8em;
     color: #8e8e8e;
 }
 
-.input-field input[type=search]:focus ~ #search-close-icon {
-    color: #8e8e8e !important;
+@media only screen and (max-width: 600px) {
+    #search-close-icon {
+        right: 0;
+    }
 }
 
-#search-close-icon {
-    margin-top: -10px;
+@media only screen and (min-width: 601px) {
+    #search-close-icon {
+        margin-top: -10px;
+    }
 }
 
 @media only screen and (max-width: 600px) {
