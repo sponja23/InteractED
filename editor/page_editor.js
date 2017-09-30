@@ -30,6 +30,8 @@ $(document).ready(function() {
     });
     $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
+    $("#page-edit-name").val(pageName);
+    $("#page-edit-category").val(pageCategory);
     category.loadTree();
     categories = category.getCategories();
     var category_image = {};
@@ -68,7 +70,7 @@ function initDialogs() {
                 dismissible: true,
                 endingTop: '50%',
                 complete: function() {
-                    elementTypes[type].editDialogReady();
+                    elementTypes[type].editDialogClose();
                 }
             });
             $("#" + elementTypes[type].name + "-create-button").click(function(){
@@ -245,6 +247,7 @@ function openEditPageDialog() {
 function savePage() {
     console.log("Saving...");
     var $content = $("<div id=content></div>");
+    var maxHeight = 0;
     $("#content").children(".object").each(function() {
         var type = $(this).data("type");
         var $elem = $(elementTypes[type].tag);
@@ -264,16 +267,26 @@ function savePage() {
                     $elem.attr(attribute, $inner.attr(attribute));
             }
         }
+        var bottomPos = $(this).position().top + $(this).outerHeight(true);
+        if(bottomPos > maxHeight)
+        	maxHeight = bottomPos
         $content.append($elem);
     });
 
+    $content.css({
+    	"height": (bottomPos + 50) + "px",
+    	"width": $("#content").width() + "px";
+    });
     console.log($content[0].outerHTML);
 
     $.ajax({
         url: "save_page.php",
         type: "POST",
         data: {
-            content: $content[0].outerHTML
+            content: $content[0].outerHTML,
+            transcript: "",
+            name: pageName,
+            category: pageCategory
         },
         success: function() {
             console.log("saved");

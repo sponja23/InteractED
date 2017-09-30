@@ -1,15 +1,16 @@
-
 <?php
-	/*
 	session_start();
     if(!isset($_SESSION["UserCode"]))
         header("Location: ../");
     else {
-        include "../include/connect.php";
-        $sql = "SELECT A.* FROM Articles A
-                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
-                INNER JOIN Users U ON ER.UserCode = U.UserCode
-                WHERE A.PostID = " . $_GET["id"] . " AND U.UserCode = " . $_SESSION["UserCode"];
+    	include "../include/connect.php";
+    	if($_SESSION["Level"] > 1)
+    		$sql = "SELECT * FROM Articles WHERE PostID = " . $_GET["id"];
+    	else
+	        $sql = "SELECT A.* FROM Articles A
+	                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
+	                INNER JOIN Users U ON ER.UserCode = U.UserCode
+	                WHERE A.PostID = " . $_GET["id"] . " AND U.UserCode = " . $_SESSION["UserCode"];
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -18,16 +19,17 @@
                 $_SESSION[$_GET["id"] . "-Category"] = $row["Category"];
             }
         }
-        else
+        else {
             header("Location: ../");
+        }
+        $conn->close();
     }
-    */
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Editar <!-- <?= $_SESSION[$_GET["id"] . "-Title"]?> --> </title>
+        <title>Editar <?= $_SESSION[$_GET["id"] . "-Title"]?></title>
 
         <?php require "../include/head.html"; ?>
 
@@ -129,11 +131,10 @@
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="../category/category.js"></script>
-		<!--
         <script>
-            var currentCategory = <?=  $_SESSION[$_GET["id"] . "-Category"]?>
+        	var pageName = <?= $_SESSION[$_GET["id"]] . "-Title"]?>
+            var pageCategory = <?= $_SESSION[$_GET["id"] . "-Category"]?>
         </script>
-    	-->
         <script src="page_editor.js"></script>
 
     </body>

@@ -5,9 +5,17 @@ include "../include/connect.php";
 
 $folder = "../posts/" . $_GET["id"] . "/";
 
-if(file_exists($folder)) {
-	file_put_contents($folder . "content", $_POST["content"]);
+file_put_contents($folder . "content.html", $_POST["content"]);
+file_put_contents($folder . "transcript.txt", $_POST["transcript"]);
+if($_POST["name"] != $_SESSION[$_GET["id"] . "-Title"]) {
+	$sql = "UPDATE Articles SET Title = '" . $_POST["name"] ."' WHERE PostID = " . $_GET["id"];
+	$conn->query($sql);
+}
+if($_POST["category"] != $_SESSION[$_GET["id"] . "-Category"]) {
+	$sql = "UPDATE Articles SET Category = '" . $_POST["category"] ."' WHERE PostID = " . $_GET["id"];
+	$conn->query($sql);
 }
 
+$conn->close();
 
 ?>

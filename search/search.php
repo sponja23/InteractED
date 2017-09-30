@@ -3,7 +3,12 @@ class Search {
     function SearchQuery($Search, $MaxWords) {
         require "../include/connect.php";
 
-        $sql = 'SELECT * FROM Articles WHERE Title LIKE "%' . $Search . '%" OR Creator LIKE "%' . $Search . '%" OR Tags LIKE "%' . $Search . '%" OR Text LIKE "%' . $Search . '%"';
+
+
+        $sql = 'SELECT DISTINCT A.* FROM Articles A
+                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
+                INNER JOIN Users U ON U.UserCode = ER.UserCode
+                WHERE A.Title LIKE "%' . $Search . '%" OR U.User LIKE "%' . $Search . '%" OR A.Tags LIKE "%' . $Search . '%" OR A.Transcript LIKE "%'. $Search . '%"';
 
         $result = $conn->query($sql);
 
@@ -34,10 +39,15 @@ class Search {
 
             $Words = $this->CheckQuery($Search);
 
-            $sql = 'SELECT * FROM Articles WHERE Title LIKE "%' . $Words[0] . '%" OR Creator LIKE "%' . $Words[0] . '%" OR Tags LIKE "%' . $Words[0] . '%" OR Text LIKE "%' . $Words[0] . '%"';
+            // En la base de datos ya no se guarda el nombre del creador
+
+            $sql = 'SELECT DISTINCT A.* FROM Articles A
+                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
+                INNER JOIN Users U ON U.UserCode = ER.UserCode
+                WHERE A.Title LIKE "%' . $Words[0] . '%" OR U.User LIKE "%' . $Words[0] . '%" OR A.Tags LIKE "%' . $Words[0] . '%" OR A.Transcript LIKE "%'. $Words[0] . '%"';
 
             for ($i = 1; $i < count($Words); $i++)
-                $sql .= 'OR Title LIKE "%' . $Words[$i] . '%" OR Creator LIKE "%' . $Words[$i] . '%" OR Tags LIKE "%' . $Words[$i] . '%" OR Text LIKE "%' . $Words[$i] . '%"';
+                $sql .= 'OR A.Title LIKE "%' . $Words[$i] . '%" OR U.User LIKE "%' . $Words[$i] . '%" OR A.Tags LIKE "%' . $Words[$i] . '%" OR A.Transcript LIKE "%'. $Words[$i] . '%"';
 
             $result = $conn->query($sql);
 
