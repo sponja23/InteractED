@@ -2,14 +2,23 @@
     padding: 0;
 }
 
-.chat {
+#new-chat, .chat {
     padding: 10px 24px;
 }
 
-.chat:hover {
+#new-chat:hover, .chat:hover {
     cursor: pointer;
     cursor: hand;
     background-color: #eee;
+}
+
+#new-chat-button {
+	width: 40px;
+	height: 40px;
+}
+
+#new-chat-icon {
+	margin-left: calc(50% - 12px);
 }
 
 .image {

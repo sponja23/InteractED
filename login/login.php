@@ -4,6 +4,7 @@ session_start();
 require "../include/connect.php";
 
 $sql = 'SELECT UserCode, Name, Email FROM Users WHERE (Email="' . $_POST["User"] . '" OR User="' . $_POST["User"] . '") AND Password="' . $_POST["Password"] . '"';
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -16,9 +17,8 @@ if ($result->num_rows > 0) {
         echo '1';
     }
 }
-else {
+else
     echo '0';
-}
 
 $conn->close();
 ?>

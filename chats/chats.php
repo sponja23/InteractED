@@ -18,9 +18,9 @@ if (file_exists($File)) {
 
     $result = $conn->query($sql);
 
-    $UserData = '{';
-
     if ($result->num_rows > 0) {
+        $UserData = '{';
+
         while ($row = $result->fetch_assoc()) {
             if ($_POST['UserCode'] < $_SESSION['UserCode'])
                 $ChatFile = "../chat/chats/" . $row['UserCode'] . '-' . $_SESSION['UserCode'] . ".chat";
@@ -32,9 +32,9 @@ if (file_exists($File)) {
 
             $UserData .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Image":"' . $row['Image'] . '","Message":"' . $Message . '"},';
         }
-    }
 
-    echo substr($UserData, 0, -1) . '}';
+        echo substr($UserData, 0, -1) . '}';
+    }
 }
 else
     file_put_contents($File, '{"Chats":[]}');

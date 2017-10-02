@@ -1,4 +1,9 @@
-<?php session_start(); ?>
+<?php
+session_start();
+
+if (!isset($_SESSION["UserCode"]))
+    header("Location: ../login");
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,7 +19,14 @@
 
         <div class="container">
             <div class="row">
-                <div id="chats" class="card-panel col s12 m6 offset-m3"></div>
+                <div id="chats" class="card-panel col s12 m6 offset-m3">
+                    <div id="new-chat" class="valign-wrapper">
+                        <div id="new-chat-button" class="blue circle valign-wrapper">
+                            <i id="new-chat-icon" class="material-icons white-text">add</i>
+                        </div>
+                        <span class="text">Conversaci&oacute;n nueva</span>
+                    </div>
+                </div>
             </div>
         </div>
 
