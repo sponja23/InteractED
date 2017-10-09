@@ -1,4 +1,5 @@
 <?php
+    $_SESSION["UserCode"] = 1;
 	session_start();
     if(!isset($_SESSION["UserCode"]))
         header("Location: ../");

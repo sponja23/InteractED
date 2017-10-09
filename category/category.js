@@ -1,4 +1,5 @@
 var category = {
+
     tree: {},
 
     // loads the tree into memory
@@ -32,7 +33,7 @@ var category = {
 
     // Returns a string with the parent of a node
     getParent: function(name) {
-        return this.tree[category].parent;
+        return this.tree[name].parent;
     },
 
     // Only used in getAbsolutePath

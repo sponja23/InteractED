@@ -269,12 +269,12 @@ function savePage() {
         }
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
-        	maxHeight = bottomPos
+        	maxHeight = bottomPos;
         $content.append($elem);
     });
 
     $content.css({
-    	"height": (bottomPos + 50) + "px",
+    	"height": (maxHeight + 50) + "px",
     	"width": $("#content").width() + "px";
     });
     console.log($content[0].outerHTML);
