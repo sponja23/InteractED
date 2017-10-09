@@ -65,6 +65,7 @@
                         type: "POST",
                         data: { User: User, Password: Password } ,
                         success: function (response) {
+                            console.log(response);
                             if (response == '1')
                                 window.history.back();
                             else

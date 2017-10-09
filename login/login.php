@@ -11,7 +11,8 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $_SESSION["UserCode"] = $row["UserCode"];
         $_SESSION["Name"] = $row["Name"];
-        $_SESSION["Image"] = "/InteractED/images/" . basename(glob("../images/" . $row["UserCode"] . ".*")[0]);
+        $images = glob("../images/" . $row["UserCode"] . ".*"); // Lo tuve que mover de linea porque el parser me tiraba que no andaba
+        $_SESSION["Image"] = "/InteractED/images/" . basename($images[0]);
         $_SESSION["Email"] = $row["Email"];
 
         echo '1';

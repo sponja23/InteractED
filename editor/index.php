@@ -1,5 +1,4 @@
 <?php
-    $_SESSION["UserCode"] = 1;
 	session_start();
     if(!isset($_SESSION["UserCode"]))
         header("Location: ../");
@@ -122,6 +121,15 @@
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-edit-button">Guardar</a>
                 </div>
             </div>
+            <div id="text-create-dialog" class="modal valign-modal">
+                <div class="modal-content row">
+                    
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-cancel">Cancelar</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-button">Crear</a>
+                </div>
+            </div>
         </div>
 
         <div id="content" class="container" onclick="if(!dragging) unselectElement();">
@@ -131,10 +139,11 @@
         <?php require "../include/scripts.html"; ?>
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script src="../include/textboxio/textboxio.js"></script>
         <script src="../category/category.js"></script>
         <script>
-        	var pageName = <?= $_SESSION[$_GET["id"]] . "-Title"]?>
-            var pageCategory = <?= $_SESSION[$_GET["id"] . "-Category"]?>
+        	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
+            var pageCategory = <?= "\"" . $_SESSION[$_GET["id"] . "-Category"] . "\""?>;
         </script>
         <script src="page_editor.js"></script>
 

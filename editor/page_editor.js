@@ -9,14 +9,28 @@ elementTypes["image"] = {
         "height" : "label"
     },
     createDialogClose: function() {
-        console.log("close create");
         emptyParameters("#image-create-dialog");
         invalidateImage("create");
     },
     editDialogClose: function() {
-        console.log("close edit");
+        emptyParameters("#image-edit-dialog");
+
     }
 };
+
+elementTypes["text"] = {
+    name: "text",
+    tag: "<p></p>",
+    attributes: {
+        "html" : "input"
+    },
+    createDialogClose: function() {
+
+    },
+    editDialogClose: function() {
+
+    }
+}
 
 var categories;
 
@@ -238,6 +252,7 @@ function editButtonClick() {
 
 function openEditDialog(type) {
     console.log("Editing " + type + ": " + $selectedElement.attr("id"));
+    $("#edit-page-dialog").modal("open");
 }
 
 function openEditPageDialog() {
@@ -275,7 +290,7 @@ function savePage() {
 
     $content.css({
     	"height": (maxHeight + 50) + "px",
-    	"width": $("#content").width() + "px";
+    	"width": $("#content").width() + "px"
     });
     console.log($content[0].outerHTML);
 
