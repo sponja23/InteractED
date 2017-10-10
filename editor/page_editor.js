@@ -20,7 +20,7 @@ elementTypes["image"] = {
 
 elementTypes["text"] = {
     name: "text",
-    tag: "<p></p>",
+    tag: "<div></div>",
     attributes: {
         "html" : "input"
     },
@@ -252,11 +252,11 @@ function editButtonClick() {
 
 function openEditDialog(type) {
     console.log("Editing " + type + ": " + $selectedElement.attr("id"));
-    $("#edit-page-dialog").modal("open");
 }
 
 function openEditPageDialog() {
     console.log("Editing page");
+    $("#edit-page-dialog").modal("open");
 }
 
 function savePage() {

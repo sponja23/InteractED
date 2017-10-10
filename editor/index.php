@@ -123,7 +123,8 @@
             </div>
             <div id="text-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    
+                    <h4>Crear Texto</h4>
+                    <textarea id="text-create-content" class="col s8"></textarea> 
                 </div>
                 <div class="modal-footer">
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-cancel">Cancelar</a>

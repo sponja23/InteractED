@@ -6,7 +6,6 @@ include "../include/connect.php";
 $folder = "../posts/" . $_GET["id"] . "/";
 
 file_put_contents($folder . "content.html", $_POST["content"]);
-file_put_contents($folder . "transcript.txt", $_POST["transcript"]);
 if($_POST["name"] != $_SESSION[$_GET["id"] . "-Title"]) {
 	$sql = "UPDATE Articles SET Title = '" . $_POST["name"] ."' WHERE PostID = " . $_GET["id"];
 	$conn->query($sql);
