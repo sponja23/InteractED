@@ -1,37 +1,5 @@
 var elementTypes = {};
 
-elementTypes["image"] = {
-    name: "image",
-    tag: "<img />",
-    attributes: {
-        "src" : "input",
-        "width" : "label",
-        "height" : "label"
-    },
-    createDialogClose: function() {
-        emptyParameters("#image-create-dialog");
-        invalidateImage("create");
-    },
-    editDialogClose: function() {
-        emptyParameters("#image-edit-dialog");
-
-    }
-};
-
-elementTypes["text"] = {
-    name: "text",
-    tag: "<div></div>",
-    attributes: {
-        "html" : "input"
-    },
-    createDialogClose: function() {
-
-    },
-    editDialogClose: function() {
-
-    }
-}
-
 var categories;
 
 var nextID = 0;
@@ -39,6 +7,38 @@ var $selectedElement = $("#content");
 var dragging = false;
 
 $(document).ready(function() {
+
+    elementTypes["text"] = {
+        name: "text",
+        tag: "<div></div>",
+        attributes: {},
+        createDialogClose: function() {
+            console.log("dialogo de texto cerrado");
+        },
+        editDialogClose: function() {
+
+        }
+    };
+
+    elementTypes["image"] = {
+        name: "image",
+        tag: "<img />",
+        attributes: {
+            "src" : "input",
+            "width" : "label",
+            "height" : "label"
+        },
+        createDialogClose: function() {
+            emptyParameters("#image-create-dialog");
+            invalidateImage("create");
+        },
+        editDialogClose: function() {
+            emptyParameters("#image-edit-dialog");
+
+        }
+    };
+    
+
     $("#content").css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
     });
@@ -67,16 +67,19 @@ $(window).on("resize", function() {
 });
 
 function initDialogs() {
+
     $("#edit-page-dialog").modal({
         dismissible: true,
         endingTop: "50%"
     });
     for(var type in elementTypes) {
         if(elementTypes.hasOwnProperty(type)) {
+            console.log("#" + elementTypes[type].name + "-create-dialog");
             $("#" + elementTypes[type].name + "-create-dialog").modal({
                 dismissible: true,
                 endingTop: '50%',
                 complete: function() {
+                    console.log("closing: #" + elementTypes[type].name + "-create-dialog");
                     elementTypes[type].createDialogClose();
                 }
             });
@@ -146,12 +149,14 @@ function emptyParameters(id) {
 }
 
 function openCreateDialog(type) {
+    console.log("opening: #" + elementTypes[type].name + "-create-dialog");
     $("#" + elementTypes[type].name + "-create-dialog").modal("open");
     $(".sideNav-button").sideNav("hide");
 }
 
 function createElement(type) {
-    var parameter_attributes = { "data-type" : elementTypes["image"].name };
+
+    var parameter_attributes = { "data-type" : elementTypes[type].name };
 
     $("#" + elementTypes[type].name + "-create-dialog .input").each(function() {
         var value;
@@ -171,8 +176,9 @@ function createElement(type) {
             alert("Parameter error");
     });
 
-    var $element = $(elementTypes["image"].tag).attr(parameter_attributes).addClass("inner");
-    emptyParameters("#image-create-dialog");
+    var $element = $(elementTypes[type].tag).attr(parameter_attributes).addClass("inner");
+    emptyParameters("#" + type + "-create-dialog");
+    $("#content").append($element);
     createWrapper($element);
 }
 
