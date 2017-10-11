@@ -40,11 +40,16 @@
                                 <input id="title" name="title" type="text">
                                 <label for="title" data-error="Debe ingresar un titulo">Titulo</label>
                             </div>
-                            <div class="input-field col s12 m6">
+                            <div class="input-field col s6">
+                                <input id="category" type="text" class="autocomplete">
+                                <label for="category">Categoría</label>
+                            </div>
+                            <br><br>
+                            <div class="input-field col s12">
                                 <div class="chips chips-autocomplete" id="tags"></div>
                                 <label for="tags" data-error="Debe ingresar etiquetas">Tags</label>
                             </div>
-                            <label id="error-message" class="red-text">&nbsp;</label>
+                            <br><br>
                             <br><br>
                             <a id="cancel" class="btn-flat blue-text waves-effect">Cancelar</a>
                             <a id="create-button" class="btn blue waves-effect waves-light right">Crear</a>
@@ -62,19 +67,23 @@
                 $('.chips-autocomplete').material_chip({
                     autocompleteOptions: {
                         data: {
-                            'Matematica': null,
-                            'Fisica': null,
-                            'Quimica': null,
-                            'Historia': null,
-                            'Programación': null,
-                            'Lengua': null,
-                            'Francia': null
                         },
                         limit: Infinity,
                         minLength: 1
                     }
                 });
+                $('#category').autocomplete({
+                    autocompleteOptions: {
+                        data: {
+                            //Roberto
+                        },
+                        limit: Infinity,
+                        minLength: 1
+                    }
+                });
+
             });
+
 
             $( "#create-button" ).click(function() {
 
@@ -85,15 +94,20 @@
                 else {
                     if ($( "#title" ).val() == "")
                     {
-                        $( "#title" ).addClass("validate invalid").focus();
+                        $( "#title" ).addClass("invalid").focus();
                     }
                     else{ 
-                        if ($( ".chip" )) // ESTO NO FUNKA DA TRUE SIEMPRE. VER COMO DETECTARLO XD
+                        if ($( ".chip" )[0])
                         {
+                            var tagText = "";
+                            var data = $(".chips").material_chip("data");
+                            for(var i = 0; i < data.length; i++)
+                                tagText += data[i].tag + ";";
+                            console.log(tagText);
                             $.ajax({
                                 url: "create.php",
                                 type: "POST",
-                                data: { Title: $( "#title" ).val(), Tags: $( "#tags" ).val() } ,
+                                data: { Title: $( "#title" ).val(), Tags: tagText, Category: $("#category").val() } ,
                                 success: function (response) {
                                     alert(response);
                                 },
@@ -104,7 +118,8 @@
                         }
                         else
                         {
-                            $( "#tags" ).addClass("validate invalid").focus();
+                            console.log("Estropajo");
+                            $( "#tags" ).addClass("invalid").focus();
                         }
                     }
                 }
