@@ -1,5 +1,3 @@
-var elementTypes = {};
-
 var categories;
 
 var nextID = 0;
@@ -7,38 +5,6 @@ var $selectedElement = $("#content");
 var dragging = false;
 
 $(document).ready(function() {
-
-    elementTypes["text"] = {
-        name: "text",
-        tag: "<div></div>",
-        attributes: {},
-        createDialogClose: function() {
-            console.log("dialogo de texto cerrado");
-        },
-        editDialogClose: function() {
-
-        }
-    };
-
-    elementTypes["image"] = {
-        name: "image",
-        tag: "<img />",
-        attributes: {
-            "src" : "input",
-            "width" : "label",
-            "height" : "label"
-        },
-        createDialogClose: function() {
-            emptyParameters("#image-create-dialog");
-            invalidateImage("create");
-        },
-        editDialogClose: function() {
-            emptyParameters("#image-edit-dialog");
-
-        }
-    };
-    
-
     $("#content").css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
     });
@@ -72,45 +38,36 @@ function initDialogs() {
         dismissible: true,
         endingTop: "50%"
     });
-    for(var type in elementTypes) {
-        if(elementTypes.hasOwnProperty(type)) {
-            console.log("#" + elementTypes[type].name + "-create-dialog");
-            $("#" + elementTypes[type].name + "-create-dialog").modal({
-                dismissible: true,
-                endingTop: '50%',
-                complete: function() {
-                    console.log("closing: #" + elementTypes[type].name + "-create-dialog");
-                    elementTypes[type].createDialogClose();
-                }
-            });
-            $("#" + elementTypes[type].name + "-edit-dialog").modal({
-                dismissible: true,
-                endingTop: '50%',
-                complete: function() {
-                    elementTypes[type].editDialogClose();
-                }
-            });
-            $("#" + elementTypes[type].name + "-create-button").click(function(){
-                createElement(elementTypes[type].name);
-            });
-            $("#" + elementTypes[type].name + "-edit-button").click(function(){
-                saveEdit();
-            });
-        }
-    }
-    
+
+    // Image Dialog
+
+    $("#image-create-dialog").modal({
+        dismissible: true,
+        endingTop: '50%',
+        complete: function() {
+            emptyParameters("#image-create-dialog");
+            invalidateImage();
+        } 
+    });
+
+    $("#image-create-button").click(function(){
+        createImage();
+    });
+
+    // Text Dialog
+
 }
 
-function updatePreview(modalType) {
-    var $url = $("#image-" + modalType + "-src");
-    var $preview = $("#image-" + modalType + "-preview > img");
+function updatePreview() {
+    var $url = $("#image-create-src");
+    var $preview = $("#image-create-preview > img");
 
     var tmpImg = new Image();
     tmpImg.src = $url.val();
 
     $(tmpImg).one('load', function() {
         if (tmpImg.width == 0 || tmpImg.height == 0)
-            invalidateImage(modalType);
+            invalidateImage();
         else {
             $url.removeClass("invalid").addClass("valid");
             $preview.attr("src", $url.val());
@@ -126,20 +83,26 @@ function updatePreview(modalType) {
     });
 
     $(tmpImg).one("error", function() {
-        invalidateImage(modalType);
+        invalidateImage();
     });
 }
 
-function invalidateImage(modalType) {
-    $url = $("#image-" + modalType + "-src");
+function invalidateImage() {
+    $url = $("#image-create-src");
 
     if($url.val() == "")
         $url.removeClass("invalid").removeClass("valid");
     else
         $url.removeClass("valid").addClass("invalid");
 
-    $("#image-" + modalType + "-width, #image-" + modalType + "-height").html("200");
-    $("#image-" + modalType + "-preview > img").attr("src", "no_image_selected.gif");
+    $("#image-create-width, #image-create-height").html("200");
+    $("#image-create-preview > img").attr("src", "no_image_selected.gif");
+}
+
+function openCreateDialog(type) {
+    console.log("opening: #" + type + "-create-dialog");
+    $("#" + type + "-create-dialog").modal("open");
+    $(".sideNav-button").sideNav("hide");
 }
 
 function emptyParameters(id) {
@@ -148,38 +111,16 @@ function emptyParameters(id) {
     });
 }
 
-function openCreateDialog(type) {
-    console.log("opening: #" + elementTypes[type].name + "-create-dialog");
-    $("#" + elementTypes[type].name + "-create-dialog").modal("open");
-    $(".sideNav-button").sideNav("hide");
-}
-
-function createElement(type) {
-
-    var parameter_attributes = { "data-type" : elementTypes[type].name };
-
-    $("#" + elementTypes[type].name + "-create-dialog .input").each(function() {
-        var value;
-        switch(elementTypes[type].attributes[$(this).data("parameter")]) {
-            case "input":
-                value = $(this).val();
-                break;
-            case "label":
-                value = $(this).html();
-                break;
-            default:
-                value = 0;
-        }
-        if(value != 0)
-            parameter_attributes[$(this).data("parameter")] = value;
-        else
-            alert("Parameter error");
-    });
-
-    var $element = $(elementTypes[type].tag).attr(parameter_attributes).addClass("inner");
-    emptyParameters("#" + type + "-create-dialog");
-    $("#content").append($element);
-    createWrapper($element);
+function createImage() {
+    var attributes = {
+        "width": $("#image-create-width").html() + "px",
+        "height": $("#image-create-height").html() + "px",
+        "src": $("#image-create-src").val(),
+        "data-type": "image"
+    };
+    console.log(attributes);
+    emptyParameters("#image-create-dialog");
+    createWrapper($("<img />").attr(attributes).addClass("inner"));
 }
 
 function createWrapper($inner) {
@@ -206,7 +147,7 @@ function createWrapper($inner) {
         },
         aspectRatio: $newElement.width() / $newElement.height()
     });
-    $newElement.addClass("object " + elementTypes[$inner.data("type")].name);
+    $newElement.addClass("object " + $inner.data("type"));
     $newElement.children().css({
         "width": "100%",
         "height": "100%"
@@ -230,6 +171,7 @@ function createWrapper($inner) {
     $newElement.appendTo($("#content"));
     nextID++;
 }
+
 function selectElement($element) {
     unselectElement();
     console.log("selecting element");
@@ -271,23 +213,23 @@ function savePage() {
     var maxHeight = 0;
     $("#content").children(".object").each(function() {
         var type = $(this).data("type");
-        var $elem = $(elementTypes[type].tag);
         var $inner = $(this).children(".inner");
+        var $elem;
+        switch($inner.data("type")) {
+            case "image":
+                $elem = $("<img />").attr({
+                    "src": $inner.attr("src")
+                });
+            case "text":
+                $elem = $("<div></div>");
+        }
         $elem.css({
             "position": "relative",
             "left": $(this).css("left"),
             "top": $(this).css("top")
         });
-        for(var attribute in elementTypes[type].attributes) {
-            if(elementTypes[type].attributes.hasOwnProperty(attribute)) {
-                if(attribute == "width")
-                    $elem.width($inner.width());
-                else if(attribute == "height")
-                    $elem.height($inner.height());
-                else
-                    $elem.attr(attribute, $inner.attr(attribute));
-            }
-        }
+        $elem.width($inner.width());
+        $elem.height($inner.height());
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
         	maxHeight = bottomPos;

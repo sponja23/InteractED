@@ -68,7 +68,7 @@
             </li>
         </ul>
         
-        <div class="fixed-action-btn" onclick="editButtonClick(); savePage()">
+        <div class="fixed-action-btn" onclick="editButtonClick()">
             <a href="#" class="btn-floating btn-large blue">
                 <i class="large material-icons">mode_edit</i>
             </a>
@@ -102,7 +102,7 @@
                         <p id="image-create-lengths"><strong>Width:</strong><br><span id="image-create-width" class="input" data-parameter="width">200</span>px<br><br><strong>Height:</strong><br><span id="image-create-height" class="input" data-parameter="height">200</span>px</p>
                     </div>
                     <div class="input-field col s12">
-                        <input id="image-create-src" type="url" onchange="updatePreview('create')" class="input" data-parameter="src">
+                        <input id="image-create-src" type="url" onchange="updatePreview()" class="input" data-parameter="src">
                         <label for="image-create-url">Source</label>
                     </div>
                 </div>
