@@ -4,14 +4,16 @@ var nextID = 0;
 var $selectedElement = $("#content");
 var dragging = false;
 
+var debugSaveEnabled = true;
+
 $(document).ready(function() {
+
     $("#content").css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
     });
+
     $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
-    $("#page-edit-name").val(pageName);
-    $("#page-edit-category").val(pageCategory);
     category.loadTree();
     categories = category.getCategories();
     var category_image = {};
@@ -19,7 +21,7 @@ $(document).ready(function() {
     NOT IMPLEMENTED
     for(var cat in categories)
         category_image[cat] = "../category/images/" + cat + ".jpg";
-    $("#page-edit-category").autocomplete({
+    $("#edit-page-category").autocomplete({
         data: category_image,
         limit: 10,
         minLength: 1
@@ -28,16 +30,20 @@ $(document).ready(function() {
     initDialogs();
 });
 
-$(window).on("resize", function() {
-    $("#content").css("height", ($(window).height() - $("#side-nav").height()) + "px");
-});
-
 function initDialogs() {
+
+    // Page Dialog
 
     $("#edit-page-dialog").modal({
         dismissible: true,
         endingTop: "50%"
     });
+
+    $("#edit-page-name").val(pageName);
+    $("#edit-page-category").val(pageCategory);
+    $("#edit-page-height").val($("#content").height());
+
+    $("#edit-page-button").click(editPage);
 
     // Image Dialog
 
@@ -50,13 +56,27 @@ function initDialogs() {
         } 
     });
 
-    $("#image-create-button").click(function(){
-        createImage();
-    });
+    $("#image-create-button").click(createImage);
 
     // Text Dialog
 
 }
+
+// Code: Page edit
+
+function openEditPageDialog() {
+    console.log("Editing page");
+    $("#side-nav-button").sideNav("hide");
+    $("#edit-page-dialog").modal("open");
+}
+
+function editPage() {
+    pageName = $("#edit-page-name").val();
+    pageCategory = $("#edit-page-category").val();
+    $("#content").height($("#edit-page-height").val());
+}
+
+// Code: Image creation
 
 function updatePreview() {
     var $url = $("#image-create-src");
@@ -70,7 +90,7 @@ function updatePreview() {
             invalidateImage();
         else {
             $url.removeClass("invalid").addClass("valid");
-            $preview.attr("src", $url.val());
+            $("#image-create-preview").attr("src", $url.val());
 
             $("#image-create-width").html(tmpImg.width);
             $("#image-create-height").html(tmpImg.height);
@@ -112,18 +132,24 @@ function emptyParameters(id) {
 }
 
 function createImage() {
+    console.log($("#image-create-width").html());
     var attributes = {
-        "width": $("#image-create-width").html() + "px",
-        "height": $("#image-create-height").html() + "px",
         "src": $("#image-create-src").val(),
         "data-type": "image"
     };
-    console.log(attributes);
+    var css = {
+        "width": $("#image-create-width").html() + "px",
+        "height": $("#image-create-height").html() + "px"
+    }
     emptyParameters("#image-create-dialog");
-    createWrapper($("<img />").attr(attributes).addClass("inner"));
+    var $image = $("<img />").attr(attributes).css(css).addClass("inner");
+    createWrapper($image);
 }
 
+// Code: Wrapper
+
 function createWrapper($inner) {
+    console.log($inner);
     var $newElement = $("<div></div>").html($inner);
     $newElement.draggable({
         snap: true,
@@ -136,8 +162,8 @@ function createWrapper($inner) {
         "data-type": $inner.data("type")
     });
     $newElement.css({
-        "width": $inner.attr("width") + "px",
-        "height": $inner.attr("height") + "px",
+        "width": $inner.width() + "px",
+        "height": $inner.height() + "px",
         "float": "left",
         "position": "absolute !important"
     });
@@ -172,6 +198,8 @@ function createWrapper($inner) {
     nextID++;
 }
 
+// Code: Selection
+
 function selectElement($element) {
     unselectElement();
     console.log("selecting element");
@@ -202,10 +230,7 @@ function openEditDialog(type) {
     console.log("Editing " + type + ": " + $selectedElement.attr("id"));
 }
 
-function openEditPageDialog() {
-    console.log("Editing page");
-    $("#edit-page-dialog").modal("open");
-}
+// Code: Saving
 
 function savePage() {
     console.log("Saving...");
@@ -240,22 +265,29 @@ function savePage() {
     	"height": (maxHeight + 50) + "px",
     	"width": $("#content").width() + "px"
     });
-    console.log($content[0].outerHTML);
 
-    $.ajax({
-        url: "save_page.php",
-        type: "POST",
-        data: {
-            content: $content[0].outerHTML,
-            transcript: "",
-            name: pageName,
-            category: pageCategory
-        },
-        success: function() {
-            console.log("saved");
-        },
-        error: function() {
-            console.log("saving error");
-        }
-    });
+    if(debugSaveEnabled)
+        console.log($content[0].outerHTML);
+    else
+        $.ajax({
+            url: "save_page.php",
+            type: "POST",
+            data: {
+                content: $content[0].outerHTML,
+                transcript: "",
+                name: pageName,
+                category: pageCategory
+            },
+            success: function() {
+                console.log("saved");
+            },
+            error: function() {
+                console.log("saving error");
+            }
+        });
+}
+
+function toggleDebugSave() {
+    debugSaveEnabled = !debugSaveEnabled;
+    console.log("Debug save set to " + debugSaveEnabled);
 }

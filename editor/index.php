@@ -78,18 +78,25 @@
             <div id="edit-page-dialog" class="modal valign-modal">
                 <div class="modal-content row">
                     <h4>Editar propiedades de página</h4>
-                    <div class="input-field col s6">
-                        <input id="page-edit-name" type="text" class="input">
-                        <label for="page-edit-name">Nombre</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="page-edit-category" type="text" class="autocomplete">
-                        <label for="page-edit-category">Categoría</label>
+                    <br><br>
+                    <div style="display: block; margin: 0 auto; padding: 0 10%">
+                        <div class="input-field col s12">
+                            <input id="edit-page-name" type="text" class="input">
+                            <label for="edit-page-name">Nombre</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="edit-page-category" type="text" class="input autocomplete">
+                            <label for="edit-page-category">Categoría</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="edit-page-height" type="number" class="input" min="0">
+                            <label for="edit-page-height">Altura</label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="page-edit-cancel">Cancelar</a>
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="page-edit-done">Guardar</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-cancel">Cancelar</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-button">Guardar</a>
                 </div>
             </div>
             <div id="image-create-dialog" class="modal valign-modal">
