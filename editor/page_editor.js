@@ -14,6 +14,7 @@ $(document).ready(function() {
 
     $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
+
     category.loadTree();
     categories = category.getCategories();
     var category_image = {};
@@ -27,6 +28,7 @@ $(document).ready(function() {
         minLength: 1
     });
     */
+
     initDialogs();
 });
 
@@ -51,7 +53,9 @@ function initDialogs() {
         dismissible: true,
         endingTop: '50%',
         complete: function() {
-            emptyParameters("#image-create-dialog");
+            $("#image-create-dialog .input").each(function(){
+                $(this).val('').blur().removeClass("valid invalid");
+            });
             invalidateImage();
         } 
     });
@@ -60,6 +64,50 @@ function initDialogs() {
 
     // Text Dialog
 
+    $("#text-create-dialog").modal({
+        dismissible: true,
+        endingTop: '50%',
+        complete: function() {
+            $("#text-create-content").val('');
+            $("#text-create-dialog .collapsible").collapsible('close', 0);
+            $("#text-create-border-style").val('none');
+            $("#text-create-border-color").val('#000000');
+            $("#text-create-border-width").val('0');
+            
+        }
+    });
+
+    $("#text-create-border-style").material_select();
+    $("#text-create-border-color").colorpicker();
+
+    textboxio.replace("#text-create-content", {
+        autosubmit: false,
+        css : {
+            stylesheets: [''],
+            styles: [               
+                { rule: 'p',    text: 'Párrafo' },
+                { rule: 'h1',   text: 'Encabezado 1' },
+                { rule: 'h2',   text: 'Encabezado 2' },
+                { rule: 'h3',   text: 'Encabezado 3' },
+                { rule: 'h4',   text: 'Encabezado 4' }
+            ]
+        },
+        codeview: {
+            enabled: true,
+            showButton: true
+        },
+        images: {
+            allowLocal : true
+        },
+        languages: ['en', 'es'],
+        ui: {
+            toolbar:  {
+                items: [ 'undo', 'style', 'emphasis', 'align', 'listindent', 'format', 'tools' ]
+            }
+        }
+    });
+
+    $("#text-create-button").click(createText);
 }
 
 // Code: Page edit
@@ -125,14 +173,8 @@ function openCreateDialog(type) {
     $(".sideNav-button").sideNav("hide");
 }
 
-function emptyParameters(id) {
-    $(id + " .input").each(function(){
-        $(this).val('').blur().removeClass("valid invalid");
-    });
-}
-
 function createImage() {
-    console.log($("#image-create-width").html());
+    console.log("Creating image");
     var attributes = {
         "src": $("#image-create-src").val(),
         "data-type": "image"
@@ -141,9 +183,32 @@ function createImage() {
         "width": $("#image-create-width").html() + "px",
         "height": $("#image-create-height").html() + "px"
     }
-    emptyParameters("#image-create-dialog");
-    var $image = $("<img />").attr(attributes).css(css).addClass("inner");
+    var $image = $("<img />")
+    .attr(attributes)
+    .css(css)
+    .addClass("inner");
     createWrapper($image);
+}
+
+// Code: Text Creation
+
+function createText() {
+    console.log("Creating text");
+    var attributes = {
+        "data-type": "text"
+    };
+    var css = {
+        "border": $("#text-create-border-width").val() + " " + 
+                  $("#text-create-border-style").val() + " " +
+                  $("#text-create-border-width").val()
+    };
+    var $inner_content = $($("#text-create-content").val());
+    var $text = $("<div></div>")
+    .attr(attributes)
+    .css(css)
+    .append($inner_content.addClass("inner_content"))
+    .addClass("inner");
+    createWrapper($text);
 }
 
 // Code: Wrapper

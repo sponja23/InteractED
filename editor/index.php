@@ -34,6 +34,7 @@
         <?php require "../include/head.html"; ?>
 
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css">
+        <link rel="stylesheet" href="../include/colorpicker/materialize-colorpicker.min.css">
         <link rel="stylesheet" href="../css/input.css">
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="page_editor.css">
@@ -110,7 +111,7 @@
                     </div>
                     <div class="input-field col s12">
                         <input id="image-create-src" type="url" onchange="updatePreview()" class="input" data-parameter="src">
-                        <label for="image-create-url">Source</label>
+                        <label for="image-create-src">Source</label>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -131,7 +132,34 @@
             <div id="text-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
                     <h4>Crear Texto</h4>
-                    <textarea id="text-create-content" class="col s8"></textarea> 
+                    <div id="text-create-properties" class="section row">
+                        <ul class="collapsible popout row s12" data-collapsible="accordion">
+                            <li>
+                                <a class="collapsible-header">Borde<i class="material-icons">arrow_drop_down</i></a>
+                                <div class="collapsible-body row">
+                                    <div class="input-field col s4">
+                                        <select id="text-create-border-style">
+                                            <option value="none" selected>Ninguno</option>
+                                            <option value="solid">Sólido</option>
+                                            <option value="dotted">Punteado</option>
+                                        </select>
+                                        <label for="text-create-border-style">Estilo</label>
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <input id="text-create-border-color" type="text" />
+                                        <label for="text-create-border-color">Color</label>
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <input id="text-create-border-width" type="number" value='0' min='0' max='12'/>
+                                        <label for="text-create-border-width">Grosor</label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <textarea id="text-create-content" class="col s12" style="height: 250px"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-cancel">Cancelar</a>
@@ -148,6 +176,7 @@
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="../include/textboxio/textboxio.js"></script>
+        <script src="../include/colorpicker/materialize-colorpicker.min.js"></script>
         <script src="../category/category.js"></script>
         <script>
         	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
