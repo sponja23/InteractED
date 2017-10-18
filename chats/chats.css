@@ -1,4 +1,4 @@
-#chats {
+#chats-wrapper {
     padding: 0;
 }
 
@@ -6,9 +6,12 @@
     padding: 10px 24px;
 }
 
-#new-chat:hover, .chat:hover {
+.search-toggle:hover, .chat:hover {
     cursor: pointer;
     cursor: hand;
+}
+
+#new-chat:hover, .chat:hover {
     background-color: #eee;
 }
 
@@ -29,4 +32,44 @@
 
 .text {
     margin-left: 15px;
+}
+
+#search-users {
+    padding: 0;
+}
+
+#search-user-wrapper {
+    border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+#user-back-icon {
+    margin-top: -3px;
+}
+
+#user-search {
+    margin-top: -10px;
+    margin-bottom: 5px;
+    margin-left: 40px;
+    width: calc(100% - 80px);
+}
+
+#user-search, #user-search:focus {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+#user-search:focus ~ #user-close-icon {
+    color: #8e8e8e;
+}
+
+#user-close-icon {
+    margin-top: -4px;
+}
+
+#user-search-icon {
+    margin-top: -12px;
+}
+
+.generic {
+    margin-top: 70px;
 }

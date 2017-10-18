@@ -3,16 +3,27 @@ session_start();
 
 require "../include/connect.php";
 
-$sql = 'SELECT Name, Image FROM Users WHERE UserCode="' . $_GET["id"] . '"';
+$sql = 'SELECT Name FROM Users WHERE UserCode=' . $_GET["id"];
 
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $Name = $row['Name'];
-        $Image = $row['Image'];
+        $Extension = pathinfo(glob("../images/" . $_GET["id"] . ".*")[0])['extension'];
+        $Image = "../images/" . $_GET["id"] . '.' . $Extension;
     }
 }
+
+$File = "../chats/users/" . $_SESSION["UserCode"] . ".chats";
+
+if (file_exists($File)) {
+    $Chats = json_decode(file_get_contents($File), true);
+    $Chats["Chats"][count($Chats["Chats"])] = $_GET["id"];
+    file_put_contents($File, json_encode($Chats));
+}
+else
+    file_put_contents($File, '{"Chats":[' . $_GET["id"] . ']}');
 ?>
 <!DOCTYPE html>
 <html>

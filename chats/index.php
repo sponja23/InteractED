@@ -19,12 +19,23 @@ if (!isset($_SESSION["UserCode"]))
 
         <div class="container">
             <div class="row">
-                <div id="chats" class="card-panel col s12 m6 offset-m3">
-                    <div id="new-chat" class="valign-wrapper">
+                <div id="chats-wrapper" class="card-panel col s12 m6 offset-m3">
+                    <div id="new-chat" class="valign-wrapper search-toggle">
                         <div id="new-chat-button" class="blue circle valign-wrapper">
                             <i id="new-chat-icon" class="material-icons white-text">add</i>
                         </div>
                         <span class="text">Conversaci&oacute;n nueva</span>
+                    </div>
+                    <div id="chats"></div>
+                </div>
+                <div id="search-users" class="card-panel col s12 m6 offset-m3 hide">
+                    <div id="search-user-wrapper" class="input-field col s12">
+                        <i id="user-back-icon" class="material-icons prefix grey-text search-toggle">arrow_back</i>
+                        <input id="user-search" type="search" placeholder="Usuario, nombre o correo electr&oacute;nico">
+                        <i id="user-close-icon" class="material-icons waves-effect waves-light">close</i>
+                    </div>
+                    <div id="search-results">
+                        <p class="center-align generic">Ingrese un usuario, nombre o correo electr&oacute;nico</p>
                     </div>
                 </div>
             </div>
