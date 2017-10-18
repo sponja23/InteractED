@@ -4,6 +4,7 @@ var textEditor;
 var nextID = 0;
 var $selectedElement = $("#content");
 var dragging = false;
+var newImages = {};
 
 var debugSaveEnabled = true;
 
@@ -131,6 +132,8 @@ function updatePreview() {
     var $url = $("#image-create-src");
     var $preview = $("#image-create-preview > img");
 
+    console.log($url.val());
+
     var tmpImg = new Image();
     tmpImg.src = $url.val();
 
@@ -139,7 +142,7 @@ function updatePreview() {
             invalidateImage();
         else {
             $url.removeClass("invalid").addClass("valid");
-            $("#image-create-preview").attr("src", $url.val());
+            $("#image-create-preview img").attr("src", $url.val());
 
             $("#image-create-width").html(tmpImg.width);
             $("#image-create-height").html(tmpImg.height);
@@ -184,6 +187,7 @@ function createImage() {
         "width": $("#image-create-width").html() + "px",
         "height": $("#image-create-height").html() + "px"
     }
+    newImages["" + nextID] = attributes["src"];
     var $image = $("<img />")
     .attr(attributes)
     .css(css)
@@ -321,7 +325,7 @@ function savePage() {
         switch($inner.data("type")) {
             case "image":
                 $elem = $("<img />").attr({
-                    "src": $inner.attr("src")
+                    "src": "/InteractED/post/content/" + PostID + "/images/" + $(this).attr("id") + "." + $inner.data("extension")
                 });
             case "text":
                 $elem = $("<div></div>");
@@ -354,7 +358,8 @@ function savePage() {
                 content: $content[0].outerHTML,
                 transcript: "",
                 name: pageName,
-                category: pageCategory
+                category: pageCategory,
+                newImages: JSON.stringify(newImages)
             },
             success: function() {
                 console.log("saved");
