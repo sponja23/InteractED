@@ -3,9 +3,9 @@ session_start();
 
 include "../include/connect.php";
 
-$folder = "../posts/" . $_GET["id"] . "/";
+$folder = "../post/content/" . $_GET["id"] . "/";
 
-file_put_contents($folder . "content.html", $_POST["content"]);
+file_put_contents($folder . "index.html", $_POST["content"]);
 if($_POST["name"] != $_SESSION[$_GET["id"] . "-Title"]) {
 	$sql = "UPDATE Articles SET Title = '" . $_POST["name"] ."' WHERE PostID = " . $_GET["id"];
 	$conn->query($sql);

@@ -1,4 +1,5 @@
 var categories;
+var textEditor;
 
 var nextID = 0;
 var $selectedElement = $("#content");
@@ -68,7 +69,7 @@ function initDialogs() {
         dismissible: true,
         endingTop: '50%',
         complete: function() {
-            $("#text-create-content").val('');
+            textEditor.content.set('');
             $("#text-create-dialog .collapsible").collapsible('close', 0);
             $("#text-create-border-style").val('none');
             $("#text-create-border-color").val('#000000');
@@ -80,7 +81,7 @@ function initDialogs() {
     $("#text-create-border-style").material_select();
     $("#text-create-border-color").colorpicker();
 
-    textboxio.replace("#text-create-content", {
+    textEditor = textboxio.replace("#text-create-content", {
         autosubmit: false,
         css : {
             stylesheets: [''],
@@ -194,19 +195,29 @@ function createImage() {
 
 function createText() {
     console.log("Creating text");
+    var text = $(textEditor.content.get());
+    text.css("display", "inline-block");
+    var $inner_content = $("<div></div>").append(text).addClass("inner-content").css("display", "inline-block");
+    $("#content").append($inner_content);
     var attributes = {
         "data-type": "text"
     };
     var css = {
-        "border": $("#text-create-border-width").val() + " " + 
-                  $("#text-create-border-style").val() + " " +
-                  $("#text-create-border-width").val()
+        "border": $("#text-create-border-style").val() + " " + 
+                  $("#text-create-border-color").val() + " " +
+                  $("#text-create-border-width").val(),
+        "display": "inline-block",
+        "padding": "0 10px",
+        "width": $inner_content.width(),
+        "height": $inner_content.height()
     };
-    var $inner_content = $($("#text-create-content").val());
+    $inner_content.one("load", function() {
+        $("#content").remove($inner_content);
+    });
     var $text = $("<div></div>")
     .attr(attributes)
     .css(css)
-    .append($inner_content.addClass("inner_content"))
+    .append($inner_content)
     .addClass("inner");
     createWrapper($text);
 }
@@ -227,17 +238,19 @@ function createWrapper($inner) {
         "data-type": $inner.data("type")
     });
     $newElement.css({
-        "width": $inner.width() + "px",
-        "height": $inner.height() + "px",
+        "width": $inner.outerWidth() + "px",
+        "height": $inner.outerHeight() + "px",
         "float": "left",
         "position": "absolute !important"
     });
-    $newElement.append($("<div id='handle-" + nextID + "' class='handle ui-resizable-handle ui-resizable-se'></div>")).resizable({
-        handles: {
-            "se": "#handle-" + nextID
-        },
-        aspectRatio: $newElement.width() / $newElement.height()
-    });
+    if($inner.data("type") != "text") {
+        $newElement.append($("<div id='handle-" + nextID + "' class='handle ui-resizable-handle ui-resizable-se'></div>")).resizable({
+            handles: {
+                "se": "#handle-" + nextID
+            },
+            aspectRatio: $newElement.width() / $newElement.height()
+        });
+    }
     $newElement.addClass("object " + $inner.data("type"));
     $newElement.children().css({
         "width": "100%",
