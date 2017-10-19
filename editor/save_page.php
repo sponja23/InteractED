@@ -10,14 +10,14 @@ if(!file_exists("../post/content/" . $_POST["id"] . "/")) {
 
 file_put_contents("../post/content/" . $_POST["id"] . "/index.html", $_POST["content"]);
 if($_POST["name"] != $_SESSION[$_POST["id"] . "-Title"]) {
-	$sql = "UPDATE Articles SET Title = '" . $_POST["name"] ."' WHERE PostID = " . $_POST["id"];
+	$sql = "UPDATE Articles SET Title = '" . $_POST["name"] . "' WHERE MD5(PostID) = '" . $_POST["id"] . "'";
 	$conn->query($sql);
 }
 if($_POST["category"] != $_SESSION[$_POST["id"] . "-Category"]) {
-	$sql = "UPDATE Articles SET Category = '" . $_POST["category"] ."' WHERE PostID = " . $_POST["id"];
+	$sql = "UPDATE Articles SET Category = '" . $_POST["category"] . "' WHERE MD5(PostID) = '" . $_POST["id"] . "'";
 	$conn->query($sql);
 }
-$sql = "UPDATE Articles SET Transcript = '" . $_POST["transcript"] ."' WHERE PostID = " - $_POST["id"];
+$sql = "UPDATE Articles SET Transcript = '" . $_POST["transcript"] . "' WHERE MD5(PostID) = '" . $_POST["id"] . "'";
 $conn->query($sql);
 
 $newImages = json_decode($_POST["newImages"]);

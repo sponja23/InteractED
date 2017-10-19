@@ -5,12 +5,12 @@
     else {
     	include "../include/connect.php";
     	if($_SESSION["Level"] > 1)
-    		$sql = "SELECT * FROM Articles WHERE PostID = " . $_GET["id"];
+    		$sql = "SELECT * FROM Articles WHERE MD5(PostID) = '" . $_GET["id"] . "'";
     	else
 	        $sql = "SELECT A.* FROM Articles A
 	                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
 	                INNER JOIN Users U ON ER.UserCode = U.UserCode
-	                WHERE A.PostID = " . $_GET["id"] . " AND U.UserCode = " . $_SESSION["UserCode"];
+	                WHERE MD5(A.PostID) = '" . $_GET["id"] . "' AND U.UserCode = " . $_SESSION["UserCode"];
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -181,7 +181,7 @@
         <script>
         	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
             var pageCategory = <?= "\"" . $_SESSION[$_GET["id"] . "-Category"] . "\""?>;
-            var postID = <?= $_GET["id"] ?>;
+            var postID = <?= "\"" . $_GET["id"] . "\"" ?>;
         </script>
         <script src="page_editor.js"></script>
 
