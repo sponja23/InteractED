@@ -1,0 +1,54 @@
+.rating { 
+    border: none;
+    float: left;
+}
+
+.rating > label {
+    margin: 0;
+    padding: 0;
+}
+
+[type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:after {
+    background-color: initial;
+}
+
+[type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:before, [type="radio"].with-gap:checked+label:after,
+[type="radio"]:not(:checked)+label:before, [type="radio"]:not(:checked)+label:after,
+[type="radio"]:checked+label:before {
+    border: initial;
+}
+
+[type="radio"]:not(:checked)+label, [type="radio"]:checked+label {
+    padding-left: 5px;
+}
+
+.rating > input {
+    display: none;
+}
+
+.rating .material-icons {
+    font-size: 32px;
+}
+
+.rating > label:before {
+    margin: 5px;
+    display: inline-block;
+}
+
+.rating > label { 
+    color: #ddd; 
+    float: right; 
+}
+
+.rating > input:checked ~ label,
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: #FFD700;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label,
+.rating > input:checked ~ label:hover ~ label {
+    color: #FFED85;
+}
