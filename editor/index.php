@@ -70,12 +70,12 @@
         </ul>
         
         <div class="fixed-action-btn" onclick="editButtonClick()">
-            <a href="#" class="btn-floating btn-large blue">
-                <i class="large material-icons">mode_edit</i>
+            <a href="#" class="btn-floating btn-large blue darken-2">
+                <i class="large material-icons">settings</i>
             </a>
             <ul id="btn-list">
-                <li id="btn-edit"><a class="btn-floating yellow"><i class="material-icons">border_color</i></a></li>
-                <li id="btn-remove"><a class="btn-floating red"><i class="material-icons">remove_circle_outline</i></a></li>
+                <li id="btn-edit"><a class="btn-floating blue darken-3"><i class="material-icons">mode_edit</i></a></li>
+                <li id="btn-remove"><a class="btn-floating blue darken-3"><i class="material-icons">delete</i></a></li>
             </ul>
         </div>
         

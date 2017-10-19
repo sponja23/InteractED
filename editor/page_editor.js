@@ -352,10 +352,11 @@ function openEditDialog(type) {
 
 function savePage() {
     console.log("Saving...");
+    var $editorContent = $("#content");
     var $content = $("<div id=content></div>");
     var maxHeight = 0;
     var pageTranscript = "";
-    $("#content").children(".object").each(function() {
+    $editorContent.children(".object").each(function() {
         var type = $(this).data("type");
         var $inner = $(this).children(".inner");
         switch(type) {
@@ -373,8 +374,8 @@ function savePage() {
         }
         $elem.css({
             "position": "relative",
-            "left": $(this).position().left,
-            "top": $(this).position().top
+            "left": ($(this).offset().left - $editorContent.offset().left) + "px",
+            "top": ($(this).offset().top - $editorContent.offset().top) + "px"
         });
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
