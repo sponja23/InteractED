@@ -181,6 +181,7 @@
         <script>
         	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
             var pageCategory = <?= "\"" . $_SESSION[$_GET["id"] . "-Category"] . "\""?>;
+            var postID = <?= $_GET["id"] ?>;
         </script>
         <script src="page_editor.js"></script>
 

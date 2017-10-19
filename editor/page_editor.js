@@ -6,7 +6,7 @@ var $selectedElement = $("#content");
 var dragging = false;
 var newImages = {};
 
-var debugSaveEnabled = true;
+var debugSaveEnabled = false;
 
 $(document).ready(function() {
 
@@ -131,9 +131,6 @@ function editPage() {
 function updatePreview() {
     var $url = $("#image-create-src");
     var $preview = $("#image-create-preview > img");
-
-    console.log($url.val());
-
     var tmpImg = new Image();
     tmpImg.src = $url.val();
 
@@ -179,15 +176,17 @@ function openCreateDialog(type) {
 
 function createImage() {
     console.log("Creating image");
+    var url = $("#image-create-src").val();
     var attributes = {
-        "src": $("#image-create-src").val(),
+        "src": url,
+        "data-extension": url.slice(url.lastIndexOf('.')),
         "data-type": "image"
     };
     var css = {
         "width": $("#image-create-width").html() + "px",
         "height": $("#image-create-height").html() + "px"
     }
-    newImages["" + nextID] = attributes["src"];
+    newImages[nextID.toString()] = url;
     var $image = $("<img />")
     .attr(attributes)
     .css(css)
@@ -229,7 +228,6 @@ function createText() {
 // Code: Wrapper
 
 function createWrapper($inner) {
-    console.log($inner);
     var $newElement = $("<div></div>").html($inner);
     $newElement.draggable({
         snap: true,
@@ -277,6 +275,7 @@ function createWrapper($inner) {
         }
     });
     $newElement.appendTo($("#content"));
+    $newElement
     nextID++;
 }
 
@@ -318,25 +317,28 @@ function savePage() {
     console.log("Saving...");
     var $content = $("<div id=content></div>");
     var maxHeight = 0;
+    var pageTranscript = "";
     $("#content").children(".object").each(function() {
         var type = $(this).data("type");
         var $inner = $(this).children(".inner");
-        var $elem;
-        switch($inner.data("type")) {
+        switch(type) {
             case "image":
-                $elem = $("<img />").attr({
-                    "src": "/InteractED/post/content/" + PostID + "/images/" + $(this).attr("id") + "." + $inner.data("extension")
+                var $elem = $("<img />").attr({
+                    "src": "/InteractED/post/content/" + postID + "/images/" + $(this).attr("id") + "." + $inner.data("extension"),
+                    "width": $inner.width() + "px",
+                    "height": $inner.height() + "px"
                 });
+                break;
             case "text":
-                $elem = $("<div></div>");
+                var $elem = $inner.children().clone();
+                pageTranscript += $elem.text() + " ";
+                break;
         }
         $elem.css({
             "position": "relative",
-            "left": $(this).css("left"),
-            "top": $(this).css("top")
+            "left": $(this).position().left,
+            "top": $(this).position().top
         });
-        $elem.width($inner.width());
-        $elem.height($inner.height());
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
         	maxHeight = bottomPos;
@@ -344,24 +346,28 @@ function savePage() {
     });
 
     $content.css({
-    	"height": (maxHeight + 50) + "px",
-    	"width": $("#content").width() + "px"
+        "height": (maxHeight + 50) + "px",
+        "width": $("#content").width() + "px"
     });
 
+    var dataSaved = {
+        id: postID,
+        content: $content[0].outerHTML,
+        transcript: pageTranscript,
+        name: pageName,
+        category: pageCategory,
+        newImages: JSON.stringify(newImages)
+    }
+
     if(debugSaveEnabled)
-        console.log($content[0].outerHTML);
+        console.log(dataSaved);
     else
         $.ajax({
             url: "save_page.php",
             type: "POST",
-            data: {
-                content: $content[0].outerHTML,
-                transcript: "",
-                name: pageName,
-                category: pageCategory,
-                newImages: JSON.stringify(newImages)
-            },
-            success: function() {
+            data: dataSaved,
+            success: function(result) {
+                console.log(result);
                 console.log("saved");
             },
             error: function() {
