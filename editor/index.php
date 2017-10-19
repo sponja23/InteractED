@@ -73,6 +73,10 @@
             <a href="#" class="btn-floating btn-large blue">
                 <i class="large material-icons">mode_edit</i>
             </a>
+            <ul id="btn-list">
+                <li id="btn-edit"><a class="btn-floating yellow"><i class="material-icons">border_color</i></a></li>
+                <li id="btn-remove"><a class="btn-floating red"><i class="material-icons">remove_circle_outline</i></a></li>
+            </ul>
         </div>
         
         <div id="dialogs">
@@ -168,7 +172,7 @@
             </div>
         </div>
 
-        <div id="content" class="container" onclick="if(!dragging) unselectElement();">
+        <div id="content" class="container" data-type="content" onclick="if(!dragging) unselectElement();">
 
         </div>
 

@@ -4,7 +4,9 @@ var textEditor;
 var nextID = 0;
 var $selectedElement = $("#content");
 var dragging = false;
+var resizing = false;
 var newImages = {};
+
 
 var debugSaveEnabled = false;
 
@@ -110,6 +112,38 @@ function initDialogs() {
     });
 
     $("#text-create-button").click(createText);
+}
+
+function enableButton(button) {
+    switch(button) {
+        case "edit":
+            if($("#btn-edit").length == 0)
+                $("#btn-list").append($edit);
+            break;
+        case "remove":
+            if($("#btn-remove").length == 0)
+                $("#btn-list").append($remove);
+            break;
+    }
+}
+
+function updateFAB(type) {
+    var $edit = $("#btn-edit");
+    var $remove = $("#btn-remove");
+    switch(type) {
+        case "content":
+            $edit.hide();
+            $remove.hide();
+            break;
+        case "image":
+            $edit.hide();
+            $remove.show();
+            break;
+        case "text":
+            $edit.show();
+            $remove.show();
+            break;
+    }
 }
 
 // Code: Page edit
@@ -269,13 +303,14 @@ function createWrapper($inner) {
                 dragging = true;
                 e.stopPropagation();
             }
+            if($(".handle:hover").length != 0)
+                dragging = false;
         },
         "mouseup" : function(e) {
             dragging = false;
         }
     });
     $newElement.appendTo($("#content"));
-    $newElement
     nextID++;
 }
 
@@ -289,6 +324,7 @@ function selectElement($element) {
         $selectedElement.addClass("selected");
         $selectedElement.children(".handle").show();
     }
+    updateFAB($selectedElement.data("type"));
 }
 
 function unselectElement() {
@@ -298,6 +334,7 @@ function unselectElement() {
         $selectedElement.children(".handle").hide();
     }
     $selectedElement = $("#content");
+    updateFAB("content");
 }
 
 function editButtonClick() {
