@@ -17,6 +17,10 @@
             while($row = $result->fetch_assoc()) {
                 $_SESSION[$_GET["id"] . "-Title"] = $row["Title"];
                 $_SESSION[$_GET["id"] . "-Category"] = $row["Category"];
+                $PageContent = "";
+                if(!is_null($row["LastEditDate"])) {
+                    $PageContent = file_get_contents("/InteractED/post/content/" . $_GET["id"] . "/index.html");
+                }
             }
         }
         else {
