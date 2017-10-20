@@ -21,10 +21,16 @@ $(document).ready(function() {
 
     $(pageContent).children().each(function(){
         $element = $(this);
+        console.log("Creating " + $element.data("type"));
         console.log($element[0]);
         switch($element.data("type")) {
             case "image":
-                createWrapper($element);
+                createImage($element.attr("src"), true, {
+                    "left": $element.css("left"),
+                    "top": $element.css("top"),
+                    "width": $element.css("width"),
+                    "height": $element.css("height")
+                });
                 break;
             case "text":
                 createText($element.children(), true, {
@@ -82,7 +88,9 @@ function initDialogs() {
         } 
     });
 
-    $("#image-create-button").click(createImage);
+    $("#image-create-button").click(function() {
+        createImage($("#image-create-src").val());
+    });
 
     // Text Dialog
 
@@ -228,30 +236,33 @@ function openCreateDialog(type) {
     $(".sideNav-button").sideNav("hide");
 }
 
-function createImage() {
+function createImage(url, old=false, other_css={}) {
     console.log("Creating image");
-    var url = $("#image-create-src").val();
     var attributes = {
         "src": url,
         "data-extension": url.slice(url.lastIndexOf('.')),
         "data-type": "image"
     };
-    var css = {
-        "width": $("#image-create-width").html() + "px",
-        "height": $("#image-create-height").html() + "px"
-    }
+    if(!old)
+        var css = {
+            "width": $("#image-create-width").html() + "px",
+            "height": $("#image-create-height").html() + "px"
+        };
+    else
+        var css = other_css;
     newImages[nextID.toString()] = url;
     var $image = $("<img />")
     .attr(attributes)
     .css(css)
     .addClass("inner");
+    if(old)
+        $image.attr("data-old", "true");
     createWrapper($image);
 }
 
 // Code: Text Creation
 
-function createText($inner_text, old=false, extra_attr={}) {
-    console.log("Creating text");
+function createText($inner_text, old=false, extra_css={}) {
     $inner_text.css("display", "inline-block");
     var $inner_content = $("<div></div>").append($inner_text).addClass("inner-content").css("display", "inline-block");
     $content.append($inner_content);
@@ -276,7 +287,7 @@ function createText($inner_text, old=false, extra_attr={}) {
     .append($inner_content)
     .addClass("inner");
     if(old) {
-        $text.css(extra_attr);
+        $text.css(extra_css);
         $text.attr("data-old", "true");
     }
     createWrapper($text);
@@ -403,13 +414,15 @@ function savePage() {
         switch(type) {
             case "image":
                 var $elem = $("<img />").attr({
-                    "src": "/InteractED/post/content/" + postID + "/images/" + id.slice(id.lastIndexOf("-") + 1) + "." + $inner.data("extension"),
-                    "width": $inner.width() + "px",
-                    "height": $inner.height() + "px",
+                    "src": "/InteractED/post/content/" + postID + "/images/" + id.slice(id.lastIndexOf("-") + 1) + $inner.data("extension"),
                     "data-type": $inner.data("type"),
                     "data-extension": $inner.data("extension"),
                     "data-old": "true"
+                }).css({
+                    "width": $inner.width() + "px",
+                    "height": $inner.height() + "px"
                 });
+                console.log($elem.attr("src"));
                 break;
             case "text":
                 var $elem = $inner.children().clone().attr({
@@ -427,6 +440,8 @@ function savePage() {
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
         	maxHeight = bottomPos;
+        console.log(type + ": ");
+        console.log($elem[0]);
         $newContent.append($elem);
     });
 
