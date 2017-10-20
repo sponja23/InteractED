@@ -17,7 +17,10 @@ if($_POST["category"] != $_SESSION[$_POST["id"] . "-Category"]) {
 	$sql = "UPDATE Articles SET Category = '" . $_POST["category"] . "' WHERE MD5(PostID) = '" . $_POST["id"] . "'";
 	$conn->query($sql);
 }
-$sql = "UPDATE Articles SET Transcript = '" . $_POST["transcript"] . "' WHERE MD5(PostID) = '" . $_POST["id"] . "'";
+$sql = "UPDATE Articles SET
+		Transcript = '" . $_POST["transcript"] . "',
+		LastEditDate = CURDATE()
+		WHERE MD5(PostID) = '" . $_POST["id"] . "'";
 $conn->query($sql);
 
 $newImages = json_decode($_POST["newImages"]);

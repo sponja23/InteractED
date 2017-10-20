@@ -19,6 +19,24 @@ $(document).ready(function() {
     $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
 
+    $(pageContent).children().each(function(){
+        $element = $(this);
+        console.log($element[0]);
+        switch($element.data("type")) {
+            case "image":
+                createWrapper($element);
+                break;
+            case "text":
+                createText($element.children(), true, {
+                    "left": $element.css("left"),
+                    "top": $element.css("top")
+                });
+                break;
+            default:
+                console.log("No type detected");
+        }
+    });
+
     category.loadTree();
     categories = category.getCategories();
     var category_image = {};
@@ -111,7 +129,9 @@ function initDialogs() {
         }
     });
 
-    $("#text-create-button").click(createText);
+    $("#text-create-button").click(function() {
+        createText($(textEditor.content.get()));
+    });
 }
 
 function enableButton(button) {
@@ -230,11 +250,10 @@ function createImage() {
 
 // Code: Text Creation
 
-function createText() {
+function createText($inner_text, old=false, extra_attr={}) {
     console.log("Creating text");
-    var text = $(textEditor.content.get());
-    text.css("display", "inline-block");
-    var $inner_content = $("<div></div>").append(text).addClass("inner-content").css("display", "inline-block");
+    $inner_text.css("display", "inline-block");
+    var $inner_content = $("<div></div>").append($inner_text).addClass("inner-content").css("display", "inline-block");
     $("#content").append($inner_content);
     var attributes = {
         "data-type": "text"
@@ -256,6 +275,10 @@ function createText() {
     .css(css)
     .append($inner_content)
     .addClass("inner");
+    if(old) {
+        $text.css(extra_attr);
+        $text.attr("data-old", "true");
+    }
     createWrapper($text);
 }
 
@@ -273,6 +296,17 @@ function createWrapper($inner) {
         "id": "object-" + nextID,
         "data-type": $inner.data("type")
     });
+    if($inner.data("old")) {
+        console.log($inner.css("left"));
+        $newElement.css({
+            "left": $inner.css("left"),
+            "top": $inner.css("top")
+        });
+        $inner.css({
+            "left": "",
+            "top": ""
+        });
+    }
     $newElement.css({
         "width": $inner.outerWidth() + "px",
         "height": $inner.outerHeight() + "px",
@@ -358,17 +392,23 @@ function savePage() {
     var pageTranscript = "";
     $editorContent.children(".object").each(function() {
         var type = $(this).data("type");
+        var id = $(this).attr("id");
         var $inner = $(this).children(".inner");
         switch(type) {
             case "image":
                 var $elem = $("<img />").attr({
-                    "src": "/InteractED/post/content/" + postID + "/images/" + $(this).attr("id") + "." + $inner.data("extension"),
+                    "src": "/InteractED/post/content/" + postID + "/images/" + id.slice(id.lastIndexOf("-") + 1) + "." + $inner.data("extension"),
                     "width": $inner.width() + "px",
-                    "height": $inner.height() + "px"
+                    "height": $inner.height() + "px",
+                    "data-type": $inner.data("type"),
+                    "data-extension": $inner.data("extension")
                 });
                 break;
             case "text":
-                var $elem = $inner.children().clone();
+                var $elem = $inner.children().clone().attr({
+                    "data-type": "text",
+                    "data-old": "true"
+                });
                 pageTranscript += $elem.text() + " ";
                 break;
         }

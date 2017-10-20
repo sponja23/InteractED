@@ -19,7 +19,7 @@
                 $_SESSION[$_GET["id"] . "-Category"] = $row["Category"];
                 $PageContent = "";
                 if(!is_null($row["LastEditDate"])) {
-                    $PageContent = file_get_contents("/InteractED/post/content/" . $_GET["id"] . "/index.html");
+                    $PageContent = file_get_contents("../post/content/" . $_GET["id"] . "/index.html");
                 }
             }
         }
@@ -190,6 +190,7 @@
         	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
             var pageCategory = <?= "\"" . $_SESSION[$_GET["id"] . "-Category"] . "\""?>;
             var postID = <?= "\"" . $_GET["id"] . "\"" ?>;
+            var pageContent = <?= "'". $PageContent . "'" ?>;
         </script>
         <script src="page_editor.js"></script>
 
