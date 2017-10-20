@@ -1,6 +1,8 @@
 .rating { 
     border: none;
     float: left;
+    padding-left: 0;
+    margin-left: 0;
 }
 
 .rating > label {

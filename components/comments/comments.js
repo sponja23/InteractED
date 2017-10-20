@@ -31,6 +31,29 @@ $.ajax({
             $( "#publish" ).click(function() {
                 UploadComment($( "#comment" ).val().replace(/\n/g, "<br>"));
             });
+
+            function UploadComment(Comment) {
+                $.ajax({
+                    url: "../components/comments/UploadComment.php",
+                    type: "POST",
+                    data: { PostID: PostID, Comment: Comment } ,
+                    success: function (response) {
+                        var Data = JSON.parse(response);
+
+                        $( "#top-divider" ).removeClass( "hide" );
+
+                        AddComment("../images/" + Data.Image, Data.Name, Comment);
+
+                        $( "#comment" ).val("").css("height", "auto");
+                        $( "#publish" ).addClass( "disabled" );
+
+                        LoadedComments += Data.CommentID + ';';
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            }
         }
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -64,29 +87,6 @@ function LoadComments(PostID, DownloadedComments) {
                     }
                 }
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-        }
-    });
-}
-
-function UploadComment(Comment) {
-    $.ajax({
-        url: "../components/comments/UploadComment.php",
-        type: "POST",
-        data: { PostID: PostID, Comment: Comment } ,
-        success: function (response) {
-            var Data = JSON.parse(response);
-
-            $( "#top-divider" ).removeClass( "hide" );
-
-            AddComment("../images/" + Data.Image, Data.Name, Comment);
-
-            $( "#comment" ).val("").css("height", "auto");
-            $( "#publish" ).addClass( "disabled" );
-
-            LoadedComments += Data.CommentID + ';';
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);

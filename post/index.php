@@ -3,7 +3,7 @@ session_start();
 
 include "../include/connect.php";
 
-$sql = "SELECT * FROM Articles WHERE PostID = " . $_GET["id"];
+$sql = 'SELECT * FROM Articles WHERE MD5(PostID) = "' . $_GET["id"] . '"';
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0)
@@ -38,7 +38,7 @@ $conn->close();
         <?php require "../include/scripts.html"; ?>
 
         <script src="../components/navigation/navigation.js"></script>
-
+        <script src="../components/rating/rating.js"></script>
         <script src="../components/comments/comments.js"></script>
     </body>
 </html>

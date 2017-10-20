@@ -1,4 +1,5 @@
 <div id="top-divider" class="divider hide"></div>
+    <p style="margin-bottom: 0;"><strong>Comentarios</strong></p>
     <div id="comments"></div>
 <div id="bottom-divider" class="divider hide"></div>
 
