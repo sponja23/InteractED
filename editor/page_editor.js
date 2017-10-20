@@ -2,17 +2,17 @@ var categories;
 var textEditor;
 
 var nextID = 0;
-var $selectedElement = $("#content");
+var $content = $("#content");
+var $selectedElement = $content;
 var dragging = false;
 var resizing = false;
 var newImages = {};
-
 
 var debugSaveEnabled = false;
 
 $(document).ready(function() {
 
-    $("#content").css({
+    $content.css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
     });
 
@@ -65,7 +65,7 @@ function initDialogs() {
 
     $("#edit-page-name").val(pageName);
     $("#edit-page-category").val(pageCategory);
-    $("#edit-page-height").val($("#content").height());
+    $("#edit-page-height").val($content.height());
 
     $("#edit-page-button").click(editPage);
 
@@ -177,7 +177,7 @@ function openEditPageDialog() {
 function editPage() {
     pageName = $("#edit-page-name").val();
     pageCategory = $("#edit-page-category").val();
-    $("#content").height($("#edit-page-height").val());
+    $content.height($("#edit-page-height").val());
 }
 
 // Code: Image creation
@@ -254,7 +254,7 @@ function createText($inner_text, old=false, extra_attr={}) {
     console.log("Creating text");
     $inner_text.css("display", "inline-block");
     var $inner_content = $("<div></div>").append($inner_text).addClass("inner-content").css("display", "inline-block");
-    $("#content").append($inner_content);
+    $content.append($inner_content);
     var attributes = {
         "data-type": "text"
     };
@@ -268,7 +268,7 @@ function createText($inner_text, old=false, extra_attr={}) {
         "height": $inner_content.height()
     };
     $inner_content.one("load", function() {
-        $("#content").remove($inner_content);
+        $content.remove($inner_content);
     });
     var $text = $("<div></div>")
     .attr(attributes)
@@ -296,22 +296,11 @@ function createWrapper($inner) {
         "id": "object-" + nextID,
         "data-type": $inner.data("type")
     });
-    if($inner.data("old")) {
-        console.log($inner.css("left"));
-        $newElement.css({
-            "left": $inner.css("left"),
-            "top": $inner.css("top")
-        });
-        $inner.css({
-            "left": "",
-            "top": ""
-        });
-    }
     $newElement.css({
         "width": $inner.outerWidth() + "px",
         "height": $inner.outerHeight() + "px",
         "float": "left",
-        "position": "absolute !important"
+        "position": "relative !important"
     });
     if($inner.data("type") != "text") {
         $newElement.append($("<div id='handle-" + nextID + "' class='handle ui-resizable-handle ui-resizable-se'></div>")).resizable({
@@ -344,7 +333,21 @@ function createWrapper($inner) {
             dragging = false;
         }
     });
-    $newElement.appendTo($("#content"));
+    $newElement.appendTo($content);
+    if($inner.data("old")) {
+        $newElement.css({
+            "left": "0px",
+            "top": "0px"
+        });
+        $newElement.css({
+            "left": parseInt($inner.css("left").slice(0, $inner.css("left").lastIndexOf("px"))) - $inner.offset().left + $content.offset().left,
+            "top": parseInt($inner.css("top").slice(0, $inner.css("top").lastIndexOf("px"))) - $inner.offset().top + $content.offset().top
+        });
+        $inner.css({
+            "left": "",
+            "top": ""
+        });
+    }
     nextID++;
 }
 
@@ -367,8 +370,12 @@ function unselectElement() {
         $selectedElement.removeClass("selected");
         $selectedElement.children(".handle").hide();
     }
-    $selectedElement = $("#content");
+    $selectedElement = $content;
     updateFAB("content");
+}
+
+function deleteButtonClick() {
+
 }
 
 function editButtonClick() {
@@ -386,11 +393,10 @@ function openEditDialog(type) {
 
 function savePage() {
     console.log("Saving...");
-    var $editorContent = $("#content");
-    var $content = $("<div id=content></div>");
+    var $newContent = $("<div id=content></div>");
     var maxHeight = 0;
     var pageTranscript = "";
-    $editorContent.children(".object").each(function() {
+    $content.children(".object").each(function() {
         var type = $(this).data("type");
         var id = $(this).attr("id");
         var $inner = $(this).children(".inner");
@@ -401,7 +407,8 @@ function savePage() {
                     "width": $inner.width() + "px",
                     "height": $inner.height() + "px",
                     "data-type": $inner.data("type"),
-                    "data-extension": $inner.data("extension")
+                    "data-extension": $inner.data("extension"),
+                    "data-old": "true"
                 });
                 break;
             case "text":
@@ -414,23 +421,23 @@ function savePage() {
         }
         $elem.css({
             "position": "relative",
-            "left": ($(this).offset().left - $editorContent.offset().left) + "px",
-            "top": ($(this).offset().top - $editorContent.offset().top) + "px"
+            "left": ($(this).offset().left - $content.offset().left) + "px",
+            "top": ($(this).offset().top - $content.offset().top) + "px"
         });
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
         	maxHeight = bottomPos;
-        $content.append($elem);
+        $newContent.append($elem);
     });
 
-    $content.css({
+    $newContent.css({
         "height": (maxHeight + 50) + "px",
         "width": $("#content").width() + "px"
     });
 
     var dataSaved = {
         id: postID,
-        content: $content[0].outerHTML,
+        content: $newContent[0].outerHTML,
         transcript: pageTranscript,
         name: pageName,
         category: pageCategory,
