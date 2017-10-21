@@ -9,7 +9,7 @@
     	else
 	        $sql = "SELECT A.* FROM Articles A
 	                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
-	                INNER JOIN Users U ON ER.UserCode = U.UserCode
+	                INNER JOIN Users U ON ER.UserCode = U.UserCode OR A.CreatorID = U.UserCode
 	                WHERE MD5(A.PostID) = '" . $_GET["id"] . "' AND U.UserCode = " . $_SESSION["UserCode"];
         $result = $conn->query($sql);
 
