@@ -79,7 +79,7 @@
             </a>
             <ul id="btn-list">
                 <li id="btn-edit"><a class="btn-floating blue darken-3"><i class="material-icons">mode_edit</i></a></li>
-                <li id="btn-remove"><a class="btn-floating blue darken-3"><i class="material-icons">delete</i></a></li>
+                <li id="btn-remove"><a class="btn-floating blue darken-3" onclick="deleteButtonClick()"><i class="material-icons">delete</i></a></li>
             </ul>
         </div>
         
@@ -176,7 +176,7 @@
             </div>
         </div>
 
-        <div id="content" class="container" data-type="content" onclick="if(!dragging) unselectElement();">
+        <div id="content" class="container" data-type="content" onclick="if(!dragging) unselectElement();" style="position: relative;">
 
         </div>
 

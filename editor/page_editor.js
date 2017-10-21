@@ -359,6 +359,8 @@ function createWrapper($inner) {
             "top": ""
         });
     }
+    selectElement($newElement);
+    unselectElement();
     nextID++;
 }
 
