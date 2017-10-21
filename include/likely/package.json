@@ -1,0 +1,56 @@
+{
+  "name": "likely",
+  "description": "Recommendation engine for Node.js applications.",
+  "version": "0.2.0",
+  "engines": {
+    "node": ">=0.6.13"
+  },
+  "author": {
+    "name": "Sean Byrnes",
+    "email": "sean@fogstack.com"
+  },
+  "keywords": [
+    "recommendation",
+    "learning",
+    "matrix"
+  ],
+  "homepage": "https://github.com/sbyrnes/likely.js",
+  "bugs": {
+    "url": "https://github.com/sbyrnes/likely.js/issues"
+  },
+  "main": "./likely.js",
+  "maintainers": [
+    {
+      "name": "sbyrnes",
+      "email": "sean@fogstack.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sbyrnes/likely.js"
+  },
+  "dependencies": {
+    "sylvester": ">=0.0.21"
+  },
+  "devDependencies": {
+    "expresso": ">=0.9.2"
+  },
+  "optionalDependencies": {},
+  "gitHead": "aa49560d97eac6114d362733b479debc0468eefd",
+  "_id": "likely@0.2.0",
+  "scripts": {},
+  "_shasum": "6395fd3f7b065c813fdf49ad128658d278a9282c",
+  "_from": "likely@latest",
+  "_npmVersion": "2.1.11",
+  "_nodeVersion": "0.10.30",
+  "_npmUser": {
+    "name": "sbyrnes",
+    "email": "sean@fogstack.com"
+  },
+  "dist": {
+    "shasum": "6395fd3f7b065c813fdf49ad128658d278a9282c",
+    "tarball": "https://registry.npmjs.org/likely/-/likely-0.2.0.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/likely/-/likely-0.2.0.tgz"
+}
