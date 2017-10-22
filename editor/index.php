@@ -185,6 +185,7 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="../include/textboxio/textboxio.js"></script>
         <script src="../include/colorpicker/materialize-colorpicker.min.js"></script>
+        <script src="../include/contextMenu/src/jquery.contextMenu.js"></script>
         <script src="../category/category.js"></script>
         <script>
         	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;

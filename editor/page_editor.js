@@ -6,7 +6,12 @@ var $content = $("#content");
 var $selectedElement = $content;
 var dragging = false;
 var resizing = false;
+
+var creatingImage = false;
 var newImages = {};
+var resize_diff;
+
+var positions;
 
 var debugSaveEnabled = false;
 
@@ -21,7 +26,7 @@ $(document).ready(function() {
 
     $(pageContent).children().each(function(){
         $element = $(this);
-        console.log("Creating " + $element.data("type"));
+        console.log("Loading " + $element.data("type"));
         console.log($element[0]);
         switch($element.data("type")) {
             case "image":
@@ -30,7 +35,7 @@ $(document).ready(function() {
                     "top": $element.css("top"),
                     "width": $element.css("width"),
                     "height": $element.css("height")
-                });
+                }, $element.attr("data-extension"));
                 break;
             case "text":
                 createText($element.children(), true, {
@@ -60,13 +65,41 @@ $(document).ready(function() {
     initDialogs();
 });
 
+function savePositions($exception) {
+    positions = {};
+    $(".object").each(function() {
+        var id = $(this).attr("id"); 
+        if(id != $exception.attr("id")) {
+            positions[id] = $(this).offset();
+        }
+    });
+}
+
+function resetPositions($exception, bias) {
+    $(".object").each(function() {
+        var id = $(this).attr("id");
+        if(id != $exception.attr("id")) {
+            $(this).css({
+                "left": "0px",
+                "top": "0px"
+            });
+            console.log(positions[id].left - $(this).offset().left + $content.offset().left);
+            $(this).css({
+                "left": positions[id].left - $(this).offset().left,
+                "top": positions[id].top - $(this).offset().top
+            });
+        }
+    });
+}
+
 function initDialogs() {
 
     // Page Dialog
 
     $("#edit-page-dialog").modal({
         dismissible: true,
-        endingTop: "50%"
+        endingTop: "50%",
+        opacity: 1
     });
 
     $("#edit-page-name").val(pageName);
@@ -81,10 +114,12 @@ function initDialogs() {
         dismissible: true,
         endingTop: '50%',
         complete: function() {
-            $("#image-create-dialog .input").each(function(){
-                $(this).val('').blur().removeClass("valid invalid");
-            });
-            invalidateImage();
+            if(!creatingImage) {
+                $("#image-create-dialog .input").each(function(){
+                    $(this).val('').blur().removeClass("valid invalid");
+                });
+                invalidateImage();
+            }
         } 
     });
 
@@ -194,6 +229,7 @@ function updatePreview() {
     var $url = $("#image-create-src");
     var $preview = $("#image-create-preview > img");
     var tmpImg = new Image();
+
     tmpImg.src = $url.val();
 
     $(tmpImg).one('load', function() {
@@ -236,21 +272,40 @@ function openCreateDialog(type) {
     $(".sideNav-button").sideNav("hide");
 }
 
-function createImage(url, old=false, other_css={}) {
+function createImage(src, old=false, other_css={}, extension="") {
     console.log("Creating image");
+    creatingImage = true;
+    if(!old)
+        $.ajax({
+            url: "get_image_extension.php",
+            type: "POST",
+            context: this,
+            data: {
+                "url": src
+            },
+            success: function(php_extension) {
+                createImage_helper(src, old, other_css, php_extension);
+            }
+        });
+    else
+        createImage_helper(src, old, other_css, extension)
+}
+
+function createImage_helper(src, old, other_css, extension) {
     var attributes = {
-        "src": url,
-        "data-extension": url.slice(url.lastIndexOf('.')),
+        "src": src,
+        "data-extension": extension,
         "data-type": "image"
     };
-    if(!old)
+    if(!old) {
         var css = {
             "width": $("#image-create-width").html() + "px",
             "height": $("#image-create-height").html() + "px"
         };
+        newImages[nextID.toString()] = src;
+    }
     else
         var css = other_css;
-    newImages[nextID.toString()] = url;
     var $image = $("<img />")
     .attr(attributes)
     .css(css)
@@ -258,6 +313,11 @@ function createImage(url, old=false, other_css={}) {
     if(old)
         $image.attr("data-old", "true");
     createWrapper($image);
+    creatingImage = false;
+    $("#image-create-dialog .input").each(function(){
+        $(this).val('').blur().removeClass("valid invalid");
+    });
+    invalidateImage();
 }
 
 // Code: Text Creation
@@ -311,14 +371,20 @@ function createWrapper($inner) {
         "width": $inner.outerWidth() + "px",
         "height": $inner.outerHeight() + "px",
         "float": "left",
-        "position": "relative !important"
+        "position": "absolute !important"
     });
     if($inner.data("type") != "text") {
         $newElement.append($("<div id='handle-" + nextID + "' class='handle ui-resizable-handle ui-resizable-se'></div>")).resizable({
             handles: {
                 "se": "#handle-" + nextID
             },
-            aspectRatio: $newElement.width() / $newElement.height()
+            aspectRatio: $newElement.width() / $newElement.height(),
+            start: function() {
+                savePositions($(this));
+            },
+            stop: function() {
+                resetPositions($(this), 0);
+            }
         });
     }
     $newElement.addClass("object " + $inner.data("type"));
@@ -368,7 +434,6 @@ function createWrapper($inner) {
 
 function selectElement($element) {
     unselectElement();
-    console.log("selecting element");
     if($selectedElement.attr("id") != $element.attr("id")) {
         $selectedElement = $element;
         $selectedElement.addClass("selected");
@@ -378,7 +443,6 @@ function selectElement($element) {
 }
 
 function unselectElement() {
-    console.log("unselecting");
     if($selectedElement[0].id != "#content") {
         $selectedElement.removeClass("selected");
         $selectedElement.children(".handle").hide();
@@ -388,7 +452,10 @@ function unselectElement() {
 }
 
 function deleteButtonClick() {
+    var prevPositions = {};
+    $(".object").each(function() {
 
+    });
 }
 
 function editButtonClick() {
@@ -435,7 +502,7 @@ function savePage() {
                 break;
         }
         $elem.css({
-            "position": "relative",
+            "position": "absolute",
             "left": ($(this).offset().left - $content.offset().left) + "px",
             "top": ($(this).offset().top - $content.offset().top) + "px"
         });
@@ -481,4 +548,23 @@ function savePage() {
 function toggleDebugSave() {
     debugSaveEnabled = !debugSaveEnabled;
     console.log("Debug save set to " + debugSaveEnabled);
+}
+
+function UpdateContextMenu() {
+
+}
+
+var debug_positions = [{}, {}, {}, {}];
+
+function debug_RecordPositions(slot) {
+    $(".object").each(function() {
+        debug_positions[slot][$(this).attr("id")] = $(this).offset();
+    });
+}
+
+function debug_DiffPositions(slot1, slot2) {
+    for(var id in debug_positions[slot1]) {
+        console.log(debug_positions[slot1][id].left - debug_positions[slot2][id].left);
+        console.log(debug_positions[slot1][id].top - debug_positions[slot2][id].top);
+    }
 }

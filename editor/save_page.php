@@ -3,6 +3,9 @@ session_start();
 
 include "../include/connect.php";
 
+if(!file_exists("../post/content/"))
+	mkdir("../post/content/");
+
 if(!file_exists("../post/content/" . $_POST["id"] . "/")) {
 	mkdir("../post/content/" . $_POST["id"]);
 	mkdir("../post/content/" . $_POST["id"]. "/images");
@@ -25,7 +28,7 @@ $conn->query($sql);
 
 $newImages = json_decode($_POST["newImages"]);
 foreach($newImages as $image => $path) {
-	copy($path, "../post/content/" . $_POST["id"] . "/images/" . $image . substr($path, strrpos($path, '.')));
+	copy($path, "../post/content/" . $_POST["id"] . "/images/" . $image . image_type_to_extension(getimagesize($path)[2]));
 }
 
 $conn->close();
