@@ -75,7 +75,7 @@ function savePositions($exception) {
     });
 }
 
-function resetPositions($exception, bias) {
+function resetPositions($exception) {
     $(".object").each(function() {
         var id = $(this).attr("id");
         if(id != $exception.attr("id")) {
@@ -383,7 +383,7 @@ function createWrapper($inner) {
                 savePositions($(this));
             },
             stop: function() {
-                resetPositions($(this), 0);
+                resetPositions($(this));
             }
         });
     }

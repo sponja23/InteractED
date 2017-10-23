@@ -7,7 +7,6 @@
         <?php 
             require "include/head.html"; 
             include "recommend/recommend.php";
-            $Recommend = new recommend();
             $MaxValue  = 5;
 
         ?>
@@ -77,7 +76,7 @@
             <div class="row">
                 <?php 
                     //print_r($Recomend->GetTags('Articles'));
-                    echo $Recomend->GetArticles($MaxValue, 'Articles');
+                    echo Recomend::GetArticles($MaxValue, 'Articles');
                 ?>
             </div>
             <li class="divider"></li>
@@ -85,7 +84,7 @@
             <div class="row">
                 <?php 
                     //print_r($Recomend->GetTags('Users'));
-                    echo $Recomend->GetArticles($MaxValue, 'Users');    
+                    echo Recomend::GetArticles($MaxValue, 'Users');    
                 ?>
             </div>
         <?php require "include/scripts.html"; ?>

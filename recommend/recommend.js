@@ -46,7 +46,7 @@ function getRatings() {
 					   INNER JOIN Articles A ON A.PostID = R.PostID\
 					   WHERE U.UserCode = " + user["UserCode"], function(err, result, fields) {
 				currentRatings = arrayOfZeros(matrixWidth);
-				for(rating in result) {
+				for(var rating in result) {
 					if(!(rating["Title"] in postTitlePosition)) {
 						postTitlePosition[rating["Title"]] = width++;
 						currentRatings.push(rating["Title"]);
