@@ -75,7 +75,7 @@ function savePositions(exception_id) {
     });
 }
 
-function resetPositions($exception) {
+function resetPositions(exception_id) {
     $(".object").each(function() {
         var id = $(this).attr("id");
         if(id != exception_id) {
@@ -99,7 +99,7 @@ function initDialogs() {
     $("#edit-page-dialog").modal({
         dismissible: true,
         endingTop: "50%",
-        opacity: 1
+        opacity: 0.5
     });
 
     $("#edit-page-name").val(pageName);
@@ -124,6 +124,12 @@ function initDialogs() {
     });
 
     $("#image-create-button").click(function() {
+        var $sourceInput = $("#image-create-src");
+        var $uploadInput = $("#image-create-upload-src");
+        var $errorMessage = $("#image-create-error");
+        if($sourceInput.val() == "" && $sourceInput.val() == "") {
+            $errorMessage.html("Debe ingresar una url o cargar una imagen");
+        }
         createImage($("#image-create-src").val());
     });
 
@@ -272,29 +278,9 @@ function openCreateDialog(type) {
     $(".sideNav-button").sideNav("hide");
 }
 
-function createImage(src, old=false, other_css={}, extension="") {
-    console.log("Creating image");
-    creatingImage = true;
-    if(!old)
-        $.ajax({
-            url: "get_image_extension.php",
-            type: "POST",
-            context: this,
-            data: {
-                "url": src
-            },
-            success: function(php_extension) {
-                createImage_helper(src, old, other_css, php_extension);
-            }
-        });
-    else
-        createImage_helper(src, old, other_css, extension)
-}
-
-function createImage_helper(src, old, other_css, extension) {
+function createImage(src, old=false, other_css={}) {
     var attributes = {
         "src": src,
-        "data-extension": extension,
         "data-type": "image"
     };
     if(!old) {
@@ -302,7 +288,8 @@ function createImage_helper(src, old, other_css, extension) {
             "width": $("#image-create-width").html() + "px",
             "height": $("#image-create-height").html() + "px"
         };
-        newImages[nextID.toString()] = src;
+        if(src[0] == 'f')
+            newImages[nextID.toString()] = src;
     }
     else
         var css = other_css;
@@ -314,7 +301,7 @@ function createImage_helper(src, old, other_css, extension) {
         $image.attr("data-old", "true");
     createWrapper($image);
     creatingImage = false;
-    $("#image-create-dialog .input").each(function(){
+    $("#image-create-dialog .input").each(function() {
         $(this).val('').blur().removeClass("valid invalid");
     });
     invalidateImage();
@@ -416,6 +403,17 @@ function createWrapper($inner) {
         },
         "mouseup" : function(e) {
             dragging = false;
+        },
+        "contextmenu" : function(e) {
+            e.stopPropagation();
+            var contextMenuID = "#" + $(e.target).data("type") + "-dropdown";
+            $(contextMenuID + "-activator").dropdown("open");
+            $(contextMenuID).css({
+                display: "block",
+                left: e.pageX,
+                top: e.pageY
+            });
+            e.preventDefault();
         }
     });
 
@@ -463,10 +461,10 @@ function unselectElement() {
     updateFAB("content");
 }
 
-function removeElement($target) {
-    var id = $target.attr("id");
+function removeSelectedElement() {
+    var id = $selectedElement.attr("id");
     savePositions(id);
-    $target.remove();
+    $selectedElement.remove();
     resetPositions(id);
 }
 
@@ -536,8 +534,7 @@ function savePage() {
         content: $newContent[0].outerHTML,
         transcript: pageTranscript,
         name: pageName,
-        category: pageCategory,
-        newImages: JSON.stringify(newImages)
+        category: pageCategory
     }
 
     if(debugSaveEnabled)
@@ -555,6 +552,12 @@ function savePage() {
                 console.log("saving error");
             }
         });
+}
+
+function saveNewImages() {
+    $.ajax({
+
+    });
 }
 
 function toggleDebugSave() {

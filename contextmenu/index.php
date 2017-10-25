@@ -50,7 +50,7 @@
                     top: e.pageY
                 });
 
-                event.preventDefault();
+                e.preventDefault();
             });
         </script>
     </body>

@@ -1,3 +1,4 @@
 <?php
-echo image_type_to_extension(getimagesize($_POST["url"])[2]);
+$imageSize = getimagesize($_GET["url"]);
+echo image_type_to_extension($imageSize[2]);
 ?>

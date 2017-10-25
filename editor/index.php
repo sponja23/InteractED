@@ -73,6 +73,12 @@
             </li>
         </ul>
         
+        <a id="image-dropdown-activator" class="dropdown-button hide" data-activates="image-dropdown" data-constrainWidth="false"></a>
+
+        <ul id="image-dropdown" class="dropdown-content">
+            <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar im&aacute;gen</a></li>
+        </ul>
+
         <div class="fixed-action-btn" onclick="editButtonClick()">
             <a href="#" class="btn-floating btn-large blue darken-2">
                 <i class="large material-icons">settings</i>
@@ -115,12 +121,23 @@
                         <div id="image-create-preview" class="valign-wrapper">
                             <img src="no_image_selected.gif" />
                         </div>
-                        <p id="image-create-lengths"><strong>Width:</strong><br><span id="image-create-width" class="input" data-parameter="width">200</span>px<br><br><strong>Height:</strong><br><span id="image-create-height" class="input" data-parameter="height">200</span>px</p>
+                        <p id="image-create-lengths"><strong>Ancho:</strong><br><span id="image-create-width" class="input" data-parameter="width">200</span>px<br><br><strong>Alto:</strong><br><span id="image-create-height" class="input" data-parameter="height">200</span>px</p>
                     </div>
                     <div class="input-field col s12">
                         <input id="image-create-src" type="url" onchange="updatePreview()" class="input" data-parameter="src">
-                        <label for="image-create-src">Source</label>
+                        <label for="image-create-src">URL</label>
                     </div>
+                    <span>Ó</span>
+                    <div class="file-field input-field">
+                        <div class="btn blue">
+                            <span>Imagen</span>
+                            <input type="file" name="image">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input id="image-path" class="file-path" type="text">
+                        </div>
+                    </div>
+                    <span id="image-create-error" class="red-text">></span>
                 </div>
                 <div class="modal-footer">
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-cancel">Cancelar</a>
@@ -176,7 +193,7 @@
             </div>
         </div>
 
-        <div id="content" class="container" data-type="content" onclick="if(!dragging) unselectElement();" style="position: relative;">
+        <div id="content" class="container" data-type="content" onclick="unselectElement();" style="position: relative;">
 
         </div>
 
@@ -185,7 +202,6 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="../include/textboxio/textboxio.js"></script>
         <script src="../include/colorpicker/materialize-colorpicker.min.js"></script>
-        <script src="../include/contextMenu/src/jquery.contextMenu.js"></script>
         <script src="../category/category.js"></script>
         <script>
         	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
