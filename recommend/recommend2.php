@@ -22,7 +22,16 @@ function postsBySimilarTags() {
 }
 
 function postsBySimilarPeople() {
-
+	$sql = "SELECT T.TagName FROM Tags T
+			INNER JOIN Visited V ON T.PostID = V.PostID
+			WHERE V.UserCode = " . $_SESSION["UserCode"] . " ORDER BY V.DateLastVisited DESC LIMIT 10";
+	$tag_result = $conn->query($sql);
+	if($tag_result->num_rows > 0) {
+		
+	}
+	else {
+		// El usuario no visito ningun post
+	}
 }
 
 ?>

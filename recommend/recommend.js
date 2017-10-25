@@ -1,9 +1,15 @@
-var recommendInput;
-var model;
-var postTitlePosition;
-var userLabels;
-var matrixWidth;
+var ratingInput;
+var ratingModel;
 var currentRatings;
+
+var ratingModel {
+	model: {},
+	name: "rating_model"
+};
+
+var similarPeopleModel {
+
+};
 
 var fs = require("fs");
 var recommender = require("likely");
@@ -24,54 +30,48 @@ con.connect(function(err) {
 	console.log("Database connected");
 });
 
-function arrayOfZeros(size) {
-	var arr = [];
-	for(var i = 0; i < size; i++)
-		arr.push(0);
-	return arr;
+function matrixOfZeros(width, height) {
+	var matrix = [];
+	for(var i = 0; i < height; i++) {
+		var arr = [];
+		for(var j = 0; j < width; j++)
+			arr.push(0);
+		matrix.push(arr);
+	}
+	return matrix;
 }
 
-function getRatings() {
-	con.query("SELECT User, UserCode FROM Users", function(err, result, fields) {
-		if(err) {
-			console.log("Error: couldn't query database");
-			throw err;
-		}
-		postTitlePosition = {};
-		userLabels = [];
-		for(var user in result) {
-			userLabels.push(user.User);
-			con.query("SELECT A.Title, R.Stars FROM Users U\
-					   INNER JOIN Ratings R ON U.UserCode = R.UserCode\
-					   INNER JOIN Articles A ON A.PostID = R.PostID\
-					   WHERE U.UserCode = " + user["UserCode"], function(err, result, fields) {
-				currentRatings = arrayOfZeros(matrixWidth);
-				for(var rating in result) {
-					if(!(rating["Title"] in postTitlePosition)) {
-						postTitlePosition[rating["Title"]] = width++;
-						currentRatings.push(rating["Title"]);
-					}
-					else
-						currentRatings[postTitlePosition[rating["Title"]]] = rating["Stars"];
-				}
-			});
-			recommendInput.push(currentRatings);
-		}
+function buildRatingModel() {
+	con.query("SELECT COUNT(A.*), COUNT(U.*) FROM Articles A INNER JOIN Users U"), function(err, result, fields) {
+		ratingInput = matrixOfZeros(result[0]["COUNT(A.*)"], result[0]["COUNT(U.*)"]);
+		con.query("SELECT U.UserName A.Title, R.Stars FROM Users U\
+				   INNER JOIN Ratings R ON U.UserCode = R.UserCode\
+				   INNER JOIN Articles A ON A.PostID = R.PostID", function(err, result, fields) {
+			var postTitlePosition = {};
+			var userPosition = {};
+			var width = 0, height = 0;
+			for(var rating in result) {
+				if(!(rating["Title"] in postTitlePosition))
+					postTitlePosition[rating["Title"]] = width++;
+				if(!(rating["UserName"] in userPosition))
+					userPosition[rating["UserName"]] = height++;
+				ratingInput[userPosition[rating["UserName"]]][postTitlePosition[rating["Title"]]] = rating["Stars"];
+			}
+			var bias = recommender.calculateBias(ratingInput);
+			var postTitleLabels = [], userLabels = [];
+			for(var title in postTitlePosition)
+				postTitleLabels[postTitlePosition[title]] = title; 
+			for(var userName in userPosition)
+				userLabels[userPosition[userName]] = userName;
+			ratingModel = {
+				model: recommender.buildModelWithBias(ratingInput, bias, userLabels, postTitleLabels);
+				name: "rating_model"
+			}
 	});
 }
 
-function buildModel() {
-	getRatings();
-	var bias = recommender.calculateBias(recommendInput);
-	var postTitleLabels = arrayOfZeros(width);
-	for(var title in postTitlePosition) {
-		postTitleLabels[postTitlePosition[title]] = title; 
-	}
-	model = recommender.buildModelWithBias(recommendInput, bias, userLabels, postTitleLabels);
-}
-
-function saveModel() {
-	fs.writeFile("model.json", JSON.stringify(model), function(err) {
+function saveModel(model) {
+	fs.writeFile(model.name + ".json", JSON.stringify(model.model), function(err) {
 		if(err) {
 			console.log("Error: model not saved");
 			throw err;
@@ -80,6 +80,6 @@ function saveModel() {
 	});
 }
 
-function loadModel() {
+function loadModel(name) {
 	
 }
