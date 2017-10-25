@@ -127,10 +127,20 @@ function initDialogs() {
         var $sourceInput = $("#image-create-src");
         var $uploadInput = $("#image-create-upload-src");
         var $errorMessage = $("#image-create-error");
-        if($sourceInput.val() == "" && $sourceInput.val() == "") {
+
+        if($sourceInput.val() == "" && $uploadInput.val() == "") {
             $errorMessage.html("Debe ingresar una url o cargar una imagen");
         }
-        createImage($("#image-create-src").val());
+        else if($sourceInput.val() != "" && $uploadInput.val() != "") {
+            $errorMessage.html("No puede ingresar ambas");
+        }
+        else if($sourceInput.val() != "") {
+            createImage($sourceInput.val());
+        }
+        else {
+            $("#image-create-upload-form").submit();
+            createImage()
+        }
     });
 
     // Text Dialog
