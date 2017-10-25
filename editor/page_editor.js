@@ -65,11 +65,11 @@ $(document).ready(function() {
     initDialogs();
 });
 
-function savePositions($exception) {
+function savePositions(exception_id) {
     positions = {};
     $(".object").each(function() {
         var id = $(this).attr("id"); 
-        if(id != $exception.attr("id")) {
+        if(id != exception_id) {
             positions[id] = $(this).offset();
         }
     });
@@ -78,7 +78,7 @@ function savePositions($exception) {
 function resetPositions($exception) {
     $(".object").each(function() {
         var id = $(this).attr("id");
-        if(id != $exception.attr("id")) {
+        if(id != exception_id) {
             $(this).css({
                 "left": "0px",
                 "top": "0px"
@@ -356,23 +356,27 @@ function createText($inner_text, old=false, extra_css={}) {
 // Code: Wrapper
 
 function createWrapper($inner) {
+
     var $newElement = $("<div></div>").html($inner);
+
     $newElement.draggable({
         snap: true,
         scroll: false,
         containment: "#content"
     });
-    $newElement.children(".handle").hide();
+
     $newElement.attr({
         "id": "object-" + nextID,
         "data-type": $inner.data("type")
     });
+
     $newElement.css({
         "width": $inner.outerWidth() + "px",
         "height": $inner.outerHeight() + "px",
         "float": "left",
         "position": "absolute !important"
     });
+
     if($inner.data("type") != "text") {
         $newElement.append($("<div id='handle-" + nextID + "' class='handle ui-resizable-handle ui-resizable-se'></div>")).resizable({
             handles: {
@@ -380,18 +384,22 @@ function createWrapper($inner) {
             },
             aspectRatio: $newElement.width() / $newElement.height(),
             start: function() {
-                savePositions($(this));
+                savePositions($(this).attr("id"));
             },
             stop: function() {
-                resetPositions($(this));
+                resetPositions($(this).attr("id"));
             }
         });
+        $newElement.children(".handle").hide();
     }
+
     $newElement.addClass("object " + $inner.data("type"));
+    
     $newElement.children().css({
         "width": "100%",
         "height": "100%"
     });
+
     $newElement.on({
         "click" : function(e) {
             selectElement($(this));
@@ -410,7 +418,9 @@ function createWrapper($inner) {
             dragging = false;
         }
     });
+
     $newElement.appendTo($content);
+    
     if($inner.data("old")) {
         $newElement.css({
             "left": "0px",
@@ -425,8 +435,10 @@ function createWrapper($inner) {
             "top": ""
         });
     }
+    
     selectElement($newElement);
     unselectElement();
+    
     nextID++;
 }
 
@@ -451,11 +463,11 @@ function unselectElement() {
     updateFAB("content");
 }
 
-function deleteButtonClick() {
-    var prevPositions = {};
-    $(".object").each(function() {
-
-    });
+function removeElement($target) {
+    var id = $target.attr("id");
+    savePositions(id);
+    $target.remove();
+    resetPositions(id);
 }
 
 function editButtonClick() {
@@ -548,10 +560,6 @@ function savePage() {
 function toggleDebugSave() {
     debugSaveEnabled = !debugSaveEnabled;
     console.log("Debug save set to " + debugSaveEnabled);
-}
-
-function UpdateContextMenu() {
-
 }
 
 var debug_positions = [{}, {}, {}, {}];
