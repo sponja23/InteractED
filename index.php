@@ -4,11 +4,11 @@
     <head>
         <title>InteractED</title>
 
-        <?php 
-            require "include/head.html"; 
-            include "recommend/recommend.php";
-            $MaxValue  = 5;
+        <?php require "include/head.html"; ?>
 
+        <?php 
+            //include "recommend/recommend.php";
+            //$MaxValue  = 5;
         ?>
 
         <link rel="stylesheet" href="components/navigation/navigation.css">
@@ -71,12 +71,12 @@
                     </div>
                 </div>
             </div>
-            <li class="divider"></li>
+            <!-- <li class="divider"></li>
             <h5>Recomendados por los articulos visitados</h5>
             <div class="row">
                 <?php 
                     //print_r($Recomend->GetTags('Articles'));
-                    echo Recomend::GetArticles($MaxValue, 'Articles');
+                    //echo Recomend::GetArticles($MaxValue, 'Articles');
                 ?>
             </div>
             <li class="divider"></li>
@@ -84,9 +84,9 @@
             <div class="row">
                 <?php 
                     //print_r($Recomend->GetTags('Users'));
-                    echo Recomend::GetArticles($MaxValue, 'Users');    
+                    //echo Recomend::GetArticles($MaxValue, 'Users');    
                 ?>
-            </div>
+            </div> -->
         <?php require "include/scripts.html"; ?>
 
         <script src="components/navigation/navigation.js"></script>
