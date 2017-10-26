@@ -21,6 +21,7 @@
                 if(!is_null($row["LastEditDate"])) {
                     $PageContent = file_get_contents("../post/content/" . $_GET["id"] . "/index.html");
                 }
+                $_SESSION[$_GET["id"] . "-NextImage"] = 0;
             }
         }
         else {
@@ -132,7 +133,7 @@
                         <div class="file-field input-field">
                             <div class="btn blue">
                                 <span>Imagen</span>
-                                <input type="file" name="image">
+                                <input type="file" name="image" id="image-create-upload-file">
                             </div>
                             <div class="file-path-wrapper">
                                 <input id="image-create-upload-src" class="file-path" type="text">

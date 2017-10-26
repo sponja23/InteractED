@@ -35,7 +35,7 @@ $(document).ready(function() {
                     "top": $element.css("top"),
                     "width": $element.css("width"),
                     "height": $element.css("height")
-                }, $element.attr("data-extension"));
+                });
                 break;
             case "text":
                 createText($element.children(), true, {
@@ -138,8 +138,23 @@ function initDialogs() {
             createImage($sourceInput.val());
         }
         else {
-            $("#image-create-upload-form").submit();
-            createImage()
+            var resultingSource = "";
+            var formData = new FormData();
+            formData.append("image", $("#image-create-upload-file")[0].files[0]);
+            $.ajax({
+                url: "upload_image.php?id=" + postID,
+                type: "POST",
+                context: this,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function(result) {
+                    console.log(result);
+                    resultingSource = result;
+                }
+
+            });
+            createImage($uploadInput.val());
         }
     });
 
