@@ -3,7 +3,7 @@ class Categories{
 	function GetCategories(){
 		require "../include/connect.php";
 
-		$sql = 'SELECT CategoryName,CategoryID FROM Categories';
+		$sql = 'SELECT CategoryName,CategoryID FROM Categories WHERE Status = 1';
         
         $result = $conn->query($sql);
 

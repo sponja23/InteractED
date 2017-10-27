@@ -26,7 +26,7 @@
                     <div class="card-panel black-text">
                         <span id="logo" class="blue-text">InteractED</span>
                         <h1 id="title">Add New Category</h1>
-                        <form id="register" action="result/" method="post" enctype="multipart/form-data">
+                        <form id="new" action="result/" method="post" enctype="multipart/form-data">
                             <div class="file-field input-field">
                                 <div class="btn blue">
                                     <span>Imagen</span>
@@ -69,10 +69,20 @@
                         type: "POST",
                         data: { category: $( "#category" ).val()} ,
                         success: function (response) {
-                            if (response == '0')
-                                $( "#add" ).submit();
-                            else if (response == 1)
+                            if (response == '1'){
+                                //$( "#new-button" ).submit();
                                 $( "#error-message" ).html("Esta categoria ya existe");
+                            }
+                            else if (response == 0){
+                                $.ajax({
+                                url: "upload.php",
+                                type: "POST",
+                                data: { category: $( "#category" ).val()} ,
+                                success: function () {
+                                    window.history.back();
+                                }
+                            }         
+                        }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log(textStatus, errorThrown);
@@ -97,4 +107,11 @@
             });
         </script>
     </body>
+    <footer class="page-footer">
+        <div class="footer-copyright">
+            <div class="container">
+                Categories have to be approved by our moderators before being added.
+            </div>
+        </div>
+    </footer>
 </html>
