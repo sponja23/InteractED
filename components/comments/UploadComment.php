@@ -26,6 +26,8 @@ if (file_exists($File)) {
         }
     }
 }
-else
+else {
+    mkdir("../../post/comments");
     file_put_contents($File, '{"LastID":0}');
+}
 ?>

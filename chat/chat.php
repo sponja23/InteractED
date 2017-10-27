@@ -36,6 +36,8 @@ if (file_exists($File)) {
         echo $LastID;
     }
 }
-else
+else {
+    mkdir("chats");
     file_put_contents($File, '{"LastID":0}');
+}
 ?>

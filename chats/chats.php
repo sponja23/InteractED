@@ -37,6 +37,8 @@ if (file_exists($File)) {
         echo substr($UserData, 0, -1) . '}';
     }
 }
-else
+else {
+    mkdir("users");
     file_put_contents($File, '{"Chats":[]}');
+}
 ?>

@@ -42,6 +42,8 @@ if (file_exists($File)) {
         echo json_encode($Data);
     }
 }
-else
+else {
+    mkdir("../../post/comments");
     file_put_contents($File, '{"LastID":0}');
+}
 ?>

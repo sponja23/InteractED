@@ -22,8 +22,10 @@ if (file_exists($File)) {
     $Chats["Chats"][count($Chats["Chats"])] = $_GET["id"];
     file_put_contents($File, json_encode($Chats));
 }
-else
+else {
+    mkdir("../chats/users");
     file_put_contents($File, '{"Chats":[' . $_GET["id"] . ']}');
+}
 ?>
 <!DOCTYPE html>
 <html>
