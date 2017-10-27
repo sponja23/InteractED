@@ -1,0 +1,31 @@
+#post-image {
+    max-width: 90%;
+    margin-top: 20px;
+}
+
+#post-title {
+    margin-bottom: 0;
+}
+
+#post-creator-image {
+    margin: 10px;
+    width: 48px;
+    height: 48px;
+}
+
+#edit {
+    position: absolute;
+    right: 5%;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    #edit {
+        right: 7.5%;
+    }
+}
+
+@media only screen and (min-width: 993px) {
+    #edit {
+        right: 15%;
+    }
+}

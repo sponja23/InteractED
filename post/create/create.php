@@ -22,6 +22,8 @@ if ($conn->query($CreateArticle) === TRUE) {
     if ($conn->query($UploadTags) === TRUE)
         header("Location: ../../editor?id=" . md5($PostID));
 }
+else
+    echo $conn->error;
 
 $conn->close();
 ?>
