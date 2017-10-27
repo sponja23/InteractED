@@ -30,6 +30,9 @@
                     if ($conn->query($sql) === TRUE) {
                         $File = "../../images/" . $conn->insert_id . "." . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
 
+                        if (!file_exists("../../images/"))
+                            mkdir("../../images/");
+
                         if (move_uploaded_file($_FILES["image"]["tmp_name"], $File))
                             $Code = 3;
                         else {

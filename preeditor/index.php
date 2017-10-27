@@ -25,9 +25,9 @@
                 <div class="col s12 m6 offset-m3">
                     <div class="card-panel black-text">
                         <span id="logo" class="blue-text">InteractED</span>
-                        <h1 id="create">Crear una publicaci&oacute;n</h1>
-                        <form id="preeditor" action="result/index.php" method="post" enctype="multipart/form-data">
-                            <div class="file-field input-field">
+                        <h1 id="title">Crear una publicaci&oacute;n</h1>
+                        <form id="preeditor" action="create.php" method="POST" enctype="multipart/form-data">
+                            <div id="post-image" class="file-field input-field col s12">
                                 <div class="btn blue">
                                     <span>Imagen</span>
                                     <input type="file" name="image">
@@ -37,22 +37,25 @@
                                 </div>
                             </div>
                             <div class="input-field col s12 m6">
-                                <input id="title" name="title" type="text">
-                                <label for="title" data-error="Debe ingresar un titulo">Titulo</label>
+                                <input id="post-title" name="title" type="text">
+                                <label for="post-title" data-error="Debe ingresar un t&iacute;tulo">T&iacute;tulo</label>
                             </div>
-                            <div class="input-field col s6">
-                                <input id="category" type="text" class="autocomplete">
-                                <label for="category">Categoría</label>
+                            <div class="input-field col s12 m6">
+                                <input id="post-category" name="category" type="text">
+                                <label for="post-category" data-error="Debe ingresar una categor&iacute;a">Categor&iacute;a</label>
                             </div>
-                            <br><br>
                             <div class="input-field col s12">
-                                <div class="chips chips-autocomplete" id="tags"></div>
-                                <label for="tags" data-error="Debe ingresar etiquetas">Tags</label>
+                                <div id="post-tags" class="chips chips-placeholder"></div>
+                                <input id="tags-object" name="tags" class="hide">
                             </div>
-                            <br><br>
-                            <br><br>
-                            <a id="cancel" class="btn-flat blue-text waves-effect">Cancelar</a>
-                            <a id="create-button" class="btn blue waves-effect waves-light right">Crear</a>
+                            <div class="col s12">
+                                <label id="error-message" class="red-text">&nbsp;</label>
+                            </div>
+                            <div id="actions" class="col s12">
+                                <a id="cancel" class="btn-flat blue-text waves-effect">Cancelar</a>
+                                <a id="create-button" class="btn blue waves-effect waves-light right">Crear</a>
+                            </div>
+                            <span>&nbsp;</span>
                         </form>
                     </div>
                 </div>
@@ -62,66 +65,43 @@
         <?php require "../include/scripts.html"; ?>
 
         <script>
-            $(document).ready(function(){
-                $('.chips').material_chip();
-                $('.chips-autocomplete').material_chip({
-                    autocompleteOptions: {
-                        data: {
-                        },
-                        limit: Infinity,
-                        minLength: 1
-                    }
+            $(document).ready(function() {
+                $('.chips-placeholder').material_chip({
+                    placeholder: "Ingrese un tag"
                 });
-                $('#category').autocomplete({
-                    autocompleteOptions: {
-                        data: {
-                            //Roberto
-                        },
-                        limit: Infinity,
-                        minLength: 1
-                    }
-                });
-
             });
 
-
             $( "#create-button" ).click(function() {
+                $( "#error-message" ).html("&nbsp;");
 
                 if ($( "#image-path" ).val() == "")
                 {
                     $( "#error-message" ).html("Debe seleccionar una imagen");
                 }
-                else {
-                    if ($( "#title" ).val() == "")
-                    {
-                        $( "#title" ).addClass("invalid").focus();
-                    }
-                    else{ 
-                        if ($( ".chip" )[0])
-                        {
-                            var tagText = "";
-                            var data = $(".chips").material_chip("data");
-                            for(var i = 0; i < data.length; i++)
-                                tagText += data[i].tag + ";";
-                            console.log(tagText);
-                            $.ajax({
-                                url: "create.php",
-                                type: "POST",
-                                data: { Title: $( "#title" ).val(), Tags: tagText, Category: $("#category").val() } ,
-                                success: function (response) {
-                                    alert(response);
-                                },
-                                error: function(jqXHR, textStatus, errorThrown) {
-                                    console.log(textStatus, errorThrown);
-                                }
-                            });
-                        }
-                        else
-                        {
-                            console.log("Estropajo");
-                            $( "#tags" ).addClass("invalid").focus();
-                        }
-                    }
+                else if ($( "#post-title" ).val() == "")
+                {
+                    $( "#post-title" ).addClass("validate invalid").focus();
+                }
+                else if ($( "#post-category" ).val() == "")
+                {
+                    $( "#post-category" ).addClass("validate invalid").focus();
+                }
+                else if (jQuery.isEmptyObject($( "#post-tags" ).material_chip('data')))
+                {
+                    $( "#error-message" ).html("Debe ingresar al menos un tag");
+                    $( "#post-tags input" ).focus();
+                }
+                else
+                {
+                    var Tags = [];
+                    var Data = $( "#post-tags" ).material_chip("data");
+
+                    for (i = 0; i < Data.length; i++)
+                        Tags.push(Data[i].tag);
+
+                    $( "#tags-object" ).val(JSON.stringify(Tags));
+
+                    $( "#preeditor" ).submit();
                 }
             });
 
@@ -139,11 +119,6 @@
             $( "#cancel" ).click(function() {
                 window.history.back();
             });
-
-            function validateEmail(email) {
-                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                return re.test(email);
-            }
         </script>
     </body>
 </html>

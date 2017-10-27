@@ -26,7 +26,7 @@
                     <div class="card-panel black-text">
                         <span id="logo" class="blue-text">InteractED</span>
                         <h1 id="title">Registrarse</h1>
-                        <form id="register" action="result/index.php" method="post" enctype="multipart/form-data">
+                        <form id="register" action="result/" method="post" enctype="multipart/form-data">
                             <div class="file-field input-field">
                                 <div class="btn blue">
                                     <span>Imagen</span>
