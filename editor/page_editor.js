@@ -16,6 +16,20 @@ $(document).ready(function() {
 
     $content.css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
+    }).on("contextmenu", function() {
+        e.stopPropagation();
+
+        var contextMenuID = "#content-dropdown";
+
+        $(contextMenuID + "-activator").dropdown("open");
+
+        $(contextMenuID).css({
+            display: "block",
+            left: e.pageX,
+            top: e.pageY
+        });
+
+        e.preventDefault();
     });
 
     $("#side-nav-button").sideNav();
@@ -45,9 +59,6 @@ $(document).ready(function() {
         }
     });
 
-    category.loadTree();
-    categories = category.getCategories();
-    var category_image = {};
     /*
     NOT IMPLEMENTED
     for(var cat in categories)
@@ -504,13 +515,6 @@ function removeSelectedElement() {
     savePositions(id);
     $selectedElement.remove();
     resetPositions(id);
-}
-
-function editButtonClick() {
-    if($selectedElement[0].id != "content")
-        openEditDialog($selectedElement.data("type"));
-    else
-        openEditPageDialog();
 }
 
 function openEditDialog(type) {

@@ -9,9 +9,10 @@
     	else
 	        $sql = "SELECT A.*, C.CategoryName FROM Articles A
 	                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
-	                INNER JOIN Users U ON ER.UserCode = U.UserCode OR A.CreatorID = U.UserCode
+	                INNER JOIN Users Editor ON ER.UserCode = Editor.UserCode
+                    INNER JOIN Users Creator ON A.CreatorID = Creator.UserCode
                     INNER JOIN Categories C ON A.PostID = C.PostID
-	                WHERE MD5(A.PostID) = '" . $_GET["id"] . "' AND U.UserCode = " . $_SESSION["UserCode"];
+	                WHERE MD5(A.PostID) = '" . $_GET["id"] . "' AND (Creator.UserCode = " . $_SESSION["UserCode"] . " OR Editor.UserCode = " . $_SESSION["UserCode"] . ")";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -22,7 +23,6 @@
                 if(!is_null($row["LastEditDate"])) {
                     $PageContent = file_get_contents("../post/content/" . $_GET["id"] . "/index.html");
                 }
-                $_SESSION[$_GET["id"] . "-NextImage"] = 0;
             }
         }
         else {
@@ -75,13 +75,15 @@
             </li>
         </ul>
         
-        <a id="image-dropdown-activator" class="dropdown-button hide" data-activates="image-dropdown" data-constrainWidth="false"></a>
+        <a id="content-dropdown-activator" class="dropdown-button hide" data-activates="content-dropdown" data-constrainWidth="false"></a> 
         <a id="text-dropdown-activator" class="dropdown-button hide" data-activates="text-dropdown" data-constrainWidth="false"></a>
+        <a id="image-dropdown-activator" class="dropdown-button hide" data-activates="image-dropdown" data-constrainWidth="false"></a>
 
-        <ul id="image-dropdown" class="dropdown-content">
-            <li><a href="#!" class="blue-text toggle" data-option="snap" ><i class="material-icons blue-text">check circle</i>Cambiar Snap</a></li>
-            <li><a href="#!" class="blue-text toggle" data-option="deform"><i class="material-icons blue-text">cancel</i>Cambiar Deformar</a></li>
-            <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar</a></li>
+        <ul id="content-dropdown" class="dropdown-content">
+            <li><a href="#!" class="blue-text" onclick="openCreateDialog('text')">Crear Texto</a></li>
+            <li><a href="#!" class="blue-text" onclick="openCreateDialog('image')">Crear Imagen</a></li>
+            <li><a href="#!" class="blue-text" onclick="openCreateDialog('video')">Crear Video</a></li>
+            <li><a href="#!" class="blue-text" onclick="openCreateDialog('custom')">Crear Custom</a></li>
         </ul>
 
         <ul id="text-dropdown" class="dropdown-content">
@@ -90,13 +92,21 @@
             <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar</a></li>
         </ul>
 
-        <div class="fixed-action-btn" onclick="editButtonClick()">
+        <ul id="image-dropdown" class="dropdown-content">
+            <li><a href="#!" class="blue-text toggle" data-option="snap" ><i class="material-icons blue-text">check circle</i>Cambiar Snap</a></li>
+            <li><a href="#!" class="blue-text toggle" data-option="deform"><i class="material-icons blue-text">cancel</i>Cambiar Deformar</a></li>
+            <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar</a></li>
+        </ul>
+
+        <div class="fixed-action-btn">
             <a href="#" class="btn-floating btn-large blue darken-2">
                 <i class="large material-icons">settings</i>
             </a>
             <ul id="btn-list">
-                <li id="btn-edit"><a class="btn-floating blue darken-3"><i class="material-icons">mode_edit</i></a></li>
-                <li id="btn-remove"><a class="btn-floating blue darken-3" onclick="deleteButtonClick()"><i class="material-icons">delete</i></a></li>
+                <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('text')"><i class="material-icons"></i></a></li>
+                <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('image')"><i class="material-icons"></i></a></li>
+                <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('video')"><i class="material-icons"></i></a></li>
+                <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('custom')"><i class="material-icons"></i></a></li>
             </ul>
         </div>
         
@@ -211,7 +221,6 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="../include/textboxio/textboxio.js"></script>
         <script src="../include/colorpicker/materialize-colorpicker.min.js"></script>
-        <script src="../category/category.js"></script>
         <script>
         	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
             var pageCategory = <?= "\"" . $_SESSION[$_GET["id"] . "-Category"] . "\""?>;
