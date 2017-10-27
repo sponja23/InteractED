@@ -7,9 +7,10 @@
     	if($_SESSION["Level"] >= 1)
     		$sql = "SELECT * FROM Articles WHERE MD5(PostID) = '" . $_GET["id"] . "'";
     	else
-	        $sql = "SELECT A.* FROM Articles A
+	        $sql = "SELECT A.*, C.CategoryName FROM Articles A
 	                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
 	                INNER JOIN Users U ON ER.UserCode = U.UserCode OR A.CreatorID = U.UserCode
+                    INNER JOIN Categories C ON A.PostID = C.PostID
 	                WHERE MD5(A.PostID) = '" . $_GET["id"] . "' AND U.UserCode = " . $_SESSION["UserCode"];
         $result = $conn->query($sql);
 
@@ -75,9 +76,18 @@
         </ul>
         
         <a id="image-dropdown-activator" class="dropdown-button hide" data-activates="image-dropdown" data-constrainWidth="false"></a>
+        <a id="text-dropdown-activator" class="dropdown-button hide" data-activates="text-dropdown" data-constrainWidth="false"></a>
 
         <ul id="image-dropdown" class="dropdown-content">
-            <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar im&aacute;gen</a></li>
+            <li><a href="#!" class="blue-text toggle" data-option="snap" ><i class="material-icons blue-text">check circle</i>Cambiar Snap</a></li>
+            <li><a href="#!" class="blue-text toggle" data-option="deform"><i class="material-icons blue-text">cancel</i>Cambiar Deformar</a></li>
+            <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar</a></li>
+        </ul>
+
+        <ul id="text-dropdown" class="dropdown-content">
+            <li><a href="#!" class="blue-text toggle" data-option="snap" ><i class="material-icons blue-text">check circle</i>Cambiar Snap</a></li>
+            <li><a href="#!" class="blue-text"><i class="material-icons blue-text">mode edit</i>Editar</a></li>
+            <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar</a></li>
         </ul>
 
         <div class="fixed-action-btn" onclick="editButtonClick()">
@@ -122,37 +132,27 @@
                         <div id="image-create-preview" class="valign-wrapper">
                             <img src="no_image_selected.gif" />
                         </div>
-                        <p id="image-create-lengths"><strong>Ancho:</strong><br><span id="image-create-width" class="input" data-parameter="width">200</span>px<br><br><strong>Alto:</strong><br><span id="image-create-height" class="input" data-parameter="height">200</span>px</p>
+                        <p id="image-create-lengths"><strong>Ancho:</strong><br><span id="image-create-width" class="input">200</span>px<br><br><strong>Alto:</strong><br><span id="image-create-height" class="input" data-parameter="height">200</span>px</p>
                     </div>
                     <div class="input-field col s12">
-                        <input id="image-create-src" type="url" onchange="updatePreview()" class="input" data-parameter="src">
+                        <input id="image-create-src" type="url" onchange="updatePreview('url')" class="input">
                         <label for="image-create-src">URL</label>
                     </div>
-                    <span>Ó</span>
+                    <span>O</span>
                     <div class="file-field input-field">
                         <div class="btn blue">
-                            <span>Imagen</span>
+                            <span>Archivo</span>
                             <input type="file" name="image" id="image-create-upload-file">
                         </div>
                         <div class="file-path-wrapper">
-                            <input id="image-create-upload-src" class="file-path" type="text">
+                            <input id="image-create-upload-src" onchange="updatePreview('upload')" class="file-path" type="text">
                         </div>
                     </div>
-                    <span id="image-create-error" class="red-text">></span>
+                    <span id="image-create-error" class="red-text"></span>
                 </div>
                 <div class="modal-footer">
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-cancel">Cancelar</a>
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-button">Crear</a>
-                </div>
-            </div>
-            <div id="image-edit-dialog" class="modal valign-modal">
-                <div class="modal-content row">
-                    <h4>Editar Imagen</h4>
-
-                </div>
-                <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-edit-cancel">Cancelar</a>
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-edit-button">Guardar</a>
                 </div>
             </div>
             <div id="text-create-dialog" class="modal valign-modal">
@@ -190,6 +190,14 @@
                 <div class="modal-footer">
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-cancel">Cancelar</a>
                     <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-button">Crear</a>
+                </div>
+            </div>
+            <div id="text-edit-dialog" class="modal valign-modal">
+                <div class="modal-content row">
+                    <h4>Editar Texto</h4>
+                    <div class="row">
+                        <textarea id="text-edit-content" class="col s12" style="height: 250px"></textarea>
+                    </div>
                 </div>
             </div>
         </div>

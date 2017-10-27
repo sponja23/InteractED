@@ -11,7 +11,7 @@ if(!file_exists("../post/content/" . $_GET["id"] . "/images/"))
 	mkdir("../post/content/" . $_GET["id"] . "/images");
 
 if($fileError == UPLOAD_ERR_OK) {
-	$new_path = "/InteractED/post/content/" . $_GET["id"] . "/images/" . $_FILES["image"]["name"];
+	$new_path = "../post/content/" . $_GET["id"] . "/images/" . $_FILES["image"]["name"];
 	move_uploaded_file($_FILES["image"]["tmp_name"], $new_path);
 }
 

@@ -1,15 +1,12 @@
 var categories;
-var textEditor;
+var textCreateEditor;
 
 var nextID = 0;
 var $content = $("#content");
 var $selectedElement = $content;
 var dragging = false;
 var resizing = false;
-
 var creatingImage = false;
-var newImages = {};
-var resize_diff;
 
 var positions;
 
@@ -142,19 +139,19 @@ function initDialogs() {
             var formData = new FormData();
             formData.append("image", $("#image-create-upload-file")[0].files[0]);
             $.ajax({
-                url: "upload_image.php?id=" + postID,
+                url: "image_upload.php?id=" + postID,
                 type: "POST",
                 context: this,
                 processData: false,
                 contentType: false,
                 data: formData,
                 success: function(result) {
-                    console.log(result);
-                    resultingSource = result;
+                    createImage(result);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
                 }
-
             });
-            createImage($uploadInput.val());
         }
     });
 
@@ -164,7 +161,7 @@ function initDialogs() {
         dismissible: true,
         endingTop: '50%',
         complete: function() {
-            textEditor.content.set('');
+            textCreateEditor.content.set('');
             $("#text-create-dialog .collapsible").collapsible('close', 0);
             $("#text-create-border-style").val('none');
             $("#text-create-border-color").val('#000000');
@@ -176,7 +173,7 @@ function initDialogs() {
     $("#text-create-border-style").material_select();
     $("#text-create-border-color").colorpicker();
 
-    textEditor = textboxio.replace("#text-create-content", {
+    textCreateEditor = textboxio.replace("#text-create-content", {
         autosubmit: false,
         css : {
             stylesheets: [''],
@@ -204,7 +201,7 @@ function initDialogs() {
     });
 
     $("#text-create-button").click(function() {
-        createText($(textEditor.content.get()));
+        createText($(textCreateEditor.content.get()));
     });
 }
 
@@ -256,19 +253,24 @@ function editPage() {
 
 // Code: Image creation
 
-function updatePreview() {
-    var $url = $("#image-create-src");
+function updatePreview(method) {
+    if(method == "url")
+        var url = $("#image-create-src").val();
+    else if(method == "upload")
+        var url = URL.createObjectURL($("#image-create-upload-file")[0].files[0]);
     var $preview = $("#image-create-preview > img");
     var tmpImg = new Image();
 
-    tmpImg.src = $url.val();
+    tmpImg.src = url;
 
     $(tmpImg).one('load', function() {
         if (tmpImg.width == 0 || tmpImg.height == 0)
             invalidateImage();
         else {
-            $url.removeClass("invalid").addClass("valid");
-            $("#image-create-preview img").attr("src", $url.val());
+            if(method == "url")
+                $("#image-create-src").removeClass("invalid").addClass("valid");
+
+            $("#image-create-preview img").attr("src", url);
 
             $("#image-create-width").html(tmpImg.width);
             $("#image-create-height").html(tmpImg.height);
@@ -306,16 +308,15 @@ function openCreateDialog(type) {
 function createImage(src, old=false, other_css={}) {
     var attributes = {
         "src": src,
-        "data-type": "image"
+        "data-type": "image",
+        "data-snap": "true",
+        "data-deform": "false"
     };
-    if(!old) {
+    if(!old)
         var css = {
             "width": $("#image-create-width").html() + "px",
             "height": $("#image-create-height").html() + "px"
         };
-        if(src[0] == 'f')
-            newImages[nextID.toString()] = src;
-    }
     else
         var css = other_css;
     var $image = $("<img />")
@@ -339,7 +340,8 @@ function createText($inner_text, old=false, extra_css={}) {
     var $inner_content = $("<div></div>").append($inner_text).addClass("inner-content").css("display", "inline-block");
     $content.append($inner_content);
     var attributes = {
-        "data-type": "text"
+        "data-type": "text",
+        "data-snap": "true"
     };
     var css = {
         "border": $("#text-create-border-style").val() + " " + 
@@ -379,7 +381,9 @@ function createWrapper($inner) {
 
     $newElement.attr({
         "id": "object-" + nextID,
-        "data-type": $inner.data("type")
+        "data-type": $inner.data("type"),
+        "data-snap": "true",
+        "data-aspect-ratio": "true"
     });
 
     $newElement.css({
@@ -431,8 +435,17 @@ function createWrapper($inner) {
         },
         "contextmenu" : function(e) {
             e.stopPropagation();
-            var contextMenuID = "#" + $(e.target).data("type") + "-dropdown";
+
+            var type = $(e.target).data("type");
+            var contextMenuID = "#" + type + "-dropdown";
+
+            $(contextMenuID + " > .toggle").each(function() {
+                var option = $(this).data("option");
+                $(this).children(".material_select").html($(e.target).data(option) == "true" ? "check circle" : "cancel");
+            });
+
             $(contextMenuID + "-activator").dropdown("open");
+
             $(contextMenuID).css({
                 display: "block",
                 left: e.pageX,
@@ -518,7 +531,7 @@ function savePage() {
         switch(type) {
             case "image":
                 var $elem = $("<img />").attr({
-                    "src": "/InteractED/post/content/" + postID + "/images/" + id.slice(id.lastIndexOf("-") + 1) + $inner.data("extension"),
+                    "src": $inner.attr("src"),
                     "data-type": $inner.data("type"),
                     "data-extension": $inner.data("extension"),
                     "data-old": "true"
@@ -577,12 +590,6 @@ function savePage() {
                 console.log("saving error");
             }
         });
-}
-
-function saveNewImages() {
-    $.ajax({
-
-    });
 }
 
 function toggleDebugSave() {
