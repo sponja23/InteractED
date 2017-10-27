@@ -7,16 +7,13 @@ if (file_exists($File)) {
     if ($_POST['DownloadedComments'] != "") {
         $DownloadedComments = explode(';', $_POST['DownloadedComments']);
 
-        for ($i = 0; $i < count($DownloadedComments); $i++) {
+        for ($i = 0; $i < count($DownloadedComments); $i++)
             unset($Comments[$i]);
-        }
     }
 
-    foreach ($Comments as $Key => $Value) {
-        if ($Key != "LastID") {
+    foreach ($Comments as $Key => $Value)
+        if ($Key != "LastID")
             $Users[] = $Comments[$Key]["UserCode"];
-        }
-    }
 
     if (intval($Comments["LastID"]) > 0 && $Users != null) {
         require "../../include/connect.php";
@@ -25,9 +22,8 @@ if (file_exists($File)) {
 
         $sql = "SELECT UserCode, Name FROM Users WHERE UserCode=" . $Users[0];
 
-        for ($i = 1; $i < count($Users); $i++) {
+        for ($i = 1; $i < count($Users); $i++)
             $sql .= " OR UserCode=" . $Users[$i];
-        }
 
         $result = $conn->query($sql);
 

@@ -4,10 +4,10 @@ var PostID = Path.substring(Path.lastIndexOf('=') + 1, Path.length);
 var LoadedComments = "";
 
 $( document ).ready(function() {
-    LoadComments(1, LoadedComments);
+    LoadComments(PostID, LoadedComments);
 
     setInterval(function () {
-        LoadComments(1, LoadedComments);
+        LoadComments(PostID, LoadedComments);
     }, 5000);
 });
 
@@ -16,8 +16,7 @@ $.ajax({
     type: "POST",
     success: function (response) {
         if (response == 1) {
-            $( "#bottom-divider" ).removeClass( "hide" );
-            $( "#comment-box" ).removeClass( "hide" );
+            $( "#comments-section" ).removeClass( "hide" );
 
             $( "#comment" ).on('input', function() {
                 if( !$(this).val() ) {
@@ -39,8 +38,6 @@ $.ajax({
                     data: { PostID: PostID, Comment: Comment } ,
                     success: function (response) {
                         var Data = JSON.parse(response);
-
-                        $( "#top-divider" ).removeClass( "hide" );
 
                         AddComment("../images/" + Data.Image, Data.Name, Comment);
 
@@ -70,8 +67,6 @@ function LoadComments(PostID, DownloadedComments) {
             if (response != "") {
                 var Data = JSON.parse(response);
 
-                $( "#top-divider" ).removeClass( "hide" );
-
                 for (Entry in Data.Comments) {
                     if (Entry != "LastID") {
                         LoadedComments += Entry + ';';
@@ -95,6 +90,8 @@ function LoadComments(PostID, DownloadedComments) {
 }
 
 function AddComment(Image, Name, Comment) {
+    $( "#top-divider, #title" ).removeClass( "hide" );
+
     $( "#comments" ).append(
         '<div class="comment-wrapper">' +
             '<div class="comment-image-wrapper">' +

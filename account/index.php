@@ -20,10 +20,11 @@ if (!isset($_SESSION["UserCode"]))
 
         <div class="container">
             <div class="row">
+                <div class="col s12">
+                    <h1 id="title">Mi cuenta</h1>
+                </div>
                 <div class="card-panel black-text col s12">
-                    <div class="col s12">
-                        <h1 id="title">Mi cuenta</h1>
-                    </div>
+                    <div style="padding-top: 10px;"></div>
                     <div class="input-field col s12 m6">
                         <input id="name" name="name" type="text">
                         <label for="name" data-error="Debe ingresar su nombre">Nombre</label>
@@ -86,8 +87,6 @@ if (!isset($_SESSION["UserCode"]))
                         }
                     });
                 }
-
-                console.log(NewData);
             });
         </script>
     </body>
