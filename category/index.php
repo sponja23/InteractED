@@ -1,34 +1,56 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Category test</title>
-    </head>
-    <body>
-        <button type="button" onclick="alert(JSON.stringify(category.tree))">Get tree</button>
-        <br>
-        <p>Query:</p>
-        
-        <input type="text" id="input">
+        <title>InteractED</title>
 
-        <button type="button" onclick="$('#message').html(category.getChildren($('#input').val()))">Get Children</button>
-        <button type="button" onclick="$('#message').html(category.getParent($('#input').val()))">Get Parent</button>
-        <button type="button" onclick="$('#message').html(category.getAbsolutePath($('#input').val()))">Get Path</button>
+        <?php 
+        require "../include/head.html"; 
+        require "../include/connect.php";
+        include "categories.php";
+        ?>
 
-        <label id="message"></label>
-        <br>
-        <p>Add:</p>
+        <link rel="stylesheet" href="../components/navigation/navigation.css">
 
-        <p>Name: <input type="text" id="name"></p>
-        <p>Parent: <input type="text" id="parent"></p>
+        <style>
+            .item:hover {
+                cursor: pointer;
+                cursor: hand;
+            }
 
-        <button type="button" onclick="category.addCategory($('#name').val(), $('#parent').val())">Add</button>
-        <button type="button" onclick="category.writeFile()">Save</button>
+            .results {
+                font-size: 1.1rem;
+                font-weight: 400;
+                line-height: 2rem;
+            }
+        </style>
 
         <?php require "../include/scripts.html"; ?>
-        <script src="category.js"></script>
+
+        <script src="../components/navigation/navigation.js"></script>
+
+    </head>
+    <body class="grey lighten-5">
+        <?php require "../components/navigation/navigation.php"; ?>
+
+        <div class="container">
+            <h5>Categorias</h5>
+                <?php
+                    echo '<a href="addCategory.php" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a>';
+                    $categories = new Categories();
+
+                    $categories->GetCategories();
+
+                    //$categories->GetArticlesByCategories($_GET["q"]);
+                ?>
+        <div>
         <script>
-            category.loadTree();
-            console.log(category.tree);
+            $( ".item" ).click(function() {
+                window.location.href = "../post?id=" + $(this).attr("id");
+            });
+            $( ".categoryOption" ).click(function() {
+                window.location.href = "../category/articles/?q=" + $(this).attr("id");
+            });
         </script>
     </body>
 </html>
