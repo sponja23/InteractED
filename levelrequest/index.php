@@ -1,7 +1,8 @@
 <HTML>
 <HEAD></HEAD>
 <BODY>
-	<label>Eliga el nivel al que desea cambiar</label>
+
+    <label>Eliga el nivel al que desea cambiar</label>
 	<!-- Lograr que no te deje seleccionar en el que se encuentra -->
 	<select id="level">
 		<option value="0">B&aacute;sico</option>
@@ -27,11 +28,16 @@
                         type: "POST",
                         data: { Reason: Reason, Level: Level } ,
                         success: function (response) {
-                            if (response=="0"){
+                            if (response=="0")
+                            {
+                               window.history.back();
+                               alert ("Ya estas en ese nivel"); 
+                            }
+                            else if (response=="1"){
                             	window.history.back();
                             	alert ("Se ha enviado la solicitud correctamente");
                             }
-                            if (response=="1"){
+                            else if (response=="2"){
                             	window.history.back();
                             	alert ("Ha habido un error al enviar la solicitud");
                             }
