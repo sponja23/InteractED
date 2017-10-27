@@ -129,17 +129,15 @@
                         <label for="image-create-src">URL</label>
                     </div>
                     <span>Ó</span>
-                    <form action="uploadImage.php" type="POST" id="image-create-upload-form" enctype="multipart/form-data">
-                        <div class="file-field input-field">
-                            <div class="btn blue">
-                                <span>Imagen</span>
-                                <input type="file" name="image" id="image-create-upload-file">
-                            </div>
-                            <div class="file-path-wrapper">
-                                <input id="image-create-upload-src" class="file-path" type="text">
-                            </div>
+                    <div class="file-field input-field">
+                        <div class="btn blue">
+                            <span>Imagen</span>
+                            <input type="file" name="image" id="image-create-upload-file">
                         </div>
-                    </form>
+                        <div class="file-path-wrapper">
+                            <input id="image-create-upload-src" class="file-path" type="text">
+                        </div>
+                    </div>
                     <span id="image-create-error" class="red-text">></span>
                 </div>
                 <div class="modal-footer">
