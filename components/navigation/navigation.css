@@ -25,6 +25,15 @@
     }
 }
 
+nav ul a {
+    padding: initial;
+    margin: 0 15px;
+}
+
+nav ul a:hover {
+    background-color: initial;
+}
+
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: var(--placeholder-color);
 }

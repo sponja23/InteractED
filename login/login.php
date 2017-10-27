@@ -11,8 +11,8 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $_SESSION["UserCode"] = $row["UserCode"];
         $_SESSION["Name"] = $row["Name"];
-        $images = glob("../images/" . $row["UserCode"] . ".*");
-        $_SESSION["Image"] = "/InteractED/images/" . basename($images[0]);
+        $Image = glob("../images/" . $row["UserCode"] . ".*");
+        $_SESSION["Image"] = "/InteractED/images/" . basename($Image[0]);
         $_SESSION["Email"] = $row["Email"];
         $_SESSION["Level"] = $row["Level"];
         echo '1';

@@ -17,6 +17,7 @@
             <?php
             if (isset($_SESSION["UserCode"])) {
                 echo '<li><i id="search-mobile-icon" class="material-icons grey-text hide-on-med-and-up toggle-search" style="margin-right: 15px;">search</i></li>
+                      <li><a href="/InteractED/post/create"><i class="material-icons grey-text option">add</i></a></li>
                       <li><i class="material-icons grey-text dropdown-button option" data-belowOrigin="true" data-constrainWidth="false" data-activates="notifications">notifications</i></li>
                       <li><img class="dropdown-button circle option" width="40px" height="40px" style="margin-right: 20px; margin-left: 15px; vertical-align: middle;" src="' . $_SESSION["Image"] . '" data-belowOrigin="true" data-constrainWidth="false" data-activates="account"></li>
 

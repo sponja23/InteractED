@@ -1,13 +1,19 @@
+<?php
+session_start();
+
+if(!isset($_SESSION["UserCode"]))
+    header("Location: ../../");
+?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Preeditor</title>
+        <title>Crear post - InteractED</title>
 
-        <?php require "../include/head.html"; ?>
+        <?php require "../../include/head.html"; ?>
 
         <link rel="stylesheet" href="styles.css">
-        <link rel="stylesheet" href="../css/input.css">
-        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="../../css/input.css">
+        <link rel="stylesheet" href="../../css/font.css">
     </head>
     <body>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 810" preserveAspectRatio="xMinYMin slice" class="background">
@@ -46,7 +52,7 @@
                             </div>
                             <div class="input-field col s12">
                                 <div id="post-tags" class="chips chips-placeholder"></div>
-                                <input id="tags-object" name="tags" class="hide">
+                                <div id="tags-container"></div>
                             </div>
                             <div class="col s12">
                                 <label id="error-message" class="red-text">&nbsp;</label>
@@ -62,7 +68,7 @@
             </div>
         </div>
 
-        <?php require "../include/scripts.html"; ?>
+        <?php require "../../include/scripts.html"; ?>
 
         <script>
             $(document).ready(function() {
@@ -93,13 +99,10 @@
                 }
                 else
                 {
-                    var Tags = [];
-                    var Data = $( "#post-tags" ).material_chip("data");
+                    var Data = $( "#post-tags" ).material_chip( "data" );
 
                     for (i = 0; i < Data.length; i++)
-                        Tags.push(Data[i].tag);
-
-                    $( "#tags-object" ).val(JSON.stringify(Tags));
+                        $( "#tags-container" ).append('<input type="hidden" name="tags[]" value="' + Data[i].tag + '">');
 
                     $( "#preeditor" ).submit();
                 }

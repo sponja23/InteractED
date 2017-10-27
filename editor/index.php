@@ -1,18 +1,16 @@
 <?php
-	session_start();
+    session_start();
     if(!isset($_SESSION["UserCode"]))
         header("Location: ../");
     else {
-    	include "../include/connect.php";
-    	if($_SESSION["Level"] >= 1)
-    		$sql = "SELECT * FROM Articles WHERE MD5(PostID) = '" . $_GET["id"] . "'";
-    	else
-	        $sql = "SELECT A.*, C.CategoryName FROM Articles A
-	                INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
-	                INNER JOIN Users Editor ON ER.UserCode = Editor.UserCode
-                    INNER JOIN Users Creator ON A.CreatorID = Creator.UserCode
-                    INNER JOIN Categories C ON A.PostID = C.PostID
-	                WHERE MD5(A.PostID) = '" . $_GET["id"] . "' AND (Creator.UserCode = " . $_SESSION["UserCode"] . " OR Editor.UserCode = " . $_SESSION["UserCode"] . ")";
+        include "../include/connect.php";
+
+        $sql = 'SELECT A.* FROM Articles A
+                LEFT JOIN EditorRelation ER ON A.PostID = ER.PostID
+                WHERE MD5(A.PostID) = "' . $_GET["id"] . '" AND
+                (A.CreatorID = ' . $_SESSION["UserCode"] . ' OR ER.UserCode = ' . $_SESSION["UserCode"] . ' OR ' .
+                $_SESSION["Level"] . ' >= 1)';
+
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -222,7 +220,7 @@
         <script src="../include/textboxio/textboxio.js"></script>
         <script src="../include/colorpicker/materialize-colorpicker.min.js"></script>
         <script>
-        	var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
+            var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
             var pageCategory = <?= "\"" . $_SESSION[$_GET["id"] . "-Category"] . "\""?>;
             var postID = <?= "\"" . $_GET["id"] . "\"" ?>;
             var pageContent = <?= "'". $PageContent . "'" ?>;

@@ -24,8 +24,8 @@
                     $Email = $_POST["email"];
                     $Name = $_POST["name"];
 
-                    $sql = 'INSERT INTO Users (User, Password, Email, Name)
-                            VALUES ("' . $User . '", "' . $Password . '", "' . $Email . '", "' . $Name . '")';
+                    $sql = 'INSERT INTO Users (User, Password, Email, Name, Level)
+                            VALUES ("' . $User . '", "' . $Password . '", "' . $Email . '", "' . $Name . '", 0)';
 
                     if ($conn->query($sql) === TRUE) {
                         $File = "../../images/" . $conn->insert_id . "." . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
@@ -55,9 +55,11 @@
                     case 3:
                         $_SESSION["UserCode"] = $conn->insert_id;
                         $_SESSION["Name"] = $Name;
-                        $_SESSION["Image"] = "/InteractED/images/" . basename(glob("../../images/" . $conn->insert_id . ".*")[0]);
+                        $Image = glob("../../images/" . $conn->insert_id . ".*");
+                        $_SESSION["Image"] = "/InteractED/images/" . basename($Image[0]);
                         $_SESSION["Email"] = $Email;
-                        header("Location: ../../");
+                        $_SESSION["Level"] = 0;
+                        echo '<script>window.location.replace("../../");</script>';
                         break;
                     default:
                         echo "Error desconocido, por favor intente de nuevo";
