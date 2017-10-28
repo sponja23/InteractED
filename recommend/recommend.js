@@ -42,7 +42,7 @@ function matrixOfZeros(width, height) {
 }
 
 function buildRatingModel() {
-	con.query("SELECT COUNT(A.*), COUNT(U.*) FROM Articles A INNER JOIN Users U"), function(err, result, fields) {
+	con.query("SELECT COUNT(A.PostID), COUNT(U.UserCode) FROM Articles A INNER JOIN Users U"), function(err, result, fields) {
 		ratingInput = matrixOfZeros(result[0]["COUNT(A.*)"], result[0]["COUNT(U.*)"]);
 		con.query("SELECT U.UserName A.Title, R.Stars FROM Users U\
 				   INNER JOIN Ratings R ON U.UserCode = R.UserCode\

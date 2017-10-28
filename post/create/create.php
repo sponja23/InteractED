@@ -6,8 +6,8 @@ require "../../include/connect.php";
 $Title = $_POST["title"];
 $Category = $_POST["category"];
 
-$CreateArticle = 'INSERT INTO Articles (CreatorID, CreateDate, Title, Category)
-                  VALUES (' . $_SESSION["UserCode"] . ', CURDATE(), "' . $Title . '", "' . $Category . '")';
+$CreateArticle = 'INSERT INTO Articles (CreatorID, CreateDate, Title, CategoryID)
+                  VALUES (' . $_SESSION["UserCode"] . ', CURDATE(), "' . $Title . '", (SELECT CategoryID FROM Categories WHERE CategoryName = "' . $Category . '"))';
 
 if ($conn->query($CreateArticle) === TRUE) {
     $PostID = $conn->insert_id;

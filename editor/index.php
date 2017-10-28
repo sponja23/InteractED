@@ -5,8 +5,9 @@
     else {
         include "../include/connect.php";
 
-        $sql = 'SELECT A.* FROM Articles A
+        $sql = 'SELECT A.Title, A.LastEditDate, C.CategoryName FROM Articles A
                 LEFT JOIN EditorRelation ER ON A.PostID = ER.PostID
+                INNER JOIN Categories C ON A.CategoryID = C.CategoryID
                 WHERE MD5(A.PostID) = "' . $_GET["id"] . '" AND
                 (A.CreatorID = ' . $_SESSION["UserCode"] . ' OR ER.UserCode = ' . $_SESSION["UserCode"] . ' OR ' .
                 $_SESSION["Level"] . ' >= 1)';
@@ -16,7 +17,7 @@
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 $_SESSION[$_GET["id"] . "-Title"] = $row["Title"];
-                $_SESSION[$_GET["id"] . "-Category"] = $row["Category"];
+                $_SESSION[$_GET["id"] . "-Category"] = $row["CategoryName"];
                 $PageContent = "";
                 if(!is_null($row["LastEditDate"])) {
                     $PageContent = file_get_contents("../post/content/" . $_GET["id"] . "/index.html");
@@ -98,7 +99,7 @@
 
         <div class="fixed-action-btn">
             <a href="#" class="btn-floating btn-large blue darken-2">
-                <i class="large material-icons">settings</i>
+                <i class="large material-icons">add</i>
             </a>
             <ul id="btn-list">
                 <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('text')"><i class="material-icons"></i></a></li>
@@ -153,7 +154,7 @@
                             <input type="file" name="image" id="image-create-upload-file">
                         </div>
                         <div class="file-path-wrapper">
-                            <input id="image-create-upload-src" onchange="updatePreview('upload')" class="file-path" type="text">
+                            <input id="image-create-upload-src" onchange="updatePreview('upload')" class="file-path input" type="text">
                         </div>
                     </div>
                     <span id="image-create-error" class="red-text"></span>

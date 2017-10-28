@@ -59,16 +59,29 @@ $(document).ready(function() {
         }
     });
 
-    /*
-    NOT IMPLEMENTED
-    for(var cat in categories)
-        category_image[cat] = "../category/images/" + cat + ".jpg";
-    $("#edit-page-category").autocomplete({
-        data: category_image,
-        limit: 10,
-        minLength: 1
+    $.ajax({
+        url: "../category/get_categories.php",
+        type: "POST",
+        async: true,
+        context: this,
+        dataType: "json",
+        success: function(categories) {
+            if(categories) {
+                var category_images = {};
+                for(var i in categories)
+                    category_images[categories[i]] = "../../category/images/" + categories[i] + ".jpg";
+
+                $(".autocomplete").autocomplete({
+                    data: category_images,
+                    limit: 5,
+                    minLength: 1
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
     });
-    */
 
     initDialogs();
 });
@@ -101,6 +114,8 @@ function resetPositions(exception_id) {
 }
 
 function initDialogs() {
+
+    $(".colorpicker").colorpicker();
 
     // Page Dialog
 
@@ -182,7 +197,6 @@ function initDialogs() {
     });
 
     $("#text-create-border-style").material_select();
-    $("#text-create-border-color").colorpicker();
 
     textCreateEditor = textboxio.replace("#text-create-content", {
         autosubmit: false,
@@ -357,12 +371,13 @@ function createText($inner_text, old=false, extra_css={}) {
     var css = {
         "border": $("#text-create-border-style").val() + " " + 
                   $("#text-create-border-color").val() + " " +
-                  $("#text-create-border-width").val(),
+                  $("#text-create-border-width").val() + "px",
         "display": "inline-block",
         "padding": "0 10px",
         "width": $inner_content.width(),
         "height": $inner_content.height()
     };
+    console.log(css["border"]);
     $inner_content.one("load", function() {
         $content.remove($inner_content);
     });
@@ -430,6 +445,7 @@ function createWrapper($inner) {
     $newElement.on({
         "click" : function(e) {
             selectElement($(this));
+            $("#" + $(this).data("type") + "-dropdown-activator").dropdown("close");
             e.stopPropagation();
         },
         "mousedown" : function(e) {
@@ -440,6 +456,7 @@ function createWrapper($inner) {
             }
             if($(".handle:hover").length != 0)
                 dragging = false;
+            $("#" + $(this).data("type") + "-dropdown-activator").dropdown("close");
         },
         "mouseup" : function(e) {
             dragging = false;

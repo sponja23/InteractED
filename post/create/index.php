@@ -47,7 +47,7 @@ if(!isset($_SESSION["UserCode"]))
                                 <label for="post-title" data-error="Debe ingresar un t&iacute;tulo">T&iacute;tulo</label>
                             </div>
                             <div class="input-field col s12 m6">
-                                <input id="post-category" name="category" type="text">
+                                <input id="post-category" name="category" type="text" class="autocomplete">
                                 <label for="post-category" data-error="Debe ingresar una categor&iacute;a">Categor&iacute;a</label>
                             </div>
                             <div class="input-field col s12">
@@ -72,6 +72,31 @@ if(!isset($_SESSION["UserCode"]))
 
         <script>
             $(document).ready(function() {
+                var categories;
+                $.ajax({
+                    url: "../../category/get_categories.php",
+                    type: "POST",
+                    async: true,
+                    context: this,
+                    dataType: "json",
+                    success: function(categories) {
+                        if(categories) {
+                            var category_images = {};
+                            for(var i in categories)
+                                category_images[categories[i]] = "../../category/images/" + categories[i] + ".jpg";
+
+                            $(".autocomplete").autocomplete({
+                                data: category_images,
+                                limit: 5,
+                                minLength: 1
+                            });
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+
                 $('.chips-placeholder').material_chip({
                     placeholder: "Ingrese un tag"
                 });
