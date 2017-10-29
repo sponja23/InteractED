@@ -87,7 +87,7 @@
 
         <ul id="text-dropdown" class="dropdown-content">
             <li><a href="#!" class="blue-text toggle" data-option="snap" ><i class="material-icons blue-text">check circle</i>Cambiar Snap</a></li>
-            <li><a href="#!" class="blue-text"><i class="material-icons blue-text">mode edit</i>Editar</a></li>
+            <li><a href="#!" class="blue-text" onclick="openEditDialog('text')"><i class="material-icons blue-text">edit</i>Editar</a></li>
             <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar</a></li>
         </ul>
 
@@ -207,6 +207,10 @@
                     <div class="row">
                         <textarea id="text-edit-content" class="col s12" style="height: 250px"></textarea>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-edit-cancel">Cancelar</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-edit-button">Crear</a>
                 </div>
             </div>
         </div>

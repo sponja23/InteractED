@@ -16,8 +16,10 @@ $(document).ready(function() {
 
     $content.css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
-    }).on("contextmenu", function() {
+    }).on("contextmenu", function(e) {
         e.stopPropagation();
+
+        console.log("content context menu  opened");
 
         var contextMenuID = "#content-dropdown";
 
@@ -228,6 +230,45 @@ function initDialogs() {
     $("#text-create-button").click(function() {
         createText($(textCreateEditor.content.get()));
     });
+
+    $("#text-edit-dialog").modal({
+        dismissible: true,
+        endingTop: '50%',
+        complete: function() {
+            textEditEditor.content.set('');
+        }
+    });
+
+    textEditEditor = textboxio.replace("#text-edit-content", {
+        autosubmit: false,
+        css : {
+            stylesheets: [''],
+            styles: [               
+                { rule: 'p',    text: 'Párrafo' },
+                { rule: 'h1',   text: 'Encabezado 1' },
+                { rule: 'h2',   text: 'Encabezado 2' },
+                { rule: 'h3',   text: 'Encabezado 3' },
+                { rule: 'h4',   text: 'Encabezado 4' }
+            ]
+        },
+        codeview: {
+            enabled: true,
+            showButton: true
+        },
+        images: {
+            allowLocal : true
+        },
+        languages: ['en', 'es'],
+        ui: {
+            toolbar:  {
+                items: [ 'undo', 'style', 'emphasis', 'align', 'listindent', 'format', 'tools' ]
+            }
+        }
+    });
+
+    $("#text-edit-button").click(function() {
+        editText($selectedElement, $(textEditEditor.content.get()));
+    });
 }
 
 function enableButton(button) {
@@ -361,26 +402,22 @@ function createImage(src, old=false, other_css={}) {
 // Code: Text Creation
 
 function createText($inner_text, old=false, extra_css={}) {
-    $inner_text.css("display", "inline-block");
-    var $inner_content = $("<div></div>").append($inner_text).addClass("inner-content").css("display", "inline-block");
-    $content.append($inner_content);
     var attributes = {
         "data-type": "text",
         "data-snap": "true"
-    };
+    };;
+    $inner_text.css("display", "block").attr(attributes);
+    var $inner_content = $("<div></div>").append($inner_text).addClass("inner-content").css("display", "inline-block").attr(attributes);
+    $content.append($inner_content);
     var css = {
         "border": $("#text-create-border-style").val() + " " + 
                   $("#text-create-border-color").val() + " " +
                   $("#text-create-border-width").val() + "px",
         "display": "inline-block",
         "padding": "0 10px",
-        "width": $inner_content.width(),
-        "height": $inner_content.height()
+        "width": $inner_content.width() + "px",
+        "height": $inner_content.height() + "px"
     };
-    console.log(css["border"]);
-    $inner_content.one("load", function() {
-        $content.remove($inner_content);
-    });
     var $text = $("<div></div>")
     .attr(attributes)
     .css(css)
@@ -393,11 +430,36 @@ function createText($inner_text, old=false, extra_css={}) {
     createWrapper($text);
 }
 
+function editText($element, $new_text) {
+    var $inner = $element.children(".inner");
+    $inner.css({
+        "left": $element.css("left"),
+        "top": $element.css("top")
+    });
+    var id = parseInt($element.attr("id").slice($element.attr("id").lastIndexOf('-') + 1));
+    console.log(id);
+    $content.append($inner);
+    removeSelectedElement();
+    $new_text.css("display", "block");
+    var $new_content = $("<div></div>").append($new_text).addClass("inner-content").css("display", "inline-block");
+    $inner.children(".inner-content").replaceWith($new_content);
+    $inner.css({
+        "width": $new_content.width() + "px",
+        "height": $new_content.height() + "px"
+    });
+    $inner.attr({
+        "data-old": "true"
+    })
+    createWrapper($inner, id);
+}
+
 // Code: Wrapper
 
-function createWrapper($inner) {
+function createWrapper($inner, idToUse = -1) {
 
-    var $newElement = $("<div></div>").html($inner);
+    var $newElement = $("<div></div>").append($inner);
+
+    var id = idToUse == -1 ? nextID : idToUse;
 
     $newElement.draggable({
         snap: true,
@@ -406,7 +468,7 @@ function createWrapper($inner) {
     });
 
     $newElement.attr({
-        "id": "object-" + nextID,
+        "id": "object-" + id,
         "data-type": $inner.data("type"),
         "data-snap": "true",
         "data-aspect-ratio": "true"
@@ -420,9 +482,9 @@ function createWrapper($inner) {
     });
 
     if($inner.data("type") != "text") {
-        $newElement.append($("<div id='handle-" + nextID + "' class='handle ui-resizable-handle ui-resizable-se'></div>")).resizable({
+        $newElement.append($("<div id='handle-" + id + "' class='handle ui-resizable-handle ui-resizable-se'></div>")).resizable({
             handles: {
-                "se": "#handle-" + nextID
+                "se": "#handle-" + id
             },
             aspectRatio: $newElement.width() / $newElement.height(),
             start: function() {
@@ -432,15 +494,16 @@ function createWrapper($inner) {
                 resetPositions($(this).attr("id"));
             }
         });
+
         $newElement.children(".handle").hide();
     }
 
-    $newElement.addClass("object " + $inner.data("type"));
-    
-    $newElement.children().css({
+    $newElement.children(".inner").css({
         "width": "100%",
         "height": "100%"
     });
+
+    $newElement.addClass("object " + $inner.data("type"));
 
     $newElement.on({
         "click" : function(e) {
@@ -467,9 +530,11 @@ function createWrapper($inner) {
             var type = $(e.target).data("type");
             var contextMenuID = "#" + type + "-dropdown";
 
+            console.log(type + " context menu opened");
+
             $(contextMenuID + " > .toggle").each(function() {
                 var option = $(this).data("option");
-                $(this).children(".material_select").html($(e.target).data(option) == "true" ? "check circle" : "cancel");
+                $(this).children(".material_icons").html($(e.target).data(option) == "true" ? "check circle" : "cancel");
             });
 
             $(contextMenuID + "-activator").dropdown("open");
@@ -503,7 +568,8 @@ function createWrapper($inner) {
     selectElement($newElement);
     unselectElement();
     
-    nextID++;
+    if(idToUse == -1)
+        nextID++;
 }
 
 // Code: Selection
@@ -535,7 +601,13 @@ function removeSelectedElement() {
 }
 
 function openEditDialog(type) {
-    console.log("Editing " + type + ": " + $selectedElement.attr("id"));
+    console.log("opening: #" + type + "-edit-dialog");
+    $("#" + type + "-edit-dialog").modal("open");
+    $(".sideNav-button").sideNav("hide");
+    switch(type) {
+        case "text":
+            textEditEditor.content.set($selectedElement.find(".inner-content").html());
+    }
 }
 
 // Code: Saving
