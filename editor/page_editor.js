@@ -117,7 +117,10 @@ function resetPositions(exception_id) {
 
 function initDialogs() {
 
-    $(".colorpicker").colorpicker();
+    $("#colorpicker-wrapper").colorpicker({
+        format: 'hex',
+        component: '#color-box'
+    });
 
     // Page Dialog
 
@@ -537,9 +540,12 @@ function createWrapper($inner, idToUse = -1) {
 
             console.log(type + " context menu opened");
 
-            $(contextMenuID + " > .toggle").each(function() {
-                var option = $(this).data("option");
-                $(this).children(".material_icons").html($(e.target).data(option) == "true" ? "check circle" : "cancel");
+            //alert($(e.target).data("snap"));
+
+            $(contextMenuID + " li .toggle .material-icons").each(function() {
+                var value = $(e.target).data($(this).data("option"));
+                var icon = value == true ? "check_box" : "check_box_outline_blank";
+                $(this).html(icon);
             });
 
             $(contextMenuID + "-activator").dropdown("open");

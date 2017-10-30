@@ -1,7 +1,7 @@
 .logo {
     font-size: 2rem;
     font-family: and_black;
-    padding-left: 10px;
+    margin-left: 20px;
 }
 
 .valign-modal {
@@ -10,8 +10,8 @@
 }
 
 #image-create-preview {
-    width: 300px !important;
-    height: 300px !important;
+    width: 250px !important;
+    height: 250px !important;
 }
 
 #image-create-preview > img {
@@ -41,4 +41,18 @@
     bottom: -5px;
     right: -5px;
     background: blue;
+}
+
+.mobile-fab-tip {
+    position: fixed;
+    right: 95px;
+    width: auto;
+    height: auto;
+    padding:0px 0.5rem;
+    border-radius: 4px;
+    line-height: 30px;
+}
+
+.mobile-fab-button {
+    right: -8px;
 }

@@ -61,6 +61,15 @@ else
                 ?>
             </div>
             <?= file_get_contents("content/" . $_GET["id"] . "/index.html") ?>
+            Tags: <?php
+            $sql = 'SELECT TagName FROM Tags
+                    WHERE MD5(PostID) = "' . $_GET["id"] . '"';
+
+            $result = $conn->query($sql);
+
+            while ($row = $result->fetch_assoc())
+                echo '<div class="chip">' . $row["TagName"] . '</div>';
+            ?>
             <?php require "../components/rating/index.html"; ?>
             <?php require "../components/comments/index.php"; ?>
         </div>

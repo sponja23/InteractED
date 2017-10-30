@@ -47,101 +47,159 @@
     <body>
         <nav>
             <div id="side-nav" class="nav-wrapper white">
-                <ul id="nav-mobile" class="left">
-                    <li><a href="#" data-activates="slide-out" id="side-nav-button" style="float: left;"><i class="material-icons blue-text">menu</i></a></li>
-                </ul>
                 <a href="../" class="logo blue-text">InteractED</a>
+                <ul class="right">
+                    <a class="btn blue waves-effect waves-light" style="padding: 0 15px;"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a>
+                </ul>
             </div>
         </nav>
-
-        <ul id="slide-out" class="side-nav">
-            <li><div class="flow-text" style="text-align: center; padding: 5px 0">Edit Page</div></li>
-            <li><a id="edit-page" class="waves-effect waves-light" onclick="openEditPageDialog()">Propiedades de la página</a></li>
-            <li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        <a class="collapsible-header">Crear...<i class="material-icons">arrow_drop_down</i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a id="create-text" class="waves-effect waves-light" onclick="openCreateDialog('text')">Crear Texto</a></li>
-                                <li><a id="create-image" class="waves-effect waves-light" onclick="openCreateDialog('image')">Crear Imagen</a></li>
-                                <li><a id="create-video" class="waves-effect waves-light" onclick="openCreateDialog('video')">Crear Video</a></li>
-                                <li><a id="create-custom" class="waves-effect waves-light" onclick="openCreateDialog('custom')">Crear Custom</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-        </ul>
         
         <a id="content-dropdown-activator" class="dropdown-button hide" data-activates="content-dropdown" data-constrainWidth="false"></a> 
         <a id="text-dropdown-activator" class="dropdown-button hide" data-activates="text-dropdown" data-constrainWidth="false"></a>
         <a id="image-dropdown-activator" class="dropdown-button hide" data-activates="image-dropdown" data-constrainWidth="false"></a>
 
         <ul id="content-dropdown" class="dropdown-content">
-            <li><a href="#!" class="blue-text" onclick="openCreateDialog('text')">Crear Texto</a></li>
-            <li><a href="#!" class="blue-text" onclick="openCreateDialog('image')">Crear Imagen</a></li>
-            <li><a href="#!" class="blue-text" onclick="openCreateDialog('video')">Crear Video</a></li>
-            <li><a href="#!" class="blue-text" onclick="openCreateDialog('custom')">Crear Custom</a></li>
+            <li>
+                <a class="blue-text" onclick="openCreateDialog('text')">
+                    <i class="material-icons blue-text">format_shapes</i>
+                    Crear texto
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="openCreateDialog('image')">
+                    <i class="material-icons blue-text">photo</i>
+                    Crear imagen
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="openCreateDialog('video')">
+                    <i class="material-icons blue-text">ondemand_video</i>
+                    Crear video
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="openCreateDialog('custom')">
+                    <i class="material-icons blue-text">code</i>
+                    Crear personalizado
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a class="blue-text" onclick="openEditPageDialog()">
+                    <i class="material-icons blue-text">settings</i>
+                    Propiedades de la pagina
+                </a>
+            </li>
         </ul>
 
         <ul id="text-dropdown" class="dropdown-content">
-            <li><a href="#!" class="blue-text toggle" data-option="snap" ><i class="material-icons blue-text">check circle</i>Cambiar Snap</a></li>
-            <li><a href="#!" class="blue-text" onclick="openEditDialog('text')"><i class="material-icons blue-text">edit</i>Editar</a></li>
-            <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar</a></li>
+            <li>
+                <a class="blue-text toggle">
+                    <i class="material-icons blue-text" data-option="snap"></i>
+                    Alinear con objetos
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="openEditDialog('text')">
+                    <i class="material-icons blue-text">edit</i>
+                    Editar
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a class="blue-text" onclick="removeSelectedElement()">
+                    <i class="material-icons blue-text">delete</i>
+                    Borrar
+                </a>
+            </li>
         </ul>
 
         <ul id="image-dropdown" class="dropdown-content">
-            <li><a href="#!" class="blue-text toggle" data-option="snap" ><i class="material-icons blue-text">check circle</i>Cambiar Snap</a></li>
-            <li><a href="#!" class="blue-text toggle" data-option="deform"><i class="material-icons blue-text">cancel</i>Cambiar Deformar</a></li>
-            <li><a href="#!" class="blue-text" onclick="removeSelectedElement()"><i class="material-icons blue-text">delete</i>Borrar</a></li>
+            <li>
+                <a class="blue-text toggle">
+                    <i class="material-icons blue-text" data-option="snap"></i>
+                    Alinear con objetos
+                </a>
+            </li>
+            <li>
+                <a class="blue-text toggle">
+                    <i class="material-icons blue-text" data-option="deform"></i>
+                    Mantener proporciones
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a class="blue-text" onclick="removeSelectedElement()">
+                    <i class="material-icons blue-text">delete</i>
+                    Borrar
+                </a>
+            </li>
         </ul>
 
         <div class="fixed-action-btn">
-            <a href="#" class="btn-floating btn-large blue darken-2">
-                <i class="large material-icons">add</i>
+            <a class="btn-floating btn-large blue darken-2">
+                <i class="material-icons">add</i>
             </a>
-            <ul id="btn-list">
-                <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('text')"><i class="material-icons"></i></a></li>
-                <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('image')"><i class="material-icons"></i></a></li>
-                <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('video')"><i class="material-icons"></i></a></li>
-                <li><a class="btn-floating blue darken-3" onclick="openCreateDialog('custom')"><i class="material-icons"></i></a></li>
+            <ul>
+                <li class="valign-wrapper" onclick="openCreateDialog('text')">
+                    <a class="btn-floating blue darken-3 mobile-fab-button"><i class="material-icons">format_shapes</i></a>
+                    <a class="btn-floating blue darken-3 mobile-fab-tip">Crear texto</a>
+                </li>
+                <li class="valign-wrapper" onclick="openCreateDialog('image')">
+                    <a class="btn-floating blue darken-3 mobile-fab-button"><i class="material-icons">photo</i></a>
+                    <a class="btn-floating blue darken-3 mobile-fab-tip">Crear imagen</a>
+                </li>
+                <li class="valign-wrapper" onclick="openCreateDialog('video')">
+                    <a class="btn-floating blue darken-3 mobile-fab-button"><i class="material-icons">ondemand_video</i></a>
+                    <a class="btn-floating blue darken-3 mobile-fab-tip">Crear video</a>
+                </li>
+                <li class="valign-wrapper" onclick="openCreateDialog('custom')">
+                    <a class="btn-floating blue darken-3 mobile-fab-button"><i class="material-icons">code</i></a>
+                    <a class="btn-floating blue darken-3 mobile-fab-tip">Crear personalizado</a>
+                </li>
             </ul>
         </div>
         
         <div id="dialogs">
             <div id="edit-page-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    <h4>Editar propiedades de página</h4>
-                    <br><br>
-                    <div style="display: block; margin: 0 auto; padding: 0 10%">
-                        <div class="input-field col s12">
-                            <input id="edit-page-name" type="text" class="input">
-                            <label for="edit-page-name">Nombre</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input id="edit-page-category" type="text" class="input autocomplete">
-                            <label for="edit-page-category">Categoría</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input id="edit-page-height" type="number" class="input" min="0">
-                            <label for="edit-page-height">Altura</label>
-                        </div>
+                    <div class="col s12">
+                        <h5 style="margin-bottom: 20px;">Editar propiedades de p&aacute;gina</h5>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="edit-page-name" type="text" class="input">
+                        <label for="edit-page-name">Nombre</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="edit-page-category" type="text" class="input autocomplete">
+                        <label for="edit-page-category">Categoría</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="edit-page-height" type="number" class="input" min="0">
+                        <label for="edit-page-height">Altura</label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-cancel">Cancelar</a>
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-button">Guardar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-cancel">Cancelar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-button">Guardar</a>
                 </div>
             </div>
             <div id="image-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    <h4>Crear Imagen</h4>
+                    <h5>Crear im&aacute;gen</h5>
                     <div class="valign-wrapper">
                         <div id="image-create-preview" class="valign-wrapper">
                             <img src="no_image_selected.gif" />
                         </div>
-                        <p id="image-create-lengths"><strong>Ancho:</strong><br><span id="image-create-width" class="input">200</span>px<br><br><strong>Alto:</strong><br><span id="image-create-height" class="input" data-parameter="height">200</span>px</p>
+                        <p id="image-create-lengths">
+                            <strong>Ancho:</strong>
+                            <br>
+                            <span id="image-create-width" class="input">200</span>px
+                            <br><br>
+                            <strong>Alto:</strong>
+                            <br>
+                            <span id="image-create-height" class="input" data-parameter="height">200</span>px
+                        </p>
                     </div>
                     <div class="input-field col s12">
                         <input id="image-create-src" type="url" onchange="updatePreview('url')" class="input">
@@ -160,29 +218,32 @@
                     <span id="image-create-error" class="red-text"></span>
                 </div>
                 <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-cancel">Cancelar</a>
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-button">Crear</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-cancel">Cancelar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="image-create-button">Crear</a>
                 </div>
             </div>
             <div id="text-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    <h4>Crear Texto</h4>
-                    <div id="text-create-properties" class="section row">
-                        <ul class="collapsible popout row s12" data-collapsible="accordion">
+                    <h5 style="margin-bottom: 20px;">Crear texto</h5>
+                    <div id="text-create-properties">
+                        <ul class="collapsible" data-collapsible="accordion">
                             <li>
-                                <a class="collapsible-header">Borde<i class="material-icons">arrow_drop_down</i></a>
-                                <div class="collapsible-body row">
-                                    <div class="input-field col s4">
-                                        <select id="text-create-border-style">
-                                            <option value="none" selected>Ninguno</option>
-                                            <option value="solid">Sólido</option>
-                                            <option value="dotted">Punteado</option>
-                                        </select>
-                                        <label for="text-create-border-style">Estilo</label>
+                                <div class="collapsible-header">Borde<i class="material-icons">arrow_drop_down</i></div>
+                                <div class="collapsible-body row" style="padding: 1rem;">
+                                    <div id="colorpicker-wrapper" class="file-field col s4">
+                                        <div id="color-box" class="btn" style="margin-top: 15px;"></div>
+                                        <div class="file-path-wrapper input-field">
+                                            <input id="text-create-border-color" type="text" />
+                                        </div>
                                     </div>
                                     <div class="input-field col s4">
-                                        <input id="text-create-border-color" type="text" />
-                                        <label for="text-create-border-color">Color</label>
+                                        <select id="text-create-border-style">
+                                            <option value="" disabled>Choose your option</option>
+                                            <option value="none" selected>Ninguno</option>
+                                            <option value="solid">S&oacute;lido</option>
+                                            <option value="dotted">Punteado</option>
+                                        </select>
+                                        <label>Estilo</label>
                                     </div>
                                     <div class="input-field col s4">
                                         <input id="text-create-border-width" type="number" value='0' min='0' max='12'/>
@@ -197,20 +258,20 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-cancel">Cancelar</a>
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-button">Crear</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-cancel">Cancelar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="text-create-button">Crear</a>
                 </div>
             </div>
             <div id="text-edit-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    <h4>Editar Texto</h4>
+                    <h5 style="margin-bottom: 20px;">Editar texto</h5>
                     <div class="row">
                         <textarea id="text-edit-content" class="col s12" style="height: 250px"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-edit-cancel">Cancelar</a>
-                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat" id="text-edit-button">Crear</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="text-edit-cancel">Cancelar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="text-edit-button">Crear</a>
                 </div>
             </div>
         </div>
