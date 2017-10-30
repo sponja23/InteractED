@@ -36,7 +36,7 @@
         <div class="container">
             <h5>Categorias</h5>
                 <?php
-                    echo '<a href="addCategory.php" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a>';
+                    echo '<a href="addCategory.php" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a><br><br>';
                     $categories = new Categories();
 
                     $categories->GetCategories();
@@ -49,7 +49,7 @@
                 window.location.href = "../post?id=" + $(this).attr("id");
             });
             $( ".categoryOption" ).click(function() {
-                window.location.href = "../category/articles/?q=" + $(this).attr("id");
+                window.location.href = "../category/articles/?id=" + $(this).attr("id");
             });
         </script>
     </body>

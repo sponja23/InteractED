@@ -25,7 +25,8 @@
                 <div class="col s12 m6 offset-m3">
                     <div class="card-panel black-text">
                         <span id="logo" class="blue-text">InteractED</span>
-                        <h1 id="title">Add New Category</h1>
+                        <h1 id="title">Add New Category*</h1>
+                        <p style="color:#757575">*Categories must be aproved by our moderators before being approved</p>
                         <form id="new" action="result/" method="post" enctype="multipart/form-data">
                             <div class="file-field input-field">
                                 <div class="btn blue">
@@ -114,11 +115,4 @@
             });
         </script>
     </body>
-    <footer class="page-footer">
-        <div class="footer-copyright">
-            <div class="container">
-                Categories have to be approved by our moderators before being added.
-            </div>
-        </div>
-    </footer>
 </html>

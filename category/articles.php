@@ -3,15 +3,13 @@
 <html>
     <head>
         <title>InteractED</title>
-
+        
+        <link rel="stylesheet" href="../components/navigation/navigation.css">
         <?php 
         require "../include/head.html"; 
         require "../include/connect.php";
         include "categories.php";
         ?>
-
-        <link rel="stylesheet" href="../components/navigation/navigation.css">
-
         <style>
             .item:hover {
                 cursor: pointer;
@@ -34,7 +32,7 @@
         <?php require "../components/navigation/navigation.php"; ?>
 
         <div class="container">
-            <h5>Categoria: <?php echo $_GET["q"]; ?></h5>
+            <h5>Categoria: <?php echo $_GET["id"]; ?></h5>
                 <?php
                     $categories = new Categories();
 

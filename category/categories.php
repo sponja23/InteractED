@@ -3,14 +3,14 @@ class Categories{
 	function GetCategories(){
 		require "../include/connect.php";
 
-		$sql = 'SELECT CategoryName,CategoryID FROM Categories WHERE Status = 1';
+		$sql = 'SELECT CategoryName,CategoryID FROM Categories WHERE Implemented = 1';
         
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) 
         {
             while ($row = $result->fetch_assoc()){
-               echo '<a class="categoryOption waves-effect" id="'.$row['CategoryName'].'"><img src="../images/categories/'.$row['CategoryID'].'.png" alt="'.$row['CategoryName'].'" height="56" width="56"></a>';
+               echo '<a class="categoryOption waves-effect" id="'.$row['CategoryName'].'"><img src="../images/category/'.$row['CategoryID'].'.png" alt="'.$row['CategoryName'].'" height="56" width="56"></a>';
             }
         }
 	}	
