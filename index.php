@@ -7,7 +7,7 @@
         <?php require "include/head.html"; ?>
 
         <?php 
-            include "recommend/recommend.php";
+            //include "recommend/recommend.php";
             //$MaxValue  = 5;
         ?>
 
@@ -71,12 +71,12 @@
                     </div>
                 </div>
             </div>
-            <li class="divider"></li>
+            <!-- <li class="divider"></li>
             <h5>Recomendados por los articulos visitados</h5>
             <div class="row">
                 <?php
                     //echo Recomend::GetArticles($MaxValue, 'Articles');
-                postsBySimilarTags();
+                //postsBySimilarTags();
                 ?>
             </div>
             <li class="divider"></li>
@@ -84,9 +84,9 @@
             <div class="row">
                 <?php
                     //echo Recomend::GetArticles($MaxValue, 'Users');    
-                postsBySimilarPeople();
+                //postsBySimilarPeople();
                 ?>
-            </div>
+            </div> -->
         <?php require "include/scripts.html"; ?>
 
         <script src="components/navigation/navigation.js"></script>
