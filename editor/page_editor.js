@@ -143,15 +143,18 @@ function initDialogs() {
                 $("#image-create-dialog .input").each(function(){
                     $(this).val('').blur().removeClass("valid invalid");
                 });
+                console.log("")
                 invalidateImage();
             }
         } 
     });
 
-    $("#image-create-button").click(function() {
+    $("#image-create-button").click(function(e) {
         var $sourceInput = $("#image-create-src");
         var $uploadInput = $("#image-create-upload-src");
         var $errorMessage = $("#image-create-error");
+
+        creatingImage = true;
 
         if($sourceInput.val() == "" && $uploadInput.val() == "") {
             $errorMessage.html("Debe ingresar una url o cargar una imagen");
@@ -169,7 +172,6 @@ function initDialogs() {
             $.ajax({
                 url: "image_upload.php?id=" + postID,
                 type: "POST",
-                context: this,
                 processData: false,
                 contentType: false,
                 data: formData,
@@ -181,6 +183,8 @@ function initDialogs() {
                 }
             });
         }
+
+        e.preventDefault();
     });
 
     // Text Dialog
@@ -385,6 +389,7 @@ function createImage(src, old=false, other_css={}) {
         };
     else
         var css = other_css;
+    console.log($("#image-create-width").html());
     var $image = $("<img />")
     .attr(attributes)
     .css(css)

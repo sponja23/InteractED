@@ -16,7 +16,7 @@ function getSimilar($word, $maxDistance = 1) {
                 $words[] = $first_part . '_' . $word[$i] . $last_part;
             $words[] = $first_part . $last_part;
         }
-        $words[] = $first_part '_' . $last_part;
+        $words[] = $first_part . '_' . $last_part;
     }
 
     $words[] = $word . '_';
@@ -42,7 +42,7 @@ function getSimilar($word, $maxDistance = 1) {
     if($maxDistance > 1) {
         $count = count($words);
         for($i = 0; $i < $count; $i++)
-            $result = array_merge($result, getSimilar($words, $maxDistance - 1));
+            $result = array_merge($result, getSimilar($words[$i], $maxDistance - 1));
         return $result;
     }
 
@@ -86,7 +86,7 @@ function searchArticles($query, $maxWords) {
         $posts = getSimilar($query, 2);
 
         if($posts != NULL) {
-            $count = count($posts)
+            $count = count($posts);
             for($i = 0; $i < $count; $i++) {
                 echo '<div class="col s12">
                           <div class="card horizontal hoverable item" id="' . $posts[$i]['PostID'] . '">
@@ -102,6 +102,17 @@ function searchArticles($query, $maxWords) {
                           </div>
                       </div>';
             }
+        }
+        else {
+            echo '<div>
+                  <p>No se han encontrado resultados para tu búsqueda</p>
+                  <p>Sugerencias:</p>
+                  <ul style="margin-left:1.3em;">
+                      <li style="list-style-type: disc;">Asegúrate de que todas las palabras estén escritas correctamente.</li>
+                      <li style="list-style-type: disc;">Prueba diferentes palabras clave.</li>
+                      <li style="list-style-type: disc;">Prueba palabras clave más generales.</li>
+                  </ul>
+              </div>';            
         }
     }
 }

@@ -30,7 +30,7 @@
                             <div class="file-field input-field">
                                 <div class="btn blue">
                                     <span>Imagen</span>
-                                    <input type="file" name="image">
+                                    <input id="image-input" type="file" name="image">
                                 </div>
                                 <div class="file-path-wrapper">
                                     <input id="image-path" class="file-path" type="text">
@@ -74,15 +74,22 @@
                                 $( "#error-message" ).html("Esta categoria ya existe");
                             }
                             else if (response == 0){
+                                var formData = new FormData();
+                                formData.append("image", $("#image-input")[0].files[0])
                                 $.ajax({
-                                url: "upload.php",
-                                type: "POST",
-                                data: { category: $( "#category" ).val()} ,
-                                success: function () {
-                                    window.history.back();
-                                }
-                            }         
-                        }
+                                    url: "upload_category.php?name=" + $( "#category" ).val(),
+                                    type: "POST",
+                                    processData: false,
+                                    contentType: false,
+                                    data: formData,
+                                    success: function () {
+                                        window.history.back();
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                        console.log(textStatus, errorThrown);
+                                    }
+                                });
+                            }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log(textStatus, errorThrown);

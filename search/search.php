@@ -99,7 +99,7 @@ class Search {
     function Replace($Search, $Action) {
         $Alphabet = str_split("abcdefghijklmnopqrstuvwxyz0123456789");
 
-        for ($i = 0; $i < strlen($Search); $i++) {
+        for ($i = 0; $i < $length; $i++) {
             switch ($Action) {
                 case "Delete":
                     $Edits[] = substr($Search, 0, $i) . substr($Search, $i + 1);
