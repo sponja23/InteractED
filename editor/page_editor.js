@@ -661,8 +661,9 @@ function savePage() {
     });
 
     $newContent.css({
-        "height": (maxHeight + 50) + "px",
-        "width": $("#content").width() + "px"
+        "position": "relative",
+        //"width": $("#content").width() + "px",
+        "height": maxHeight + "px"
     });
 
     var dataSaved = {

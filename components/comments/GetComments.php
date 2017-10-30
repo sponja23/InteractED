@@ -43,7 +43,9 @@ if (file_exists($File)) {
     }
 }
 else {
-    mkdir("../../post/comments");
+    if (!file_exists("../../post/comments/"))
+        mkdir("../../post/comments");
+
     file_put_contents($File, '{"LastID":0}');
 }
 ?>

@@ -47,7 +47,7 @@ if(!isset($_SESSION["UserCode"]))
                                 <label for="post-title" data-error="Debe ingresar un t&iacute;tulo">T&iacute;tulo</label>
                             </div>
                             <div class="input-field col s12 m6">
-                                <input id="post-category" name="category" type="text" class="autocomplete">
+                                <input id="post-category" name="category" type="text" class="autocomplete" autocomplete="off">
                                 <label for="post-category" data-error="Debe ingresar una categor&iacute;a">Categor&iacute;a</label>
                             </div>
                             <div class="input-field col s12">

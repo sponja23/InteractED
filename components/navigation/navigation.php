@@ -27,6 +27,7 @@
                               <p class="black-text" style="margin-right: 20px; line-height: 25px;"><strong>' . $_SESSION["Name"] . '</strong><br>' . $_SESSION["Email"] . '</p>
                           </div>
                           <li><a href="/InteractED/account" class="black-text"><i class="material-icons grey-text">account_circle</i>Mi cuenta</a></li>
+                          <li><a href="/InteractED/chats" class="black-text"><i class="material-icons grey-text">chat</i>Mis chats</a></li>
                           <li><a href="/InteractED/login/logout.php" class="black-text"><i class="material-icons grey-text">exit_to_app</i>Salir</a></li>
                       </ul>
 

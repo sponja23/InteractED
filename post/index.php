@@ -3,26 +3,24 @@ session_start();
 
 include "../include/connect.php";
 
-$sql = 'SELECT * FROM Articles
-        INNER JOIN Users ON Articles.CreatorID = Users.UserCode
-        WHERE MD5(PostID) = "' . $_GET["id"] . '"';
+$sql = 'SELECT A.PostID, DATE_FORMAT(A.CreateDate, "%d/%m/%Y") CreateDate, A.Title, U.UserCode, U.Name FROM Articles A
+        INNER JOIN Users U ON A.CreatorID = U.UserCode
+        WHERE MD5(A.PostID) = "' . $_GET["id"] . '"';
 
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0)
     while ($row = $result->fetch_assoc()) {
-        $PostImage = glob("../images/" . $row["UserCode"] . ".*");
-        $PostImage = "../images/" . basename($PostImage[0]);
+        $PostImage = glob("../images/posts/" . $row["PostID"] . ".*");
+        $PostImage = "../images/posts/" . basename($PostImage[0]);
         $Title = $row["Title"];
-        $UserImage = glob("../images/" . $row["UserCode"] . ".*");
-        $UserImage = "../images/" . basename($UserImage[0]);
+        $UserImage = glob("../images/users/" . $row["UserCode"] . ".*");
+        $UserImage = "../images/users/" . basename($UserImage[0]);
         $Name = $row["Name"];
         $CreateDate = $row["CreateDate"];
     }
 else
     header("Location: ../");
-
-$conn->close();
 ?>
 <!DOCTYPE html>
 <html>
@@ -49,7 +47,18 @@ $conn->close();
                     <br>
                     Creado el <?= $CreateDate ?>
                 </p>
-                <a href=<?= "../editor?id=" . $_GET["id"] ?> id="edit" class="btn blue waves-effect waves-light">Editar post</a>
+                <?php
+                $sql = 'SELECT A.PostID FROM Articles A
+                        LEFT JOIN EditorRelation ER ON A.PostID = ER.PostID
+                        WHERE MD5(A.PostID) = "' . $_GET["id"] . '" AND
+                        (A.CreatorID = ' . $_SESSION["UserCode"] . ' OR ER.UserCode = ' . $_SESSION["UserCode"] . ' OR ' .
+                        $_SESSION["Level"] . ' >= 1)';
+
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0)
+                    echo '<a href="../editor?id=' . $_GET["id"] . '" id="edit" class="btn blue waves-effect waves-light">Editar post</a>'
+                ?>
             </div>
             <?= file_get_contents("content/" . $_GET["id"] . "/index.html") ?>
             <?php require "../components/rating/index.html"; ?>
