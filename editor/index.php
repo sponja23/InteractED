@@ -38,7 +38,7 @@
 
         <?php require "../include/head.html"; ?>
 
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css">
+        <link rel="stylesheet" href="/InteractED/include/external/jquery-ui.min.css">
         <link rel="stylesheet" href="../include/colorpicker/materialize-colorpicker.min.css">
         <link rel="stylesheet" href="../css/input.css">
         <link rel="stylesheet" href="../css/font.css">
@@ -282,7 +282,7 @@
 
         <?php require "../include/scripts.html"; ?>
 
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script src="/InteractED/include/external/jquery-ui.min.js"></script>
         <script src="../include/textboxio/textboxio.js"></script>
         <script src="../include/colorpicker/materialize-colorpicker.min.js"></script>
         <script>
