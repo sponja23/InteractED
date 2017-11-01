@@ -31,7 +31,7 @@
                         $File = "../../images/users/" . $conn->insert_id . "." . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
 
                         if (!file_exists("../../images/users/"))
-                            mkdir("../../images/users/");
+                            mkdir("../../images/users/", 0777, true);
 
                         if (move_uploaded_file($_FILES["image"]["tmp_name"], $File))
                             $Code = 3;
@@ -55,8 +55,8 @@
                     case 3:
                         $_SESSION["UserCode"] = $conn->insert_id;
                         $_SESSION["Name"] = $Name;
-                        $Image = glob("../../images/" . $conn->insert_id . ".*");
-                        $_SESSION["Image"] = "/InteractED/images/" . basename($Image[0]);
+                        $Image = glob("../../images/users/" . $conn->insert_id . ".*");
+                        $_SESSION["Image"] = "/InteractED/images/users/" . basename($Image[0]);
                         $_SESSION["Email"] = $Email;
                         $_SESSION["Level"] = 0;
                         echo '<script>window.location.replace("../../");</script>';

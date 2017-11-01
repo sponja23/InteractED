@@ -16,7 +16,7 @@
 	 			type: 'POST',
 	 			data: { UC:Answer[1], Answer: Answer[0], Level: Answer[2] } , 
 	 			success: function (response) {
-	 				alert (response);
+	 				location.reload();
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
 	            	console.log(textStatus, errorThrown);        
