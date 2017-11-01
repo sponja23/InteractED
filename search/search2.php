@@ -1,9 +1,23 @@
 <?php
-
-require "../include/connect.php";
+function addResult($ID, $Image, $Title, $Creator) {
+    echo '<div class="col s12">
+              <div class="card horizontal hoverable item" id="' . $ID . '">
+                  <div class="card-image" style="width: 192px;">
+                      <img src="../post/content/' . $Image . '/image.jpg">
+                  </div>
+                  <div class="card-stacked">
+                      <div class="card-content">
+                          <strong>' . $Title . '</strong>
+                          <p>' . $Creator . '</p>
+                      </div>
+                  </div>
+              </div>
+          </div>';
+}
 
 function getSimilar($word, $maxDistance = 1) {
-    
+    require "../include/connect.php";
+
     $words = array();
 
     $length = strlen($word);
@@ -42,7 +56,7 @@ function getSimilar($word, $maxDistance = 1) {
     if($maxDistance > 1) {
         $count = count($words);
         for($i = 0; $i < $count; $i++)
-            $result = array_merge($result, getSimilar($words[$i], $maxDistance - 1));
+            $result[] = array_merge($result, getSimilar($words[$i], $maxDistance - 1));
         return $result;
     }
 
@@ -50,6 +64,8 @@ function getSimilar($word, $maxDistance = 1) {
 }
 
 function searchArticles($query, $maxWords) {
+    require "../include/connect.php";
+
     $sql = "SELECT DISTINCT A.PostID, A.Title, U.Name FROM Articles A
             INNER JOIN Users U ON A.CreatorID = U.UserCode
             INNER JOIN Tags T ON A.PostID = T.PostID
@@ -61,19 +77,7 @@ function searchArticles($query, $maxWords) {
         echo '<p class="results">' . $result->num_rows . ' resultados para "' . $query . '"</p>';
 
         while($row = $searchResult->fetch_assoc())
-            echo '<div class="col s12">
-                          <div class="card horizontal hoverable item" id="' . $row['PostID'] . '">
-                              <div class="card-image" style="width: 192px;">
-                                  <img src="../post/content/' . md5($row['PostID']) . '/image.jpg">
-                              </div>
-                              <div class="card-stacked">
-                                  <div class="card-content">
-                                      <strong>' .$row['Title'] . '</strong>
-                                      <p>' . $row['Name'] . '</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>';
+            addResult($row['PostID'], md5($row['PostID']), $row['Title'], $row['Name']);
     }
     else {
         if (str_word_count($query) > $maxWords) {
@@ -87,34 +91,20 @@ function searchArticles($query, $maxWords) {
 
         if($posts != NULL) {
             $count = count($posts);
-            for($i = 0; $i < $count; $i++) {
-                echo '<div class="col s12">
-                          <div class="card horizontal hoverable item" id="' . $posts[$i]['PostID'] . '">
-                              <div class="card-image" style="width: 192px;">
-                                  <img src="../post/content/' . md5($posts[$i]['PostID']) . '/image.jpg">
-                              </div>
-                              <div class="card-stacked">
-                                  <div class="card-content">
-                                      <strong>' .$posts[$i]['Title'] . '</strong>
-                                      <p>' . $posts[$i]['Name'] . '</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>';
-            }
+            for($i = 0; $i < $count; $i++)
+                addResult($posts[$i]['PostID'], md5($posts[$i]['PostID']), $posts[$i]['Title'], $posts[$i]['Name']);
         }
         else {
             echo '<div>
-                  <p>No se han encontrado resultados para tu búsqueda</p>
-                  <p>Sugerencias:</p>
-                  <ul style="margin-left:1.3em;">
-                      <li style="list-style-type: disc;">Asegúrate de que todas las palabras estén escritas correctamente.</li>
-                      <li style="list-style-type: disc;">Prueba diferentes palabras clave.</li>
-                      <li style="list-style-type: disc;">Prueba palabras clave más generales.</li>
-                  </ul>
-              </div>';            
+                      <p>No se han encontrado resultados para tu búsqueda</p>
+                      <p>Sugerencias:</p>
+                      <ul style="margin-left:1.3em;">
+                          <li style="list-style-type: disc;">Asegúrate de que todas las palabras estén escritas correctamente.</li>
+                          <li style="list-style-type: disc;">Prueba diferentes palabras clave.</li>
+                          <li style="list-style-type: disc;">Prueba palabras clave más generales.</li>
+                      </ul>
+                  </div>';            
         }
     }
 }
-
 ?>
