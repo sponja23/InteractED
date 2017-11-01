@@ -10,8 +10,8 @@ if ($conn->query($sql) === TRUE) {
 
 $fileError = $_FILES["image"]["error"];
 
-if(!file_exists("../images/category"))
-    mkdir("../images/category");
+if(!file_exists("../images/category/"))
+    mkdir("../images/category/");
 
 if($fileError == UPLOAD_ERR_OK) {
     //$new_path = "../Images/Category/" . $conn->insert_id() . "." . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION;
