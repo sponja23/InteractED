@@ -1,29 +1,34 @@
 <html>
 <head>
 	<?require "../include/scripts.html";?>
+	<?php require "../include/head.html"; ?>
+    <link rel="stylesheet" href="../components/navigation/navigation.css">
 	<link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="../css/input.css">
     <link rel="stylesheet" href="../css/font.css">
-
+</head>
+<body>
+	<?php require "../components/navigation/navigation.php" ?>
+	<div class="container" id="table"></div>
+</body>
+<script src="../components/navigation/navigation.js"></script>
 <script type="text/javascript">
 	$(document).ready (function(){
 		function charge(){
-		$( '.res' ).click(function() {
-	 		var Answer = $(this).attr('id').split('-');
-	 		
-	 		$.ajax({
-	 			url: 'send.php',
-	 			type: 'POST',
-	 			data: { UC:Answer[1], Answer: Answer[0], Level: Answer[2] } , 
-	 			success: function (response) {
-	 				location.reload();
-	            },
-	            error: function(jqXHR, textStatus, errorThrown) {
-	            	console.log(textStatus, errorThrown);        
-	            }
-	        });
-	 		
-	 	});
+			$( 'i' ).click(function() {
+		 		$.ajax({
+		 			url: 'send.php',
+		 			type: 'POST',
+		 			data: { Answer: $(this).data("answer"),  UC: $(this).data("user"), Level: $(this).data("levelrequested") } , 
+		 			success: function (response) {
+		 				location.reload();
+		            },
+		            error: function(jqXHR, textStatus, errorThrown) {
+		            	console.log(textStatus, errorThrown);        
+		            }
+		        });
+		 		
+		 	});
  		}
 
 
@@ -32,7 +37,7 @@
 	 			url: 'inicio.php',
 	 			type: 'POST',
 	 			success: function (response) {
-	 				$("#div1").html(response);
+	 				$("#table").html(response);
 	 				charge();
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
@@ -43,9 +48,4 @@
 	 	bring();
 	});
 </script>
-
-</head>
-	<body>
-			<div id="div1"></div>
-	</body>
 </html>
