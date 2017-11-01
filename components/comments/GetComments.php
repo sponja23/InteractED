@@ -29,11 +29,13 @@ if (file_exists($File)) {
 
         $UserData = '{';
 
-        if ($result->num_rows > 0)
-            while ($row = $result->fetch_assoc()) {
-                $Extension = pathinfo(glob("../../images/" . $row["UserCode"] . ".*")[0])['extension'];
-                $UserData .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Extension":"' . $Extension . '"},';
-            }
+        while ($row = $result->fetch_assoc()) {
+            $Extension = glob("../../images/" . $row["UserCode"] . ".*");
+            $Extension = pathinfo($Extension[0]);
+            $Extension = $Extension['extension'];
+
+            $UserData .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Extension":"' . $Extension . '"},';
+        }
 
         $UserData = json_decode(substr($UserData, 0, -1) . '}', true);
 
@@ -44,7 +46,7 @@ if (file_exists($File)) {
 }
 else {
     if (!file_exists("../../post/comments/"))
-        mkdir("../../post/comments");
+        mkdir("../../post/comments", 0777, true);
 
     file_put_contents($File, '{"LastID":0}');
 }
