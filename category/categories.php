@@ -15,7 +15,7 @@ class Categories{
         }
 	}	
 	function GetArticlesByCategories($category){
-		require "../include/connect.php";
+		require "../../include/connect.php";
 		$sql = 'SELECT DISTINCT *
 				FROM articles
 				INNER JOIN categories ON articles.CategoryID = categories.CategoryID WHERE categories.CategoryName = "' .$category. '";';

@@ -4,11 +4,11 @@
     <head>
         <title>InteractED</title>
         
-        <link rel="stylesheet" href="../components/navigation/navigation.css">
+        <link rel="stylesheet" href="../../components/navigation/navigation.css">
         <?php 
-        require "../include/head.html"; 
-        require "../include/connect.php";
-        include "categories.php";
+        require "../../include/head.html"; 
+        require "../../include/connect.php";
+        include "../categories.php";
         ?>
         <style>
             .item:hover {
@@ -23,13 +23,13 @@
             }
         </style>
 
-        <?php require "../include/scripts.html"; ?>
+        <?php require "../../include/scripts.html"; ?>
 
-        <script src="../components/navigation/navigation.js"></script>
+        <script src="../../components/navigation/navigation.js"></script>
 
     </head>
     <body class="grey lighten-5">
-        <?php require "../components/navigation/navigation.php"; ?>
+        <?php require "../../components/navigation/navigation.php"; ?>
 
         <div class="container">
             <h5>Categoria: <?php echo $_GET["id"]; ?></h5>
@@ -41,7 +41,7 @@
         <div>
         <script>
             $( ".item" ).click(function() {
-                window.location.href = "../post?id=" + $(this).attr("id");
+                window.location.href = "../../post?id=" + $(this).attr("id");
             });
         </script>
     </body>
