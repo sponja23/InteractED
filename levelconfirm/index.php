@@ -1,6 +1,9 @@
 <html>
 <head>
 	<?require "../include/scripts.html";?>
+	<link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/input.css">
+    <link rel="stylesheet" href="../css/font.css">
 
 <script type="text/javascript">
 	$(document).ready (function(){

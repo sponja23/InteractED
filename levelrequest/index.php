@@ -78,6 +78,10 @@
                             	window.history.back();
                             	alert ("Ha habido un error al enviar la solicitud");
                             }
+                            else if (response=="3"){
+                                window.history.back();
+                                alert ("Ya has enviado una solicitud que falta confirmar");
+                            }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log(textStatus, errorThrown);

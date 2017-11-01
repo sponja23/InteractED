@@ -11,13 +11,21 @@ if($LevelR== $Level)
 }
 else
 {
-	$sql = 'INSERT INTO requests (UserCode, LevelRequested, Answer, Reason) VALUES ('.$Usercode.','.$LevelR.',"Not Answered","'.$Reason.'")';
-	if ($conn->query($sql)){
-		$conn->close();
-		echo "1";
+	$sql= 'SELECT UserCode FROM requests WHERE UserCode="'.$Usercode.'" AND Answer= "Not answered"';
+	$result = $conn->query($sql);
+	if ($result->num_rows > 0) {
+		echo "3";
 	}
-	else{
-		echo "2";
+	else
+	{
+		$sql = 'INSERT INTO requests (UserCode, LevelRequested, Answer, Reason) VALUES ('.$Usercode.','.$LevelR.',"Not Answered","'.$Reason.'")';
+		if ($conn->query($sql)){
+			$conn->close();
+			echo "1";
+		}
+		else{
+			echo "2";
+		}
 	}
 }
 ?>
