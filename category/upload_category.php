@@ -15,6 +15,7 @@ if(!file_exists("../images/category"))
 
 if($fileError == UPLOAD_ERR_OK) {
     //$new_path = "../Images/Category/" . $conn->insert_id() . "." . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION;
-    move_uploaded_file($_FILES["image"]["tmp_name"], $File);
+    $new_path = "../Images/Category/" . $_FILES["image"]["name"];
+    move_uploaded_file($_FILES["image"]["tmp_name"], $new_path);
 }
 ?>
