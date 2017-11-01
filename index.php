@@ -4,11 +4,9 @@
     <head>
         <title>InteractED</title>
 
-        <?php require "include/head.html"; ?>
-
         <?php 
-            //include "recommend/recommend.php";
-            //$MaxValue  = 5;
+            require "include/head.html"; 
+            include "recommend/recommend.php";
         ?>
 
         <link rel="stylesheet" href="components/navigation/navigation.css">
@@ -71,12 +69,17 @@
                     </div>
                 </div>
             </div>
-            <!-- <li class="divider"></li>
+            <li class="divider"></li>
+            <h5>Recomendados</h5>
+            <div class="row">
+                <!-- Aca va tu Engine en NODE Sponja -->
+            </div>
+            <li class="divider"></li>
             <h5>Recomendados por los articulos visitados</h5>
             <div class="row">
                 <?php
                     //echo Recomend::GetArticles($MaxValue, 'Articles');
-                //postsBySimilarTags();
+                postsBySimilarTags();
                 ?>
             </div>
             <li class="divider"></li>
@@ -84,9 +87,9 @@
             <div class="row">
                 <?php
                     //echo Recomend::GetArticles($MaxValue, 'Users');    
-                //postsBySimilarPeople();
+                postsBySimilarPeople();
                 ?>
-            </div> -->
+            </div>
         <?php require "include/scripts.html"; ?>
 
         <script src="components/navigation/navigation.js"></script>
