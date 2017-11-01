@@ -10,7 +10,11 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $Name = $row['Name'];
-        $Extension = pathinfo(glob("../images/" . $_GET["id"] . ".*")[0])['extension'];
+
+        $Extension = glob("../images/" . $_GET["id"] . ".*");
+        $Extension = pathinfo($Extension[0]);
+        $Extension = $Extension['extension'];
+
         $Image = "../images/" . $_GET["id"] . '.' . $Extension;
     }
 }

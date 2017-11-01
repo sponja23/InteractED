@@ -30,7 +30,10 @@ if (file_exists($File)) {
             $SpecificChat = json_decode(file_get_contents($ChatFile), true);
             $Message = $SpecificChat[$SpecificChat["LastID"]]["Message"];
 
-            $Extension = pathinfo(glob("../images/" . $row['UserCode'] . ".*")[0])['extension'];
+            $Extension = glob("../images/" . $row['UserCode'] . ".*");
+            $Extension = pathinfo($Extension[0]);
+            $Extension = $Extension['extension'];
+
             $UserData .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Extension":"' . $Extension . '","Message":"' . $Message . '"},';
         }
 
