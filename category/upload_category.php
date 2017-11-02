@@ -9,7 +9,8 @@ if ($conn->query($sql) === TRUE) {
 }
 
 $fileError = $_FILES["image"]["error"];
-
+if(!file_exists("../images/"))
+    mkdir("../images/");
 if(!file_exists("../images/category/"))
     mkdir("../images/category/");
 

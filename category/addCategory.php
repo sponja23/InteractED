@@ -83,7 +83,7 @@
                                     processData: false,
                                     contentType: false,
                                     data: formData,
-                                    success: function () {
+                                    success: function() {
                                         window.history.back();
                                     },
                                     error: function(jqXHR, textStatus, errorThrown) {
