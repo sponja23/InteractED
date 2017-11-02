@@ -16,6 +16,7 @@ function AddResult($ID, $Image, $Title, $Creator) {
 }
 
 function SearchQuery($Search, $MaxWords) {
+    require "../include/connect.php";
     $sql = 'SELECT DISTINCT A.* FROM Articles A
             INNER JOIN EditorRelation ER ON A.PostID = ER.PostID
             INNER JOIN Users U ON U.UserCode = ER.UserCode
@@ -27,7 +28,7 @@ function SearchQuery($Search, $MaxWords) {
         echo '<p class="results">' . $result->num_rows . ' resultados para "' . $Search . '"</p>';
 
         while($row = $result->fetch_assoc())
-            $this->AddResult($row['PostID'], $row['Image'], $row['Title'], $row['Creator']);
+            AddResult($row['PostID'], $row['Image'], $row['Title'], $row['Creator']);
     }
     else {
         if (str_word_count($Search) > $MaxWords) {
@@ -36,7 +37,7 @@ function SearchQuery($Search, $MaxWords) {
             $Search = implode(" ", array_splice($Pieces, 0, $MaxWords));
         }
 
-        $Words = $this->CheckQuery($Search);
+        $Words = CheckQuery($Search);
 
         // En la base de datos ya no se guarda el nombre del creador
 
@@ -53,23 +54,10 @@ function SearchQuery($Search, $MaxWords) {
         if ($result->num_rows > 0) {
             if (isset($CutSearch))
                 echo $CutSearch;
-
             echo '<p class="results">' . $result->num_rows . ' resultados</p>';
 
-            while ($row = $result->fetch_assoc())
-                echo '<div class="col s12" id="article">
-                          <div class="card horizontal hoverable item" id="' . $row['PostID'] . '">
-                              <div class="card-image" style="width: 192px;">
-                                  <img src="' . $row['Image'] . '">
-                              </div>
-                              <div class="card-stacked">
-                                  <div class="card-content">
-                                      <strong>' . $row['Title'] . '</strong>
-                                      <p>' . $row['Creator'] . '</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>';
+            while ($row = $result->fetch_assoc())  
+            AddResult($row['PostID'], $row['Image'], $row['Title'], $row['Creator']);
         }
         else
             echo '<div>
@@ -88,37 +76,35 @@ function SearchQuery($Search, $MaxWords) {
 
 function CheckQuery($Search) {
     return array_merge(
-        $this->Replace($Search, "Delete"),
-        $this->Replace($Search, "Replace"),
-        $this->Replace($Search, "Swap"),
-        $this->Replace($Search, "Insert")
+        Replace($Search, "Delete"),
+        Replace($Search, "Replace"),
+        Replace($Search, "Swap"),
+        Replace($Search, "Insert")
     );
 }
 
 function Replace($Search, $Action) {
     $Alphabet = str_split("abcdefghijklmnopqrstuvwxyz0123456789");
-
     switch ($Action) {
         case "Delete":
-            for ($i = 0; $i < $length; $i++) {
+            for ($i = 0; $i < $length; $i++)
                 $Edits[] = substr($Search, 0, $i) . substr($Search, $i + 1);
             break;
         case "Replace":
-            for ($i = 0; $i < $length; $i++) {
+            for ($i = 0; $i < $length; $i++)
                 foreach ($Alphabet as $Letter)
                     $Edits[] = substr($Search, 0, $i) . $Letter . substr($Search, $i + 1);
             break;
         case "Swap":
-            for ($i = 0; $i < $length; $i++) {
+            for ($i = 0; $i < $length; $i++) 
                 $Edits[] = substr($Search, 0, $i) . $Search[$i + 1] . $Search[$i] . substr($Search, $i + 2);
             break;
         case "Insert":
-            for ($i = 0; $i < $length; $i++) {
+            for ($i = 0; $i < $length; $i++) 
                 foreach ($Alphabet as $Letter)
                     $Edits[] = substr($Search, 0, $i) . $Letter . substr($Search, $i);
             break;
     }
-
     return array_unique($Edits);
 }
 ?>

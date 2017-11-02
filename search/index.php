@@ -27,9 +27,7 @@
         <div class="container">
             <?php
             include "search.php";
-            $Search = new Search();
-
-            $Search->SearchQuery(trim($_GET["q"]), 20);
+            SearchQuery(trim($_GET["q"]), 20);
             ?>
 
         <?php require "../include/scripts.html"; ?>
