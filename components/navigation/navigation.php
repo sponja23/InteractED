@@ -28,6 +28,7 @@
                           </div>
                           <li><a href="/InteractED/account" class="black-text"><i class="material-icons grey-text">account_circle</i>Mi cuenta</a></li>
                           <li><a href="/InteractED/chats" class="black-text"><i class="material-icons grey-text">chat</i>Mis chats</a></li>
+                          <li><a href="/InteractED/post/my_posts.php" class="black-text"><i class="material-icons grey-text">content_paste</i>Mis Articulos</a></li>
                           <li><a href="/InteractED/category" class="black-text"><i class="material-icons grey-text">view_column</i>Categorias</a></li>
                           <li><a href="/InteractED/history" class="black-text"><i class="material-icons grey-text">watch_later</i>Historial</a></li>
                           <li><a href="/InteractED/login/logout.php" class="black-text"><i class="material-icons grey-text">exit_to_app</i>Salir</a></li>
