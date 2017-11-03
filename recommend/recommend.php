@@ -1,5 +1,21 @@
 <?php
 
+function addResult($ID, $Image, $Title, $Creator) {
+    echo '<div class="col s12">
+              <div class="card horizontal hoverable item" id="' . $ID . '">
+                  <div class="card-image" style="width: 192px;">
+                      <img src="../post/content/' . $Image . '/image.jpg">
+                  </div>
+                  <div class="card-stacked">
+                      <div class="card-content">
+                          <strong>' . $Title . '</strong>
+                          <p>' . $Creator . '</p>
+                      </div>
+                  </div>
+              </div>
+          </div>';
+}
+
 function postsBySimilarTags() {
 	require "include/connect.php";
 	$sql = "SELECT T.TagName FROM Tags T
@@ -13,20 +29,8 @@ function postsBySimilarTags() {
 					WHERE T.TagName = '" . $tag_row["TagName"] . "' AND A.PostID NOT IN(SELECT PostID FROM Visited WHERE UserCode = '" . $_SESSION["UserCode"] . "')";
 			$post_result = $conn->query($sql);
 			while($post_row = $post_result->fetch_assoc())
+				addResult($post_row['PostID'], md5($post_row['PostID']), $post_row['Title'], $post_row['Name']);
 				//$recommendedPostIDs[] = $post_row["PostID"];
-				echo '<div class="col s12">
-                          <div class="card horizontal hoverable item" id="' . $post_row['PostID'] . '">
-                              <div class="card-image" style="width: 192px;">
-                                  <img src="../post/content/' . md5($post_row['PostID']) . '/image.jpg">
-                              </div>
-                              <div class="card-stacked">
-                                  <div class="card-content">
-                                      <strong>' .$post_row['Title'] . '</strong>
-                                      <p>' . $post_row['Name'] . '</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>';
 		}
 	}
 	else {
@@ -38,6 +42,8 @@ function postsBySimilarTags() {
 
 function postsBySimilarPeople() {
 	require "include/connect.php";
+
+	// ESTA CONSULTA TIENE QUE AGARRAR TAGS DE TUS VISITADOS, ENCONTRAR GENTE QUE TIENE ESTOS TAGS EN SUS VISITADOS Y QUE ME DEVUELVA EL RESTO DE SUS TAGS, Y DE ESOS TAGS OBTENER MAS ARTICULOS !!!
 	$sql = "SELECT T.TagName FROM Tags T
 			INNER JOIN Visited V ON T.PostID = V.PostID
 			WHERE V.UserCode = " . $_SESSION["UserCode"] . " ORDER BY V.DateLastVisited DESC LIMIT 10";
