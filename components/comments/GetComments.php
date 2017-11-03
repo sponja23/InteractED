@@ -30,7 +30,7 @@ if (file_exists($File)) {
         $UserData = '{';
 
         while ($row = $result->fetch_assoc()) {
-            $Extension = glob("../../images/" . $row["UserCode"] . ".*");
+            $Extension = glob("../../images/users/" . $row["UserCode"] . ".*");
             $Extension = pathinfo($Extension[0]);
             $Extension = $Extension['extension'];
 

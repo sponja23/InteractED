@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+if(!isset($_SESSION["UserCode"]))
+    header("Location: ../");
+
 require "../include/connect.php";
 
 $sql = 'SELECT Name FROM Users WHERE UserCode=' . $_GET["id"];
@@ -9,13 +12,13 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $Name = $row['Name'];
+        $Name2 = $row['Name'];
 
-        $Extension = glob("../images/" . $_GET["id"] . ".*");
+        $Extension = glob("../images/users/" . $_GET["id"] . ".*");
         $Extension = pathinfo($Extension[0]);
         $Extension = $Extension['extension'];
 
-        $Image = "../images/" . $_GET["id"] . '.' . $Extension;
+        $Image2 = "../images/users/" . $_GET["id"] . '.' . $Extension;
     }
 }
 
@@ -27,7 +30,9 @@ if (file_exists($File)) {
     file_put_contents($File, json_encode($Chats));
 }
 else {
-    mkdir("../chats/users");
+    if (file_exists("../chats/users"))
+        mkdir("../chats/users");
+
     file_put_contents($File, '{"Chats":[' . $_GET["id"] . ']}');
 }
 ?>
@@ -48,8 +53,10 @@ else {
             <div id="card" class="card-panel blue">
                 <div id="title" class="col s12 blue darken-3 valign-wrapper">
                     <a href="../chats"><i id="back" class="material-icons white-text">arrow_back</i></a>
-                    <img id="image" class="circle" src=<?= '"' . $Image . '"' ?>>
-                    <p id="user" class="white-text"><?= $Name ?></p>
+                    <div id="image-wrapper">
+                        <img id="image" class="circle" src=<?= '"' . $Image2 . '"' ?>>
+                    </div>
+                    <p id="user" class="white-text"><?= $Name2 ?></p>
                 </div>
 
                 <div id="messages" class="row"></div>

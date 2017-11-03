@@ -11,7 +11,7 @@ $.ajax({
             var Chats = JSON.parse(response);
 
             for (Entry in Chats)
-                AddChat(Entry, "../images/" + Entry + '.' + Chats[Entry].Extension, Chats[Entry].Name, Chats[Entry].Message);
+                AddChat(Entry, "../images/users/" + Entry + '.' + Chats[Entry].Extension, Chats[Entry].Name, Chats[Entry].Message);
         }
         else
             $( "#chats-wrapper" ).append('<p class="center-align">No tiene ningun chat, cree uno nuevo para empezar a hablar</p>');
@@ -58,7 +58,7 @@ $( "#user-search" ).keydown(function() {
                     var Chats = JSON.parse(response);
 
                     for (Entry in Chats)
-                        AddSearchEntry(Entry, "../images/" + Entry + '.' + Chats[Entry].Extension, Chats[Entry].Name);
+                        AddSearchEntry(Entry, "../images/users/" + Entry + '.' + Chats[Entry].Extension, Chats[Entry].Name);
                 }
                 else
                     $( "#search-results" ).append('<p class="center-align generic">No se encontraron resultados que coincidan</p>');

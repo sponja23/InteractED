@@ -25,7 +25,7 @@ class Categories{
         if ($result->num_rows > 0) 
         {
             while ($row = $result->fetch_assoc()){
-               echo '<a class="categoryOption waves-effect" id="'.$row['CategoryName'].'"><img src="../images/category/'.$row['CategoryID'].'.png" alt="'.$row['CategoryName'].'" height="56" width="56"></a>';
+               echo '<a class="categoryOption waves-effect" id="'.$row['CategoryName'].'"><img src="../images/categories/'.$row['CategoryID'].'.png" alt="'.$row['CategoryName'].'" height="56" width="56"></a>';
             }
         }
 	}	

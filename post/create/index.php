@@ -82,8 +82,8 @@ if(!isset($_SESSION["UserCode"]))
                     success: function(categories) {
                         if(categories) {
                             var category_images = {};
-                            for(var i in categories)
-                                category_images[categories[i]] = "../../category/images/" + categories[i] + ".jpg";
+                            for(category in categories)
+                                category_images[categories[category]] = "../../images/categories/" + category + ".png";
 
                             $(".autocomplete").autocomplete({
                                 data: category_images,

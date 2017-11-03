@@ -12,7 +12,10 @@ if ($result->num_rows > 0) {
     $Data = '{';
 
     while($row = $result->fetch_assoc()) {
-        $Extension = pathinfo(glob("../images/" . $row["UserCode"] . ".*")[0])['extension'];
+    	$Extension = glob("../images/users/" . $row['UserCode'] . ".*");
+        $Extension = pathinfo($Extension[0]);
+        $Extension = $Extension['extension'];
+
         $Data .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Extension":"' . $Extension . '"},';
     }
 

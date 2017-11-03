@@ -37,7 +37,7 @@
                                     <input id="image-path" class="file-path" type="text">
                                 </div>
                             </div>
-                            <div class="input-field col s12 m6">
+                            <div class="input-field col s12">
                                 <input id="category" name="category" type="text">
                                 <label for="category" data-error="Debe ingresar nombre de la categoria a agregar">Categoria</label>
                             </div>

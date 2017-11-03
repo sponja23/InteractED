@@ -39,7 +39,7 @@ $.ajax({
                     success: function (response) {
                         var Data = JSON.parse(response);
 
-                        AddComment("../images/" + Data.Image, Data.Name, Comment);
+                        AddComment("../images/users/" + Data.Image, Data.Name, Comment);
 
                         $( "#comment" ).val("").css("height", "auto");
                         $( "#publish" ).addClass( "disabled" );
@@ -75,7 +75,7 @@ function LoadComments(PostID, DownloadedComments) {
                         var Comment = Data.Comments[Entry].Comment;
 
                         var Name = Data.UserData[ID].Name;
-                        var Image = "../images/" + ID + '.' + Data.UserData[ID].Extension;
+                        var Image = "../images/users/" + ID + '.' + Data.UserData[ID].Extension;
                         //var Time = "3 h"
 
                         AddComment(Image, Name, Comment);
