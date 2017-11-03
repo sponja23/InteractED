@@ -1,9 +1,9 @@
 <?php
-function addResult($ID, $Image, $Title, $Creator) {
+function addResult($ID, $Title, $Creator) {
     echo '<div class="col s12">
-              <div class="card horizontal hoverable item" id="' . $ID . '">
+              <div class="card horizontal hoverable item" id="' . md5($ID) . '">
                   <div class="card-image" style="width: 192px;">
-                      <img src="../images/posts/' . $Image . '.jpg">
+                      <img src="../images/posts/' . $ID . '.jpg">
                   </div>
                   <div class="card-stacked">
                       <div class="card-content">
@@ -13,6 +13,14 @@ function addResult($ID, $Image, $Title, $Creator) {
                   </div>
               </div>
           </div>';
+}
+
+function postInArray($arr, $post) {
+  foreach ($arr as $p) {
+    if($p["PostID"] == $post["PostID"])
+      return true;
+  }
+  return false;
 }
 
 function getSimilar($word, $maxDistance = 1) {
@@ -36,31 +44,45 @@ function getSimilar($word, $maxDistance = 1) {
     $words[] = $word . '_';
 
     $sql = "SELECT DISTINCT A.PostID, A.Title, U.Name FROM Articles A
-            INNER JOIN Users U ON A.UserCode = U.UserCode
+            INNER JOIN Users U ON A.CreatorID = U.UserCode
             INNER JOIN Tags T ON A.PostID = T.PostID
-            WHERE A.Title LIKE %" . $words[0] . "% OR U.Name LIKE %" . $words[0] . "% OR A.TagName LIKE %" . $words[0] . "OR A.Transcript LIKE %" . $words[0] . "%";
+            WHERE A.Title LIKE '%" . $words[0] . "%' OR U.Name LIKE '%" . $words[0] . "%' OR T.TagName LIKE '%" . $words[0] . "%' OR A.Transcript LIKE '%" . $words[0] . "%'";
 
     for($i = 1; $i < count($words); $i++)
-        $sql .= " OR A.Title LIKE %" . $words[$i] . "% OR U.Name LIKE %" . $words[$i] . "% OR A.TagName LIKE %" . $words[$i] . "OR A.Transcript LIKE %" . $words[$i] . "%";
+        $sql .= " OR A.Title LIKE '%" . $words[$i] . "%' OR U.Name LIKE '%" . $words[$i] . "%' OR T.TagName LIKE '%" . $words[$i] . "%' OR A.Transcript LIKE '%" . $words[$i] . "%'";
         
     $searchResult = $conn->query($sql);
 
-    $result =  new \Ds\Set();
+    $result =  array();
+    $foundResults = False;
 
     if($searchResult->num_rows > 0) {
         while($row = $searchResult->fetch_assoc())
-            $result->add($row);
-        return $result;
+            $result[] = $row;
+        $foundResults = True;
     }
 
     if($maxDistance > 1) {
-        $count = count($words);
-        for($i = 0; $i < $count; $i++)
-            $result = $result->merge(getSimilar($words[$i], $maxDistance - 1));
-        return $result;
+      $count = count($words);
+      for($i = 0; $i < $count; $i++) {
+          $similar = getSimilar($words[$i], $maxDistance - 1);
+          if(!is_null($similar)) {
+            $result = array_merge($result, $similar);
+            $foundResults = True;
+          }
+      }
     }
 
-    return NULL;
+    if($foundResults) {
+      $uniqueResults = array();
+      foreach ($result as $r) {
+        if(!postInArray($uniqueResults, $r))
+          $uniqueResults[] = $r;
+      }
+      return $uniqueResults;
+    }
+    else
+      return NULL;
 }
 
 function searchArticles($query, $maxWords) {
@@ -90,10 +112,11 @@ function searchArticles($query, $maxWords) {
         $posts = getSimilar($query, 2);
 
         if($posts != NULL) {
-            $count = $posts->count();
+            echo '<p class="results">' . $result->num_rows . ' resultados para "' . $query . '"</p>';
+            $count = count($posts);
             for($i = 0; $i < $count; $i++) {
-                $currentPost = $posts->get($i);
-                addResult($currentPost['PostID'], md5($currentPost['PostID']), $currentPost['Title'], $currentPost['Name']);
+                $currentPost = $posts[$i];
+                addResult($currentPost['PostID'], $currentPost['Title'], $currentPost['Name']);
               }
         }
         else {
