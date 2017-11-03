@@ -36,7 +36,7 @@
                 <?php
                     $categories = new Categories();
 
-                    $categories->GetArticlesByCategories($_GET["q"]);
+                    $categories->GetArticlesByCategories($_GET["id"]);
                 ?>
         <div>
         <script>

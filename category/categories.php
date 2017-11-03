@@ -4,7 +4,7 @@ class Categories{
 	    echo '<div class="col s12">
 	              <div class="card horizontal hoverable item" id="' . $ID . '">
 	                  <div class="card-image" style="width: 192px;">
-	                      <img src="../post/content/' . $Image . '/image.jpg">
+	                      <img src="../../images/posts/' . $Image . '.jpg">
 	                  </div>
 	                  <div class="card-stacked">
 	                      <div class="card-content">
@@ -40,7 +40,7 @@ class Categories{
 		if ($result->num_rows > 0) 
 		{
 		    while ($row = $result->fetch_assoc())
-		       $this->addResult($row['PostID'], md5($row['PostID']), $row['Title'], $row['Name']);
+		       $this->addResult(md5($row['PostID']), $row['PostID'], $row['Title'], $row['Name']);
 		}
 	}
 }
