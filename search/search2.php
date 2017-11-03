@@ -45,18 +45,18 @@ function getSimilar($word, $maxDistance = 1) {
         
     $searchResult = $conn->query($sql);
 
-    $result = array();
+    $result =  new \Ds\Set();
 
     if($searchResult->num_rows > 0) {
         while($row = $searchResult->fetch_assoc())
-            $result[] = $row;
+            $result->add($row);
         return $result;
     }
 
     if($maxDistance > 1) {
         $count = count($words);
         for($i = 0; $i < $count; $i++)
-            $result[] = array_merge($result, getSimilar($words[$i], $maxDistance - 1));
+            $result = $result->merge(getSimilar($words[$i], $maxDistance - 1));
         return $result;
     }
 
@@ -90,9 +90,11 @@ function searchArticles($query, $maxWords) {
         $posts = getSimilar($query, 2);
 
         if($posts != NULL) {
-            $count = count($posts);
-            for($i = 0; $i < $count; $i++)
-                addResult($posts[$i]['PostID'], md5($posts[$i]['PostID']), $posts[$i]['Title'], $posts[$i]['Name']);
+            $count = $posts->count();
+            for($i = 0; $i < $count; $i++) {
+                $currentPost = $posts->get($i);
+                addResult($currentPost['PostID'], md5($currentPost['PostID']), $currentPost['Title'], $currentPost['Name']);
+              }
         }
         else {
             echo '<div>

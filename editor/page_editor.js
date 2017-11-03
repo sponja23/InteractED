@@ -7,7 +7,8 @@ var $selectedElement = $content;
 var dragging = false;
 var resizing = false;
 var creatingImage = false;
-
+var changeMade = false;
+var saveInterval;
 var positions;
 
 var debugSaveEnabled = false;
@@ -18,8 +19,6 @@ $(document).ready(function() {
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
     }).on("contextmenu", function(e) {
         e.stopPropagation();
-
-        console.log("content context menu  opened");
 
         var contextMenuID = "#content-dropdown";
 
@@ -86,6 +85,11 @@ $(document).ready(function() {
     });
 
     initDialogs();
+
+    saveInterval = setInterval(function() {
+        if(chageMade)
+            savePage();
+    }, 120000);
 });
 
 function savePositions(exception_id) {
@@ -146,7 +150,6 @@ function initDialogs() {
                 $("#image-create-dialog .input").each(function(){
                     $(this).val('').blur().removeClass("valid invalid");
                 });
-                console.log("")
                 invalidateImage();
             }
         } 
@@ -278,38 +281,6 @@ function initDialogs() {
     });
 }
 
-function enableButton(button) {
-    switch(button) {
-        case "edit":
-            if($("#btn-edit").length == 0)
-                $("#btn-list").append($edit);
-            break;
-        case "remove":
-            if($("#btn-remove").length == 0)
-                $("#btn-list").append($remove);
-            break;
-    }
-}
-
-function updateFAB(type) {
-    var $edit = $("#btn-edit");
-    var $remove = $("#btn-remove");
-    switch(type) {
-        case "content":
-            $edit.hide();
-            $remove.hide();
-            break;
-        case "image":
-            $edit.hide();
-            $remove.show();
-            break;
-        case "text":
-            $edit.show();
-            $remove.show();
-            break;
-    }
-}
-
 // Code: Page edit
 
 function openEditPageDialog() {
@@ -322,6 +293,7 @@ function editPage() {
     pageName = $("#edit-page-name").val();
     pageCategory = $("#edit-page-category").val();
     $content.height($("#edit-page-height").val());
+    changeMade = true;
 }
 
 // Code: Image creation
@@ -496,6 +468,7 @@ function createWrapper($inner, idToUse = -1) {
             },
             aspectRatio: $newElement.width() / $newElement.height(),
             start: function() {
+                changeMade = true;
                 savePositions($(this).attr("id"));
             },
             stop: function() {
@@ -528,6 +501,7 @@ function createWrapper($inner, idToUse = -1) {
             if($(".handle:hover").length != 0)
                 dragging = false;
             $("#" + $(this).data("type") + "-dropdown-activator").dropdown("close");
+            changeMade = true;
         },
         "mouseup" : function(e) {
             dragging = false;
@@ -538,13 +512,16 @@ function createWrapper($inner, idToUse = -1) {
             var type = $(e.target).data("type");
             var contextMenuID = "#" + type + "-dropdown";
 
-            console.log(type + " context menu opened");
+            $(".dropdown-button").each(function() {
+                if($(this).attr("id") != contextMenuID + "-activator")
+                    $(this).dropdown("close");
+            });
 
             //alert($(e.target).data("snap"));
 
             $(contextMenuID + " li .toggle .material-icons").each(function() {
                 var value = $(e.target).data($(this).data("option"));
-                var icon = value == true ? "check_box" : "check_box_outline_blank";
+                var icon = value ? "check_box" : "check_box_outline_blank";
                 $(this).html(icon);
             });
 
@@ -555,6 +532,7 @@ function createWrapper($inner, idToUse = -1) {
                 left: e.pageX,
                 top: e.pageY
             });
+
             e.preventDefault();
         }
     });
@@ -581,6 +559,8 @@ function createWrapper($inner, idToUse = -1) {
     
     if(idToUse == -1)
         nextID++;
+
+    changeMade = true;
 }
 
 // Code: Selection
@@ -609,6 +589,7 @@ function removeSelectedElement() {
     savePositions(id);
     $selectedElement.remove();
     resetPositions(id);
+    changeMade = true;
 }
 
 function openEditDialog(type) {
@@ -678,7 +659,7 @@ function savePage() {
         transcript: pageTranscript,
         name: pageName,
         category: pageCategory
-    }
+    };
 
     if(debugSaveEnabled)
         console.log(dataSaved);
@@ -700,19 +681,4 @@ function savePage() {
 function toggleDebugSave() {
     debugSaveEnabled = !debugSaveEnabled;
     console.log("Debug save set to " + debugSaveEnabled);
-}
-
-var debug_positions = [{}, {}, {}, {}];
-
-function debug_RecordPositions(slot) {
-    $(".object").each(function() {
-        debug_positions[slot][$(this).attr("id")] = $(this).offset();
-    });
-}
-
-function debug_DiffPositions(slot1, slot2) {
-    for(var id in debug_positions[slot1]) {
-        console.log(debug_positions[slot1][id].left - debug_positions[slot2][id].left);
-        console.log(debug_positions[slot1][id].top - debug_positions[slot2][id].top);
-    }
 }

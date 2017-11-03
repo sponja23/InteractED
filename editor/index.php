@@ -49,7 +49,8 @@
             <div id="side-nav" class="nav-wrapper white">
                 <a href="../" class="logo blue-text">InteractED</a>
                 <ul class="right">
-                    <a class="btn blue waves-effect waves-light" style="padding: 0 15px;"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a>
+                    <li><a onclick="savePage()"><i class="material-icons blue-text">save</i></a></li>
+                    <li><a class="btn blue waves-effect waves-light" style="padding: 0 15px;"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a></li>
                 </ul>
             </div>
         </nav>
@@ -186,7 +187,7 @@
             </div>
             <div id="image-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    <h5>Crear im&aacute;gen</h5>
+                    <h5>Crear imagen</h5>
                     <div class="valign-wrapper">
                         <div id="image-create-preview" class="valign-wrapper">
                             <img src="no_image_selected.gif" />
