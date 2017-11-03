@@ -12,7 +12,7 @@ if($_SESSION["Level"] >= 2){
 
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()){
-			echo "<tr><td>" . $row['User'] . "</td><td>" . $row['Level'] ."</td><td>" . $row['Reason'] . "</td><td>" . "<i class='materialize-icons' data-answer='Accepted' data-user=" . $row['UserCode'] . " data-levelrequested=" . $row['LevelRequested'] . ">check</i> <i class='materialize-icons' data-answer='Declined' data-user=" . $row['UserCode'] . " data-levelrequested=" . $row['LevelRequested'] . " class='btn'>close</i>" . "</td></tr>";  
+			echo "<tr><td>" . $row['User'] . "</td><td>" . $row['Level'] ."</td><td>" . $row['Reason'] . "</td><td>" . "<button class='btn waves-effect waves-light'><i class='material-icons' data-answer='Accepted' data-user=" . $row['UserCode'] . " data-levelrequested=" . $row['LevelRequested'] . ">check</i></button> <button class='btn waves-effect waves-light'><i class='material-icons' data-answer='Declined' data-user=" . $row['UserCode'] . " data-levelrequested=" . $row['LevelRequested'] . " class='btn'>close</i></button>" . "</td></tr>";  
 		}
 	}
 	else {
@@ -25,4 +25,3 @@ else{
 	echo "<script>window.history.back();</script>";
 }
 ?>
-

@@ -16,19 +16,18 @@
 	$(document).ready (function(){
 		function charge(){
 			$( 'i' ).click(function() {
-		 		$.ajax({
-		 			url: 'send.php',
-		 			type: 'POST',
-		 			data: { Answer: $(this).data("answer"),  UC: $(this).data("user"), Level: $(this).data("levelrequested") } , 
-		 			success: function (response) {
-		 				location.reload();
-		            },
-		            error: function(jqXHR, textStatus, errorThrown) {
-		            	console.log(textStatus, errorThrown);        
-		            }
-		        });
-		 		
-		 	});
+				$.ajax({
+					url: 'send.php',
+					type: 'POST',
+					data: { Answer: $(this).data("answer"),  Category: $(this).data("category") } , 
+					success: function (response) {
+						location.reload();
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log(textStatus, errorThrown);        
+					}
+				});
+			});
  		}
 
 
