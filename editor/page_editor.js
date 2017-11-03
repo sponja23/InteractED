@@ -87,8 +87,9 @@ $(document).ready(function() {
     initDialogs();
 
     saveInterval = setInterval(function() {
-        if(chageMade)
+        if(changeMade)
             savePage();
+        changeMade = false;
     }, 120000);
 });
 
@@ -572,7 +573,6 @@ function selectElement($element) {
         $selectedElement.addClass("selected");
         $selectedElement.children(".handle").show();
     }
-    updateFAB($selectedElement.data("type"));
 }
 
 function unselectElement() {
@@ -581,7 +581,6 @@ function unselectElement() {
         $selectedElement.children(".handle").hide();
     }
     $selectedElement = $content;
-    updateFAB("content");
 }
 
 function removeSelectedElement() {
