@@ -4,9 +4,9 @@
     <head>
         <title>InteractED</title>
 
-        <?php require "../include/head.html"; ?>
+        <?php require "../../include/head.html"; ?>
 
-        <link rel="stylesheet" href="../components/navigation/navigation.css">
+        <link rel="stylesheet" href="../../components/navigation/navigation.css">
 
         <style>
             .item:hover {
@@ -22,26 +22,24 @@
         </style>
     </head>
     <body class="grey lighten-5">
-        <?php require "../components/navigation/navigation.php"; ?>
+        <?php require "../../components/navigation/navigation.php"; ?>
 
         <div class="container">
              <h5>Mis Articulos</h5>
             <div class="row">
                 <?php
-                    include "get_my_posts.php";
-                    GetMyPosts();
+                    include "GetUserPosts.php";
+                    GetUserPosts();
                 ?>
             </div>
             
-        <?php require "../include/scripts.html"; ?>
+        <?php require "../../include/scripts.html"; ?>
 
-        <script src="../components/navigation/navigation.js"></script>
+        <script src="../../components/navigation/navigation.js"></script>
 
         <script>
-            $( "#search" ).val(<?= '"' . $_GET["q"] . '"' ?>);
-
             $( ".item" ).click(function() {
-                window.location.href = "post?id=" + $(this).attr("id");
+                window.location.href = "../?id=" + $(this).attr("id");
             });
         </script>
     </body>

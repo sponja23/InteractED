@@ -1,33 +1,33 @@
 <?php 
-class History{
-	function GetRecents(){
-		require "../include/connect.php";
+function GetRecents() {
+    require "../include/connect.php";
 
-		$sql = 'SELECT DISTINCT *
-                FROM Articles
-                INNER JOIN Visited ON Articles.PostID = Visited.PostID WHERE Visited.UserCode = '. session_id() .';';
+    $sql = 'SELECT DISTINCT A.PostID, A.Title, U.Name FROM Articles A
+            INNER JOIN Visited V ON A.PostID = V.PostID
+            INNER JOIN Users U ON A.CreatorID = U.UserCode
+            WHERE V.UserCode = ' . $_SESSION["UserCode"];
 
-        $result = $conn->query($sql);
+    $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) 
-        {
-            while ($row = $result->fetch_assoc()){
-                echo '<div class="col s12">
-                          <div class="card horizontal hoverable item" id="' . $row['PostID'] . '">
-                              <div class="card-image" style="width: 192px;">
-                                  <img src="../post/content/' . md5($row['PostID']) . '/image.jpg">
-                              </div>
-                              <div class="card-stacked">
-                                  <div class="card-content">
-                                      <strong>' .$row['Title'] . '</strong>
-                                      <p>' . $row['Name'] . '</p>
-                                  </div>
+    if ($result->num_rows > 0)
+        while ($row = $result->fetch_assoc()) {
+            $Image = glob("../images/posts/" . $row['PostID'] . ".*");
+
+            echo '<div class="col s12">
+                      <div class="card horizontal hoverable item" id="' . md5($row['PostID']) . '">
+                          <div class="card-image valign-wrapper" style="width: 192px; margin-left: 10px;">
+                              <img src="../images/posts/' . basename($Image[0]) . '" style="margin: 0 auto;">
+                          </div>
+                          <div class="card-stacked">
+                              <div class="card-content">
+                                  <strong>' . $row['Title'] . '</strong>
+                                  <p>' . $row['Name'] . '</p>
                               </div>
                           </div>
-                      </div>';
-            }
-
+                      </div>
+                  </div>';
         }
-	}
+    else
+        echo '<p>No se encontraron posts que hayas visitado</p>';
 }
-?>	
+?>

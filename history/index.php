@@ -3,13 +3,11 @@
 <html>
     <head>
         <title>InteractED</title>
+
+        <?php require "../include/head.html"; ?>
         
         <link rel="stylesheet" href="../components/navigation/navigation.css">
-        <?php 
-        require "../include/head.html"; 
-        require "../include/connect.php";
-        include "recents.php";
-        ?>
+
         <style>
             .item:hover {
                 cursor: pointer;
@@ -33,11 +31,10 @@
 
         <div class="container">
             <h5>History</h5>
-                <?php
-                    $recents = new History();
-
-                    $recents->GetRecents();
-                ?>
+            <?php
+                include "recents.php";
+                GetRecents();
+            ?>
         <div>
         <script>
             $( ".item" ).click(function() {
