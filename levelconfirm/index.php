@@ -1,6 +1,6 @@
 <html>
 <head>
-	<?require "../include/scripts.html";?>
+	<?php require "../include/scripts.html"; session_start();?>
 	<?php require "../include/head.html"; ?>
     <link rel="stylesheet" href="../components/navigation/navigation.css">
 	<link rel="stylesheet" href="styles.css">
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/font.css">
 </head>
 <body>
-	<?php require "../components/navigation/navigation.php" ?>
+	<?php require "../components/navigation/navigation.php"; ?>
 	<div class="container" id="table"></div>
 </body>
 <script src="../components/navigation/navigation.js"></script>

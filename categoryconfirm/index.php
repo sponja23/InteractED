@@ -1,6 +1,6 @@
 <html>
 <head>
-	<?require "../include/scripts.html";?>
+	<?require "../include/scripts.html"; session_start();?>
 	<?php require "../include/head.html"; ?>
     <link rel="stylesheet" href="../components/navigation/navigation.css">
 	<link rel="stylesheet" href="styles.css">
