@@ -287,10 +287,9 @@
         <script src="../include/textboxio/textboxio.js"></script>
         <script src="../include/colorpicker/materialize-colorpicker.min.js"></script>
         <script>
-            var pageName = <?= "\"" . $_SESSION[$_GET["id"] . "-Title"] . "\""?>;
-            var pageCategory = <?= "\"" . $_SESSION[$_GET["id"] . "-Category"] . "\""?>;
-            var postID = <?= "\"" . $_GET["id"] . "\"" ?>;
-            var pageContent = <?= "'". $PageContent . "'" ?>;
+            var pageName = <?= "'" . $_SESSION[$_GET["id"] . "-Title"] . "'" ?>;
+            var pageCategory = <?= "'" . $_SESSION[$_GET["id"] . "-Category"] . "'" ?>;
+            var postID = <?= $_GET["id"] ?>;
         </script>
         <script src="page_editor.js"></script>
 

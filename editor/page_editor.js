@@ -1,6 +1,8 @@
 var categories;
 var textCreateEditor;
 
+var pageContent;
+
 var nextID = 0;
 var $content = $("#content");
 var $selectedElement = $content;
@@ -14,6 +16,16 @@ var positions;
 var debugSaveEnabled = false;
 
 $(document).ready(function() {
+
+    $.ajax({
+        url: "load_page.php",
+        type: "POST",
+        async: false,
+        data: { ID : PostID },
+        success: function(content) {
+            pageContent = content;
+        }
+    });
 
     $content.css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
