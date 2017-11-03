@@ -14,6 +14,7 @@ if ($result->num_rows > 0)
         $PostImage = glob("../images/posts/" . $row["PostID"] . ".*");
         $PostImage = "../images/posts/" . basename($PostImage[0]);
         $Title = $row["Title"];
+        $PostID = $row["PostID"];
         $UserImage = glob("../images/users/" . $row["UserCode"] . ".*");
         $UserImage = "../images/users/" . basename($UserImage[0]);
         $Name = $row["Name"];
@@ -21,6 +22,11 @@ if ($result->num_rows > 0)
     }
 else
     header("Location: ../");
+
+$sql = "INSERT INTO visited (PostID, UserCode, FECHA)
+        VALUES (".$PostID.", ".$_SESSION["UserCode"].", GETDATE());";
+if ($conn->query($sql) === TRUE)
+    //
 ?>
 <!DOCTYPE html>
 <html>
