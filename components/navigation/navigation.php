@@ -29,7 +29,8 @@
                           <li><a href="/InteractED/account" class="black-text"><i class="material-icons grey-text">account_circle</i>Mi cuenta</a></li>
                           <li><a href="/InteractED/post/my-posts" class="black-text"><i class="material-icons grey-text">content_paste</i>Mis articulos</a></li>
                           <li><a href="/InteractED/chats" class="black-text"><i class="material-icons grey-text">chat</i>Mis chats</a></li>
-                          <li><a href="/InteractED/history" class="black-text"><i class="material-icons grey-text">watch_later</i>Historial</a></li>
+                          <li><a href="/InteractED/watchlater" class="black-text"><i class="material-icons grey-text">watch_later</i>Ver mas tarde</a></li>
+                          <li><a href="/InteractED/history" class="black-text"><i class="material-icons grey-text">query_builder</i>Historial</a></li>
                           <li><a href="/InteractED/login/logout.php" class="black-text"><i class="material-icons grey-text">exit_to_app</i>Salir</a></li>
                       </ul>
 
