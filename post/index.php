@@ -23,7 +23,7 @@ if ($result->num_rows > 0)
 else
     header("Location: ../");
 
-$sql = "INSERT INTO visited (PostID, UserCode, FECHA)
+$sql = "INSERT INTO visited (PostID, UserCode, DateLastVisited)
         VALUES (".$PostID.", ".$_SESSION["UserCode"].", GETDATE());";
 if ($conn->query($sql) === TRUE)
     //
