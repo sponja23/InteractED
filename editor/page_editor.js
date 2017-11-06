@@ -24,6 +24,9 @@ $(document).ready(function() {
         data: { ID : PostID },
         success: function(content) {
             pageContent = content;
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
         }
     });
 
@@ -267,11 +270,11 @@ function initDialogs() {
         css : {
             stylesheets: [''],
             styles: [               
-                { rule: 'p',    text: 'Párrafo' },
-                { rule: 'h1',   text: 'Encabezado 1' },
-                { rule: 'h2',   text: 'Encabezado 2' },
-                { rule: 'h3',   text: 'Encabezado 3' },
-                { rule: 'h4',   text: 'Encabezado 4' }
+                { rule: 'p',  text: 'Párrafo' },
+                { rule: 'h1', text: 'Encabezado 1' },
+                { rule: 'h2', text: 'Encabezado 2' },
+                { rule: 'h3', text: 'Encabezado 3' },
+                { rule: 'h4', text: 'Encabezado 4' }
             ]
         },
         codeview: {
@@ -292,6 +295,21 @@ function initDialogs() {
     $("#text-edit-button").click(function() {
         editText($selectedElement, $(textEditEditor.content.get()));
     });
+
+    $("#video-create-modal").modal({
+        dismissible: true,
+        endingTop: '50%',
+        complete: function() {
+            $("#image-create-dialog .input").each(function(){
+                $(this).val('').blur().removeClass("valid invalid");
+            });
+            invalidateVideo();
+        }
+    });
+
+    $("#video-create-button").click(function() {
+
+    });
 }
 
 // Code: Page edit
@@ -311,7 +329,7 @@ function editPage() {
 
 // Code: Image creation
 
-function updatePreview(method) {
+function updateImagePreview(method) {
     if(method == "url")
         var url = $("#image-create-src").val();
     else if(method == "upload")

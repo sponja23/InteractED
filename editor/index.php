@@ -203,7 +203,7 @@
                         </p>
                     </div>
                     <div class="input-field col s12">
-                        <input id="image-create-src" type="url" onchange="updatePreview('url')" class="input">
+                        <input id="image-create-src" type="url" onchange="updateImagePreview('url')" class="input">
                         <label for="image-create-src">URL</label>
                     </div>
                     <span>O</span>
@@ -213,7 +213,7 @@
                             <input type="file" name="image" id="image-create-upload-file">
                         </div>
                         <div class="file-path-wrapper">
-                            <input id="image-create-upload-src" onchange="updatePreview('upload')" class="file-path input" type="text">
+                            <input id="image-create-upload-src" onchange="updateImagePreview('upload')" class="file-path input" type="text">
                         </div>
                     </div>
                     <span id="image-create-error" class="red-text"></span>
@@ -275,6 +275,18 @@
                     <a class="modal-action modal-close waves-effect waves-light btn-flat" id="text-edit-button">Crear</a>
                 </div>
             </div>
+            <div id="video-create-dialog" class="modal valign-modal">
+                <div class="modal-content row">
+                    <h5>Crear video</h5>
+                    <div>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="video-create-cancel">Cancelar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="video-create-button">Crear</a>
+                </div>
+            </div>
         </div>
 
         <div id="content" class="container" data-type="content" onclick="unselectElement();" style="position: relative;">
@@ -289,7 +301,7 @@
         <script>
             var pageName = <?= "'" . $_SESSION[$_GET["id"] . "-Title"] . "'" ?>;
             var pageCategory = <?= "'" . $_SESSION[$_GET["id"] . "-Category"] . "'" ?>;
-            var postID = <?= $_GET["id"] ?>;
+            var PostID = <?= "'" . $_GET["id"] . "'" ?>;
         </script>
         <script src="page_editor.js"></script>
 
