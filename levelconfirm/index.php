@@ -1,7 +1,11 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
-	<?php require "../include/scripts.html"; session_start();?>
-	<?php require "../include/head.html"; ?>
+	<?
+	require "../include/scripts.html";
+	require "../include/head.html"; 
+	?>
     <link rel="stylesheet" href="../components/navigation/navigation.css">
 	<link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="../css/input.css">

@@ -11,7 +11,7 @@ if($_SESSION["Level"] >= 2){
 
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()){
-			echo "<tr><td>" . $row['CategoryName'] . "</td><td>" . $row['CategoryParent'] ."</td><td>" . "<button class='btn waves-effect waves-light'><i class='material-icons' data-answer='1' data-category=" . $row['CategoryID']. ">check</i> </button> <button class='btn waves-effect waves-light'><i class='material-icons' data-answer='2' data-category=" . $row['CategoryID']. ">close</i></button>" . "</td></tr>";  
+			echo "<tr><td>" . $row['CategoryName'] . "</td><td>" . $row['CategoryParent'] ."</td><td>" . "<button class='btn waves-effect waves-light change-status' data-answer='1' data-category=" . $row['CategoryID']. "><i class='material-icons'>check</i> </button> <button class='btn waves-effect waves-light change-status' data-answer='2' data-category=" . $row['CategoryID']. " ><i class='material-icons'>close</i></button>" . "</td></tr>";  
 		}
 	}
 	else {

@@ -1,7 +1,11 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
-	<?require "../include/scripts.html"; session_start();?>
-	<?php require "../include/head.html"; ?>
+	<?
+	require "../include/scripts.html";
+	require "../include/head.html"; 
+	?>
     <link rel="stylesheet" href="../components/navigation/navigation.css">
 	<link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="../css/input.css">
@@ -14,14 +18,20 @@
 <script src="../components/navigation/navigation.js"></script>
 <script type="text/javascript">
 	$(document).ready (function(){
-		function charge(){
-			$( 'i' ).click(function() {
+		function send(){
+			$( ".change-status" ).click(function() {
 				$.ajax({
 					url: 'send.php',
 					type: 'POST',
-					data: { Answer: $(this).data("answer"),  Category: $(this).data("category") } , 
+					data: { Answer: $(this).data("answer"),  CategoryID: $(this).data("category") } , 
 					success: function (response) {
-						location.reload();
+						if (response === "0"){
+							location.reload();
+						}
+						else{
+							var loc = "confirmed/?id=";
+							window.location.href = loc.concat(response);
+						}
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
 						console.log(textStatus, errorThrown);        
@@ -37,7 +47,7 @@
 	 			type: 'POST',
 	 			success: function (response) {
 	 				$("#table").html(response);
-	 				charge();
+	 				send();
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
 	            	console.log(textStatus, errorThrown);        
