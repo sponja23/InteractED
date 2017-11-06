@@ -4,11 +4,7 @@
     <head>
         <title>InteractED</title>
 
-        <?php 
-        require "../include/head.html"; 
-        require "../include/connect.php";
-        include "categories.php";
-        ?>
+        <?php require "../include/head.html"; ?>
 
         <link rel="stylesheet" href="../components/navigation/navigation.css">
 
@@ -35,18 +31,16 @@
 
         <div class="container">
             <h5>Categorias</h5>
-                <?php
-                    echo '<a href="addCategory.php" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a><br><br>';
-                    $categories = new Categories();
-
-                    $categories->GetCategories();
-
-                ?>
+            <a href="addCategory.php" class="btn-floating btn-large waves-effect waves-light blue">
+                <i class="material-icons">add</i>
+            </a>
+            <br><br>
+            <?php
+            include "categories.php";
+            GetCategories();
+            ?>
         <div>
         <script>
-            $( ".item" ).click(function() {
-                window.location.href = "../post?id=" + $(this).attr("id");
-            });
             $( ".categoryOption" ).click(function() {
                 window.location.href = "../category/articles/?id=" + $(this).attr("id");
             });

@@ -192,7 +192,7 @@ function initDialogs() {
             var formData = new FormData();
             formData.append("image", $("#image-create-upload-file")[0].files[0]);
             $.ajax({
-                url: "image_upload.php?id=" + postID,
+                url: "image_upload.php?id=" + PostID,
                 type: "POST",
                 processData: false,
                 contentType: false,
@@ -683,7 +683,7 @@ function savePage() {
     });
 
     var dataSaved = {
-        id: postID,
+        id: PostID,
         content: $newContent[0].outerHTML,
         transcript: pageTranscript,
         name: pageName,
