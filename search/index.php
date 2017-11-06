@@ -27,7 +27,7 @@
         <div class="container">
             <?php
             include "search.php";
-            SearchArticles(trim($_GET["q"]), 20);
+            searchArticles(trim($_GET["q"]), 20);
             ?>
 
         <?php require "../include/scripts.html"; ?>

@@ -1,9 +1,9 @@
 <?php
-function addResult($ID, $Title, $Creator) {
+function addResult($ID, $Extension, $Title, $Creator) {
     echo '<div class="col s12">
               <div class="card horizontal hoverable item" id="' . md5($ID) . '">
-                  <div class="card-image" style="width: 192px;">
-                      <img src="../images/posts/' . $ID . '.jpg">
+                  <div class="card-image valign-wrapper" style="width: 192px;">
+                      <img src="../images/posts/' . $ID . '.' . $Extension . '" style="display: block; margin: 0 auto;">
                   </div>
                   <div class="card-stacked">
                       <div class="card-content">
@@ -98,8 +98,13 @@ function searchArticles($query, $maxWords) {
     if($searchResult->num_rows > 0) {
         echo '<p class="results">' . $result->num_rows . ' resultados para "' . $query . '"</p>';
 
-        while($row = $searchResult->fetch_assoc())
-            addResult($row['PostID'], md5($row['PostID']), $row['Title'], $row['Name']);
+        while ($row = $searchResult->fetch_assoc()) {
+            $Extension = glob("../images/posts/" . $row['PostID'] . ".*");
+            $Extension = pathinfo($Extension[0]);
+            $Extension = $Extension['extension'];
+
+            addResult($row['PostID'], $Extension, md5($row['PostID']), $row['Title'], $row['Name']);
+        }
     }
     else {
         if (str_word_count($query) > $maxWords) {
@@ -116,7 +121,12 @@ function searchArticles($query, $maxWords) {
             $count = count($posts);
             for($i = 0; $i < $count; $i++) {
                 $currentPost = $posts[$i];
-                addResult($currentPost['PostID'], $currentPost['Title'], $currentPost['Name']);
+
+                $Extension = glob("../images/posts/" . $currentPost['PostID'] . ".*");
+                $Extension = pathinfo($Extension[0]);
+                $Extension = $Extension['extension'];
+
+                addResult($currentPost['PostID'], $Extension, $currentPost['Title'], $currentPost['Name']);
               }
         }
         else {
