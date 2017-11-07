@@ -27,8 +27,8 @@
                         <span id="logo" class="blue-text">InteractED</span>
                         <h1 id="title">Add New Category*</h1>
                         <p style="color:#757575">*Categories must be aproved by our moderators before being approved</p>
-                        <form id="new" action="result/" method="post" enctype="multipart/form-data">
-                            <div class="file-field input-field">
+                        <!-- <form id="new" action="result/" method="post" enctype="multipart/form-data">-->
+                            <!-- <div class="file-field input-field">
                                 <div class="btn blue">
                                     <span>Imagen</span>
                                     <input id="image-input" type="file" name="image">
@@ -36,16 +36,21 @@
                                 <div class="file-path-wrapper">
                                     <input id="image-path" class="file-path" type="text">
                                 </div>
-                            </div>
+                            </div> -->
+
                             <div class="input-field col s12">
                                 <input id="category" name="category" type="text">
                                 <label for="category" data-error="Debe ingresar nombre de la categoria a agregar">Categoria</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <input id="category-parent" name="category" type="text" class="autocomplete" autocomplete="off">
+                                <label for="category-parent" data-error="Debe ingresar una categor&iacute; padre">Categor&iacute;a padre</label>
                             </div>
                             <label id="error-message" class="red-text">&nbsp;</label>
                             <br><br>
                             <a id="cancel" class="btn-flat blue-text waves-effect">Cancelar</a>
                             <a id="add-button" class="btn blue waves-effect waves-light right">Agregar</a>
-                        </form>
+                        <!--</form> -->
                     </div>
                 </div>
             </div>
@@ -54,12 +59,33 @@
         <?php require "../include/scripts.html"; ?>
 
         <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: "get_categories_with_images.php",
+                    type: "POST",
+                    async: true,
+                    context: this,
+                    dataType: "json",
+                    success: function(categories) {
+                        if(categories) {
+                            $(".autocomplete").autocomplete({
+                                data: categories,
+                                limit: 5,
+                                minLength: 1
+                            });
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            });
             $( "#add-button" ).click(function() {
-                if ($( "#image-path" ).val() == "")
+                /*if ($( "#image-path" ).val() == "")
                 {
                     $( "#error-message" ).html("Debe seleccionar una imagen");
                 }
-                else if ($( "#category" ).val() == "")
+                else */if ($( "#category" ).val() == "")
                 {
                     $( "#category" ).addClass("validate invalid").focus();
                 }
@@ -68,23 +94,20 @@
                     $.ajax({
                         url: "check.php",
                         type: "POST",
-                        data: { category: $( "#category" ).val()} ,
+                        data: { Category: $( "#category" ).val()} ,
                         success: function (response) {
                             if (response == '1'){
                                 //$( "#new-button" ).submit();
                                 $( "#error-message" ).html("Esta categoria ya existe");
                             }
                             else if (response == 0){
-                                var formData = new FormData();
-                                formData.append("image", $("#image-input")[0].files[0])
                                 $.ajax({
-                                    url: "upload_category.php?name=" + $( "#category" ).val(),
+                                    url: "send.php",
                                     type: "POST",
-                                    processData: false,
-                                    contentType: false,
-                                    data: formData,
-                                    success: function() {
-                                        window.history.back();
+                                    data: { Category: $( "#category" ).val()} ,
+                                    success: function (response) {
+                                        alert("Solicitud de categoria enviada correctamente");
+                                        window.back.history();
                                     },
                                     error: function(jqXHR, textStatus, errorThrown) {
                                         console.log(textStatus, errorThrown);

@@ -72,7 +72,6 @@ if(!isset($_SESSION["UserCode"]))
 
         <script>
             $(document).ready(function() {
-                var categories;
                 $.ajax({
                     url: "../../category/get_categories_with_images.php",
                     type: "POST",
