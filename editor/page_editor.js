@@ -76,19 +76,15 @@ $(document).ready(function() {
     });
 
     $.ajax({
-        url: "../category/get_categories.php",
+        url: "../category/get_categories_with_images.php",
         type: "POST",
         async: true,
         context: this,
         dataType: "json",
         success: function(categories) {
             if(categories) {
-                var category_images = {};
-                for(var i in categories)
-                    category_images[categories[i]] = "../../category/images/" + categories[i] + ".jpg";
-
                 $(".autocomplete").autocomplete({
-                    data: category_images,
+                    data: categories,
                     limit: 5,
                     minLength: 1
                 });
@@ -373,6 +369,14 @@ function invalidateImage() {
 
     $("#image-create-width, #image-create-height").html("200");
     $("#image-create-preview > img").attr("src", "no_image_selected.gif");
+}
+
+function updateVideoPreview() {
+
+}
+
+function invalidateVideo() {
+
 }
 
 function openCreateDialog(type) {

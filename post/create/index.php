@@ -74,19 +74,15 @@ if(!isset($_SESSION["UserCode"]))
             $(document).ready(function() {
                 var categories;
                 $.ajax({
-                    url: "../../category/get_categories.php",
+                    url: "../../category/get_categories_with_images.php",
                     type: "POST",
                     async: true,
                     context: this,
                     dataType: "json",
                     success: function(categories) {
                         if(categories) {
-                            var category_images = {};
-                            for(category in categories)
-                                category_images[categories[category]] = "../../images/categories/" + category + ".png";
-
                             $(".autocomplete").autocomplete({
-                                data: category_images,
+                                data: categories,
                                 limit: 5,
                                 minLength: 1
                             });

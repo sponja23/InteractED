@@ -279,7 +279,15 @@
                 <div class="modal-content row">
                     <h5>Crear video</h5>
                     <div>
-                        
+                        <div class="row">
+                            <iframe id="video-create-preview" width="100%"></iframe>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="video-create-src" class="input" />
+                                <label for="video-create-src">Link de embed</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
