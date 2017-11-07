@@ -1,5 +1,11 @@
 <?php
-require "../../include/connect.php";
+require "../include/connect.php";
 $sql = 'INSERT INTO Categories (CategoryName, Implemented) VALUES ("' . $_POST["Category"] . '", 0)';
-$conn->query($sql);
+if ($conn->query($sql)){
+	echo "1";
+}
+else{
+	echo "0";
+}
+
 ?>
