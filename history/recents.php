@@ -24,6 +24,9 @@ function GetRecents() {
                                   <p>' . $row['Name'] . '</p>
                               </div>
                           </div>
+                          <div class="valign-wrapper">
+                            <i id="'.$row['PostID'].'" class="material-icons blue-text watch-later" style="font-size: 36px; margin-right: 24px;">watch_later</i>
+                          </div>
                       </div>
                   </div>';
         }

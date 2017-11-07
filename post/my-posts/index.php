@@ -41,6 +41,19 @@
             $( ".item" ).click(function() {
                 window.location.href = "../?id=" + $(this).attr("id");
             });
+            $( ".watch-later"  ).click(function() {
+                $.ajax({
+                        url: "../../watchlater/add.php",
+                        type: "POST",
+                        data: { id: $(this).attr("id")} ,
+                        success: function (response) {
+                            alert("Added to Watch Later");
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+            });
         </script>
     </body>
 </html>
