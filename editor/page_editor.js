@@ -70,6 +70,11 @@ $(document).ready(function() {
                     "top": $element.css("top")
                 });
                 break;
+            case "video":
+                createVideo($element, true, {
+                    "left": $element.css("left"),
+                    "top": $element.css("top")
+                });
             default:
                 console.log("No type detected");
         }
@@ -468,6 +473,16 @@ function editText($element, $new_text) {
     createWrapper($inner, id);
 }
 
+// Code: Video Creation
+
+function createVideo(embed_code, old=false, extra_css={}) {
+	var $video = $(embed_code);
+	$video.css(extra_css)
+    .attr("data-old", "true")
+    .addClass("inner");
+	createWrapper($video);
+}
+
 // Code: Wrapper
 
 function createWrapper($inner, idToUse = -1) {
@@ -513,6 +528,10 @@ function createWrapper($inner, idToUse = -1) {
 
         $newElement.children(".handle").hide();
     }
+
+    if($inner.data("type") == "video")
+        $newElement.append("<div class='overlay'><i class='material-icons large'>open with</i></div>");
+
 
     $newElement.children(".inner").css({
         "width": "100%",
@@ -665,6 +684,14 @@ function savePage() {
                     "data-old": "true"
                 });
                 pageTranscript += $elem.text() + " ";
+                break;
+            case "video":
+                var $elem = $inner.clone().attr({
+                    "data-type": "video",
+                    "data-old": "true",
+                    "width": $inner.width() + "px",
+                    "height": $inner.height() + "px"
+                });
                 break;
         }
         $elem.css({
