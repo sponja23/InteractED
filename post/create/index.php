@@ -71,6 +71,8 @@ if(!isset($_SESSION["UserCode"]))
         <?php require "../../include/scripts.html"; ?>
 
         <script>
+            //var categories;
+
             $(document).ready(function() {
                 $.ajax({
                     url: "../../category/get_categories_with_images.php",
@@ -79,6 +81,7 @@ if(!isset($_SESSION["UserCode"]))
                     context: this,
                     dataType: "json",
                     success: function(categories) {
+                        console.log(categories);
                         if(categories) {
                             $(".autocomplete").autocomplete({
                                 data: categories,
