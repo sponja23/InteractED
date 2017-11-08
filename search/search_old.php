@@ -1,20 +1,4 @@
 <?php
-function AddResult($ID, $Image, $Title, $Creator) {
-    echo '<div class="col s12">
-              <div class="card horizontal hoverable item" id="' . $ID . '">
-                  <div class="card-image" style="width: 192px;">
-                      <img src="' . $Image . '">
-                  </div>
-                  <div class="card-stacked">
-                      <div class="card-content">
-                          <strong>' . $Title . '</strong>
-                          <p>' . $Creator . '</p>
-                      </div>
-                  </div>
-              </div>
-          </div>';
-}
-
 function SearchQuery($Search, $MaxWords) {
     require "../include/connect.php";
     $sql = 'SELECT DISTINCT A.* FROM Articles A

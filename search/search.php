@@ -1,23 +1,4 @@
 <?php
-function addResult($ID, $Extension, $Title, $Creator) {
-    echo '<div class="col s12">
-              <div class="card horizontal hoverable item" id="' . md5($ID) . '">
-                  <div class="card-image valign-wrapper" style="width: 192px;">
-                      <img src="../images/posts/' . $ID . '.' . $Extension . '" style="display: block; margin: 0 auto;">
-                  </div>
-                  <div class="card-stacked">
-                      <div class="card-content">
-                          <strong>' . $Title . '</strong>
-                          <p>' . $Creator . '</p>
-                      </div>
-                  </div>
-                  <div class="valign-wrapper">
-                      <i id="'.$row['PostID'].'" class="material-icons blue-text watch-later" style="font-size: 36px; margin-right: 24px;">watch_later</i>
-                  </div>
-              </div>
-          </div>';
-}
-
 function postInArray($arr, $post) {
   foreach ($arr as $p) {
     if($p["PostID"] == $post["PostID"])
@@ -90,6 +71,7 @@ function getSimilar($word, $maxDistance = 1) {
 
 function searchArticles($query, $maxWords) {
     require "../include/connect.php";
+    include "../post/functions.php";
 
     $sql = "SELECT DISTINCT A.PostID, A.Title, U.Name FROM Articles A
             INNER JOIN Users U ON A.CreatorID = U.UserCode
@@ -102,11 +84,9 @@ function searchArticles($query, $maxWords) {
         echo '<p class="results">' . $result->num_rows . ' resultados para "' . $query . '"</p>';
 
         while ($row = $searchResult->fetch_assoc()) {
-            $Extension = glob("../images/posts/" . $row['PostID'] . ".*");
-            $Extension = pathinfo($Extension[0]);
-            $Extension = $Extension['extension'];
+            $Image = glob("../images/posts/" . $row['PostID'] . ".*");
 
-            addResult($row['PostID'], $Extension, md5($row['PostID']), $row['Title'], $row['Name']);
+            addHorizontalCard($row['PostID'], $Image[0], $row['Title'], $row['Name']);
         }
     }
     else {
@@ -125,11 +105,9 @@ function searchArticles($query, $maxWords) {
             for($i = 0; $i < $count; $i++) {
                 $currentPost = $posts[$i];
 
-                $Extension = glob("../images/posts/" . $currentPost['PostID'] . ".*");
-                $Extension = pathinfo($Extension[0]);
-                $Extension = $Extension['extension'];
+                $Image = glob("../images/posts/" . $currentPost['PostID'] . ".*");
 
-                addResult($currentPost['PostID'], $Extension, $currentPost['Title'], $currentPost['Name']);
+                addHorizontalCard($currentPost['PostID'], $Image[0], $currentPost['Title'], $currentPost['Name']);
               }
         }
         else {

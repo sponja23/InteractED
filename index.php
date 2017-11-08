@@ -13,18 +13,6 @@
                 cursor: pointer;
                 cursor: hand;
             }
-
-            .image-card {
-                width: initial !important;
-                max-width: 100%;
-                max-height: 100%;
-                display: block;
-                margin: 0 auto;
-            }
-
-            .image-card-wrapper {
-                height: 100px;
-            }
         </style>
     </head>
     <body class="grey lighten-5">
@@ -34,6 +22,7 @@
             <div class="row">
                 <?php
                 include "include/connect.php";
+                include "post/functions.php";
 
                 $sql = "SELECT CategoryID, CategoryName FROM Categories WHERE Implemented = 1 ORDER BY CategoryName";
                 $Categories = $conn->query($sql);
@@ -56,17 +45,7 @@
                         if ($Cards == 1)
                             echo '<div class="row" style="margin-bottom: 0;">';
 
-                        echo '<div class="col s12 m3">
-                                  <div class="card hoverable item" id="' . md5($PostValues["PostID"]) . '">
-                                      <div class="card-image valign-wrapper image-card-wrapper">
-                                          <img class="image-card" src="' . $Image[0] . '">
-                                      </div>
-                                      <div class="card-content">
-                                          <strong>' . $PostValues["Title"] . '</strong>
-                                          <p>' . $PostValues["User"] . '</p>
-                                      </div>
-                                  </div>
-                              </div>';
+                        addVerticalCard($PostValues["PostID"], $Image[0], $PostValues["Title"], $PostValues["User"]);
 
                         if ($Cards++ == 4) {
                             $Cards = 1;

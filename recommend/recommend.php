@@ -1,26 +1,7 @@
 <?php
-
-function addResult($ID, $Image, $Title, $Creator) {
-    echo '<div class="col s12">
-              <div class="card horizontal hoverable item" id="' . $ID . '">
-                  <div class="card-image" style="width: 192px;">
-                      <img src="../images/posts/' . $Image . '.jpg">
-                  </div>
-                  <div class="card-stacked">
-                      <div class="card-content">
-                          <strong>' . $Title . '</strong>
-                          <p>' . $Creator . '</p>
-                      </div>
-                  </div>
-                  <div class="valign-wrapper">
-                        <i id="'.$row['PostID'].'" class="material-icons blue-text watch-later" style="font-size: 36px; margin-right: 24px;">watch_later</i>
-                  </div>
-              </div>
-          </div>';
-}
-
 function postsBySimilarTags() {
 	require "include/connect.php";
+    include "post/functions.php";
 	$sql = "SELECT T.TagName FROM Tags T
 			INNER JOIN Visited V ON T.PostID = V.PostID
 			WHERE V.UserCode = " . $_SESSION["UserCode"] . " ORDER BY V.DateLastVisited DESC LIMIT 10";
@@ -31,9 +12,10 @@ function postsBySimilarTags() {
 					INNER JOIN Articles A ON T.PostID = A.PostID
 					WHERE T.TagName = '" . $tag_row["TagName"] . "' AND A.PostID NOT IN(SELECT PostID FROM Visited WHERE UserCode = '" . $_SESSION["UserCode"] . "')";
 			$post_result = $conn->query($sql);
-			while($post_row = $post_result->fetch_assoc())
-				addResult($post_row['PostID'], md5($post_row['PostID']), $post_row['Title'], $post_row['Name']);
-				//$recommendedPostIDs[] = $post_row["PostID"];
+			while($post_row = $post_result->fetch_assoc()) {
+                $Image = glob("../../images/posts/" . $post_row['PostID'] . ".*");
+				addHorizontalCard($post_row['PostID'], $Image[0], $post_row['Title'], $post_row['Name']);
+            }
 		}
 	}
 	else {

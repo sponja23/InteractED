@@ -1,23 +1,4 @@
 <?php 
-function addResult($ID, $Extension, $Title, $Creator) {
-    echo '<div class="col s12">
-              <div class="card horizontal hoverable item" id="' . md5($ID) . '">
-                  <div class="card-image valign-wrapper" style="width: 192px;">
-                      <img src="../../images/posts/' . $ID . '.' . $Extension . '" style="display: block; margin: 0 auto;">
-                  </div>
-                  <div class="card-stacked">
-                      <div class="card-content">
-                          <strong>' . $Title . '</strong>
-                          <p>' . $Creator . '</p>
-                      </div>
-                  </div>
-                  <div class="valign-wrapper">
-                      <i id="'.$row['PostID'].'" class="material-icons blue-text watch-later" style="font-size: 36px; margin-right: 24px;">watch_later</i>
-                  </div>
-              </div>
-          </div>';
-}
-
 function GetCategories() {
     require "../include/connect.php";
 
@@ -41,20 +22,20 @@ function GetCategories() {
 
 function GetArticlesByCategory($category) {
     require "../../include/connect.php";
+    include "../../post/functions.php";
 
     $sql = 'SELECT DISTINCT * FROM Articles A
             INNER JOIN Categories C ON A.CategoryID = C.CategoryID
+            INNER JOIN Users U ON A.CreatorID = U.UserCode
             WHERE C.CategoryName = "' . $category . '"';
 
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $Extension = glob("../../images/posts/" . $row['PostID'] . ".*");
-            $Extension = pathinfo($Extension[0]);
-            $Extension = $Extension['extension'];
+            $Image = glob("../../images/posts/" . $row['PostID'] . ".*");
 
-            addResult($row['PostID'], $Extension, $row['Title'], $row['Name']);
+            addHorizontalCard($row['PostID'], $Image[0], $row['Title'], $row['Name']);
         }
     }
 }
