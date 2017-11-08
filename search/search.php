@@ -100,8 +100,8 @@ function searchArticles($query, $maxWords) {
         $posts = getSimilar($query, 2);
 
         if($posts != NULL) {
-            echo '<p class="results">' . $result->num_rows . ' resultados para "' . $query . '"</p>';
             $count = count($posts);
+            echo '<p class="results">' . $count . ' resultados para "' . $query . '"</p>';
             for($i = 0; $i < $count; $i++) {
                 $currentPost = $posts[$i];
 

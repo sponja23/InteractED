@@ -55,8 +55,8 @@
                     case 3:
                         $_SESSION["UserCode"] = $conn->insert_id;
                         $_SESSION["Name"] = $Name;
-                        $Image = glob("../../images/users/" . $conn->insert_id . ".*");
-                        $_SESSION["Image"] = "/InteractED/images/users/" . basename($Image[0]);
+                        $Image = glob("/InteractED/images/users/" . $conn->insert_id . ".*");
+                        $_SESSION["Image"] = $Image[0];
                         $_SESSION["Email"] = $Email;
                         $_SESSION["Level"] = 0;
                         echo '<script>window.location.replace("../../");</script>';

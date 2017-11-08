@@ -3,7 +3,7 @@ function addHorizontalCard($ID, $Path, $Title, $Creator) {
     echo '<div class="col s12">
               <div class="card horizontal hoverable item" id="' . md5($ID) . '">
                   <div class="card-image valign-wrapper" style="width: 192px; height: 108px;">
-                      <img src="' . $Path . '" style="display: block; margin: 0 auto;">
+                      <img src="' . $Path . '" style="display: block; margin: 0 auto; max-height: 100%;">
                   </div>
                   <div class="card-stacked">
                       <div class="card-content">

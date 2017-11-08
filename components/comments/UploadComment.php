@@ -22,9 +22,8 @@ if (file_exists($File)) {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $Image = glob("../../images/users/" . $_SESSION['UserCode'] . ".*");
-            $Image = basename($Image[0]);
 
-            echo '{"CommentID":"' . $LastID . '","Name":"' . $row['Name'] . '","Image":"' . $Image . '"}';
+            echo '{"CommentID":"' . $LastID . '","Name":"' . $row['Name'] . '","Image":"' . $Image[0] . '"}';
         }
     }
 }

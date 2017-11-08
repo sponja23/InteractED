@@ -12,11 +12,9 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0)
     while ($row = $result->fetch_assoc()) {
         $PostImage = glob("../images/posts/" . $row["PostID"] . ".*");
-        $PostImage = "../images/posts/" . basename($PostImage[0]);
         $Title = $row["Title"];
         $PostID = $row["PostID"];
         $UserImage = glob("../images/users/" . $row["UserCode"] . ".*");
-        $UserImage = "../images/users/" . basename($UserImage[0]);
         $Name = $row["Name"];
         $CreateDate = $row["CreateDate"];
     }
@@ -44,10 +42,10 @@ if ($conn->query($sql) === TRUE)
         <?php require "../components/navigation/navigation.php"; ?>
 
         <div class="container">
-            <img id="post-image" src=<?= '"' . $PostImage . '"' ?>>
+            <img id="post-image" src=<?= '"' . $PostImage[0] . '"' ?>>
             <h5 id="post-title"><?= $Title ?></h5>
             <div class="valign-wrapper">
-                <img id="post-creator-image" class="circle" src=<?= '"' . $UserImage . '"' ?>>
+                <img id="post-creator-image" class="circle" src=<?= '"' . $UserImage[0] . '"' ?>>
                 <p>
                     <strong><?= $Name ?></strong>
                     <br>
@@ -66,7 +64,10 @@ if ($conn->query($sql) === TRUE)
                     echo '<a href="../editor?id=' . $_GET["id"] . '" id="edit" class="btn blue waves-effect waves-light">Editar post</a>'
                 ?>
             </div>
-            <?= file_get_contents("content/" . $_GET["id"] . "/index.html") ?>
+            <?php
+            if (file_exists("content/" . $_GET["id"] . "/index.html"))
+                echo file_get_contents("content/" . $_GET["id"] . "/index.html");
+            ?>
             Tags: <?php
             $sql = 'SELECT TagName FROM Tags
                     WHERE MD5(PostID) = "' . $_GET["id"] . '"';
