@@ -18,10 +18,10 @@
             while($row = $result->fetch_assoc()) {
                 $_SESSION[$_GET["id"] . "-Title"] = $row["Title"];
                 $_SESSION[$_GET["id"] . "-Category"] = $row["CategoryName"];
-                $PageContent = "";
-                if(!is_null($row["LastEditDate"])) {
-                    $PageContent = file_get_contents("../post/content/" . $_GET["id"] . "/index.html");
-                }
+                if(!is_null($row["LastEditDate"]))
+                    $old = "true";
+                else
+                    $old = "false";
             }
         }
         else {
@@ -280,12 +280,12 @@
                     <h5>Crear video</h5>
                     <div>
                         <div class="row">
-                            <iframe id="video-create-preview" width="100%"></iframe>
+                            <iframe id="video-create-preview" width="368" height="207" frameborder="0" gesture="media" allowfullscreen></iframe>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input id="video-create-src" class="input" />
-                                <label for="video-create-src">Link de embed</label>
+                                <input id="video-create-embed-link" class="input" />
+                                <label for="video-create-embed-link">Link de embed</label>
                             </div>
                         </div>
                     </div>
@@ -310,6 +310,7 @@
             var pageName = <?= "'" . $_SESSION[$_GET["id"] . "-Title"] . "'" ?>;
             var pageCategory = <?= "'" . $_SESSION[$_GET["id"] . "-Category"] . "'" ?>;
             var PostID = <?= "'" . $_GET["id"] . "'" ?>;
+            var oldPost = <?= $old ?>;
         </script>
         <script src="page_editor.js"></script>
 

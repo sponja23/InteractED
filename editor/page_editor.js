@@ -16,19 +16,26 @@ var positions;
 var debugSaveEnabled = false;
 
 $(document).ready(function() {
+    if(oldPost)
+        $.ajax({
+            url: "load_page.php",
+            type: "POST",
+            data: { ID : PostID },
+            success: function(content) {
+                pageContent = content;
+                console.log(pageContent);
+                init();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    else
+        init();
+    
+});
 
-    $.ajax({
-        url: "load_page.php",
-        type: "POST",
-        async: false,
-        data: { ID : PostID },
-        success: function(content) {
-            pageContent = content;
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-        }
-    });
+function init() {
 
     $content.css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
@@ -106,8 +113,8 @@ $(document).ready(function() {
         if(changeMade)
             savePage();
         changeMade = false;
-    }, 120000);
-});
+    }, 5000);
+}
 
 function savePositions(exception_id) {
     positions = {};
@@ -404,7 +411,6 @@ function createImage(src, old=false, other_css={}) {
         };
     else
         var css = other_css;
-    console.log($("#image-create-width").html());
     var $image = $("<img />")
     .attr(attributes)
     .css(css)
@@ -476,11 +482,11 @@ function editText($element, $new_text) {
 // Code: Video Creation
 
 function createVideo(embed_code, old=false, extra_css={}) {
-	var $video = $(embed_code);
-	$video.css(extra_css)
+    var $video = $(embed_code);
+    $video.css(extra_css)
     .attr("data-old", "true")
     .addClass("inner");
-	createWrapper($video);
+    createWrapper($video);
 }
 
 // Code: Wrapper
@@ -701,7 +707,7 @@ function savePage() {
         });
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
-        	maxHeight = bottomPos;
+            maxHeight = bottomPos;
         console.log(type + ": ");
         console.log($elem[0]);
         $newContent.append($elem);

@@ -1,1 +1,1 @@
-<?= file_get_contents("/InteractED/post/content/" . $_POST["ID"] . "/index.php"); ?>
+<?= file_get_contents("../post/content/" . $_POST["ID"] . "/index.html"); ?>

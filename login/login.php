@@ -12,7 +12,7 @@ if ($result->num_rows > 0) {
         $_SESSION["UserCode"] = $row["UserCode"];
         $_SESSION["Name"] = $row["Name"];
         $Image = glob("../images/users/" . $row["UserCode"] . ".*");
-        $_SESSION["Image"] = "/InteractED/images/users/" . basename($Image[0]);
+        $_SESSION["Image"] = $Image[0];
         $_SESSION["Email"] = $row["Email"];
         $_SESSION["Level"] = $row["Level"];
         echo '1';
