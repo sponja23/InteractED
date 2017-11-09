@@ -320,19 +320,21 @@ function initDialogs() {
         editText($selectedElement, $(textEditEditor.content.get()));
     });
 
-    $("#video-create-modal").modal({
+    //$("#video-create-preview").css("margin-left", $("#video-create-dialog").width() - $(""));
+
+    $("#video-create-dialog").modal({
         dismissible: true,
         endingTop: '50%',
         complete: function() {
-            $("#image-create-dialog .input").each(function(){
+            $("#video-create-dialog .input").each(function(){
                 $(this).val('').blur().removeClass("valid invalid");
             });
-            invalidateVideo();
+            $("#video-create-preview").attr("src", "");
         }
     });
 
     $("#video-create-button").click(function() {
-
+    	createVideo($("#video-create-embed-link").val());
     });
 }
 
@@ -364,7 +366,10 @@ function sharePage() {
 		url: "add_editors.php",
 		type: "POST",
 		async: true,
-		data: users
+		data: {
+			users: users,
+			id: PostID
+		}
 	});
 }
 
@@ -417,11 +422,8 @@ function invalidateImage() {
 }
 
 function updateVideoPreview() {
-
-}
-
-function invalidateVideo() {
-
+	var $embedCode = $($("#video-create-embed-link").val()).attr("src");
+	$("#video-create-preview").attr("src", $embedCode);
 }
 
 function openCreateDialog(type) {

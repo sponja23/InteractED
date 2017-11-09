@@ -186,16 +186,16 @@
                 </div>
             </div>
             <div id="share-page-dialog" class="modal valign-modal">
-				<div class="modal-content row">
-					<h5>Agregar Editores</h5>
-					<div class="col s12" id="share-page-inputs">
-						<div class="chips" id="share-page-users"></div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<a class="modal-action modal-close waves-effect waves-light btn-flat" id="share-page-cancel">Cancelar</a>
-					<a class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-button">Guardar</a>
-				</div>
+                <div class="modal-content row">
+                    <h5>Agregar Editores</h5>
+                    <div class="col s12" id="share-page-inputs">
+                        <div class="chips" id="share-page-users"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="share-page-cancel">Cancelar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-button">Guardar</a>
+                </div>
             </div>
             <div id="image-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
@@ -289,14 +289,14 @@
             </div>
             <div id="video-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    <h5>Crear video</h5>
+                    <h5 style="margin-bottom: 20px">Crear video</h5>
                     <div>
                         <div class="row">
                             <iframe id="video-create-preview" width="368" height="207" frameborder="0" gesture="media" allowfullscreen></iframe>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input id="video-create-embed-link" class="input" />
+                                <input id="video-create-embed-link" type="text" class="input" onchange="updateVideoPreview()"/>
                                 <label for="video-create-embed-link">Link de embed</label>
                             </div>
                         </div>

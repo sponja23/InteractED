@@ -57,6 +57,11 @@
     right: -8px;
 }
 
+#video-create-preview {
+    position: relative;
+    margin-left: calc(50% - 184px);
+}
+
 .overlay {
     position: absolute;
     display: block;
