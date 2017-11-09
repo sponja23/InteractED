@@ -5,9 +5,9 @@ $sql = 'SELECT CategoryName FROM Categories WHERE CategoryName ="' . $_POST["cat
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0)
-    echo '1';
-else
     echo '0';
+else
+    echo '1';
 
 $conn->close();
 ?>

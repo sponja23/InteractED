@@ -1,7 +1,7 @@
 <?php
 require "../include/connect.php";
 $sql = 'INSERT INTO Categories (CategoryName, Implemented) VALUES ("' . $_POST["Category"] . '", 0)';
-if ($conn->query($sql)){
+if ($conn->query($sql) === TRUE){
 	echo "1";
 }
 else{

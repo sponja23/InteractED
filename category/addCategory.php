@@ -26,19 +26,8 @@
                     <div class="card-panel black-text">
                         <span id="logo" class="blue-text">InteractED</span>
                         <h1 id="title">Add New Category*</h1>
-                        <p style="color:#757575">*Categories must be aproved by our moderators before being approved</p>
-                        <!-- <form id="new" action="result/" method="post" enctype="multipart/form-data">-->
-                            <!-- <div class="file-field input-field">
-                                <div class="btn blue">
-                                    <span>Imagen</span>
-                                    <input id="image-input" type="file" name="image">
-                                </div>
-                                <div class="file-path-wrapper">
-                                    <input id="image-path" class="file-path" type="text">
-                                </div>
-                            </div> -->
-
-                            <div class="input-field col s12">
+                        <p style="color:#757575">*Categories must be aproved by our moderators before being added</p>
+                        <div class="input-field col s12">
                                 <input id="category" name="category" type="text">
                                 <label for="category" data-error="Debe ingresar nombre de la categoria a agregar">Categoria</label>
                             </div>
@@ -50,7 +39,6 @@
                             <br><br>
                             <a id="cancel" class="btn-flat blue-text waves-effect">Cancelar</a>
                             <a id="add-button" class="btn blue waves-effect waves-light right">Agregar</a>
-                        <!--</form> -->
                     </div>
                 </div>
             </div>
@@ -96,18 +84,25 @@
                         type: "POST",
                         data: { Category: $( "#category" ).val()} ,
                         success: function (response) {
-                            if (response == '1'){
+                            if (response == '0'){
                                 //$( "#new-button" ).submit();
                                 $( "#error-message" ).html("Esta categoria ya existe");
                             }
-                            else if (response == 0){
+                            if (response == '1'){
                                 $.ajax({
                                     url: "send.php",
                                     type: "POST",
                                     data: { Category: $( "#category" ).val()} ,
                                     success: function (response) {
-                                        alert("Solicitud de categoria enviada correctamente");
-                                        window.back.history();
+                                        if (response == '1'){
+                                            alert("Solicitud de categoria enviada correctamente");
+                                            window.back.history();
+                                        }
+                                        if (response == '0') {
+                                            alert ("Error al mandar la solicitud, intente luego");
+                                            window.back.history();
+                                        }
+                                        
                                     },
                                     error: function(jqXHR, textStatus, errorThrown) {
                                         console.log(textStatus, errorThrown);
