@@ -164,6 +164,22 @@ function initDialogs() {
 
     $("#edit-page-button").click(editPage);
 
+    // Share Page Dialog
+
+    $("#share-page-dialog").modal({
+    	dismissible: true,
+    	endingTop: "50%",
+    	complete: function() {
+
+    	}
+    });
+
+    $("#share-page-users").material_chip();
+
+    $("#share-page-button").click(function(e) {
+    	sharePage();
+    });
+
     // Image Dialog
 
     $("#image-create-dialog").modal({
@@ -323,8 +339,6 @@ function initDialogs() {
 // Code: Page edit
 
 function openEditPageDialog() {
-    console.log("Editing page");
-    $("#side-nav-button").sideNav("hide");
     $("#edit-page-dialog").modal("open");
 }
 
@@ -333,6 +347,25 @@ function editPage() {
     pageCategory = $("#edit-page-category").val();
     $content.height($("#edit-page-height").val());
     changeMade = true;
+}
+
+// Code: Add editors
+
+function openSharePageDialog() {
+	$("#share-page-dialog").modal("open");
+}
+
+function sharePage() {
+	var data = $("#share-page-users").material_chip("data");
+	var users = [];
+	for(var chip in data)
+		users.push(chip.tag);
+	$.ajax({
+		url: "add_editors.php",
+		type: "POST",
+		async: true,
+		data: users
+	});
 }
 
 // Code: Image creation
@@ -402,7 +435,7 @@ function createImage(src, old=false, other_css={}) {
         "src": src,
         "data-type": "image",
         "data-snap": "true",
-        "data-deform": "false"
+        "data-aspect-ratio": "true"
     };
     if(!old)
         var css = {
@@ -430,7 +463,7 @@ function createImage(src, old=false, other_css={}) {
 function createText($inner_text, old=false, extra_css={}) {
     var attributes = {
         "data-type": "text",
-        "data-snap": "true"
+        "data-snap": true
     };;
     $inner_text.css("display", "block").attr(attributes);
     var $inner_content = $("<div></div>").append($inner_text).addClass("inner-content").css("display", "inline-block").attr(attributes);
@@ -569,7 +602,11 @@ function createWrapper($inner, idToUse = -1) {
         "contextmenu" : function(e) {
             e.stopPropagation();
 
-            var type = $(e.target).data("type");
+            var $target = $(e.target);
+            while(!$target.hasClass("object"))
+            	$target = $target.parent();
+
+            var type = $target.data("type");
             var contextMenuID = "#" + type + "-dropdown";
 
             $(".dropdown-button").each(function() {
@@ -580,8 +617,8 @@ function createWrapper($inner, idToUse = -1) {
             //alert($(e.target).data("snap"));
 
             $(contextMenuID + " li .toggle .material-icons").each(function() {
-                var value = $(e.target).data($(this).data("option"));
-                var icon = value ? "check_box" : "check_box_outline_blank";
+                var value = $target.attr("data-" + $(this).attr("data-option"));
+                var icon = value == "true" ? "check_box" : "check_box_outline_blank";
                 $(this).html(icon);
             });
 
@@ -640,6 +677,19 @@ function unselectElement() {
         $selectedElement.children(".handle").hide();
     }
     $selectedElement = $content;
+}
+
+function toggleSelectedSnap() {
+	$selectedElement.attr("data-snap", !($selectedElement.attr("data-snap") == "true"));
+	$selectedElement.draggable("option", "snap", !$selectedElement.draggable("option", "snap"));
+}
+
+function toggleSelectedAspectRatio() {
+	$selectedElement.attr("data-aspect-ratio", !($selectedElement.attr("data-aspect-ratio") == "true"));
+	if($selectedElement.resizable("option", "aspectRatio") != false)
+		$selectedElement.resizable("option", "aspectRatio", false);
+	else
+		$selectedElement.resizable("option", "aspectRatio", $selectedElement.width() / $selectedElement.height());
 }
 
 function removeSelectedElement() {

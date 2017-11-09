@@ -50,7 +50,7 @@
                 <a href="../" class="logo blue-text">InteractED</a>
                 <ul class="right">
                     <li><a onclick="savePage()"><i class="material-icons blue-text">save</i></a></li>
-                    <li><a class="btn blue waves-effect waves-light" style="padding: 0 15px;"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a></li>
+                    <li><a class="btn blue waves-effect waves-light" style="padding: 0 15px;" onclick="openSharePageDialog()"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a></li>
                 </ul>
             </div>
         </nav>
@@ -95,7 +95,7 @@
 
         <ul id="text-dropdown" class="dropdown-content">
             <li>
-                <a class="blue-text toggle">
+                <a class="blue-text toggle" onclick="toggleSelectedSnap()">
                     <i class="material-icons blue-text" data-option="snap"></i>
                     Alinear con objetos
                 </a>
@@ -117,14 +117,14 @@
 
         <ul id="image-dropdown" class="dropdown-content">
             <li>
-                <a class="blue-text toggle">
+                <a class="blue-text toggle" onclick="toggleSelectedSnap()">
                     <i class="material-icons blue-text" data-option="snap"></i>
                     Alinear con objetos
                 </a>
             </li>
             <li>
-                <a class="blue-text toggle">
-                    <i class="material-icons blue-text" data-option="deform"></i>
+                <a class="blue-text toggle" onclick="toggleSelectedAspectRatio()">
+                    <i class="material-icons blue-text" data-option="aspect-ratio"></i>
                     Mantener proporciones
                 </a>
             </li>
@@ -184,6 +184,18 @@
                     <a class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-cancel">Cancelar</a>
                     <a class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-button">Guardar</a>
                 </div>
+            </div>
+            <div id="share-page-dialog" class="modal valign-modal">
+				<div class="modal-content row">
+					<h5>Agregar Editores</h5>
+					<div class="col s12" id="share-page-inputs">
+						<div class="chips" id="share-page-users"></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a class="modal-action modal-close waves-effect waves-light btn-flat" id="share-page-cancel">Cancelar</a>
+					<a class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-button">Guardar</a>
+				</div>
             </div>
             <div id="image-create-dialog" class="modal valign-modal">
                 <div class="modal-content row">
