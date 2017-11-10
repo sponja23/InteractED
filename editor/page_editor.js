@@ -17,7 +17,7 @@ var positions;
 var debugSaveEnabled = false;
 var onDialog = false;
 
-var zIndexOrder = [null];
+var zIndexOrder = [];
 
 $(document).ready(function() {
     if(oldPost)
@@ -27,6 +27,10 @@ $(document).ready(function() {
             data: { ID : PostID },
             success: function(content) {
                 pageContent = content;
+                var numObjects = $(pageContent).children().length;
+                for(var i = 0; i < numObjects; i++) {
+                    zIndexOrder.push(null);
+                }
                 init();
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -60,10 +64,6 @@ function init() {
 
     $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
-
-    for(var i = 0; i < pageContent.children().length; i++) {
-        zIndexOrder.push(null);
-    }
 
     $(pageContent).children().each(function(){
         $element = $(this);
@@ -468,12 +468,6 @@ function updateVideoPreview() {
     $("#video-create-preview").attr("src", $embedCode);
 }
 
-function openCreateDialog(type) {
-    console.log("opening: #" + type + "-create-dialog");
-    $("#" + type + "-create-dialog").modal("open");
-    $(".sideNav-button").sideNav("hide");
-}
-
 function createImage(src, old=false, other_css={}) {
     var attributes = {
         "src": src,
@@ -534,6 +528,7 @@ function createText($inner_text, old=false, extra_css={}) {
 }
 
 function editText($element, $new_text) {
+    var zIndex = $element.css("z-index");
     var $inner = $element.children(".inner");
     $inner.css({
         "left": $element.css("left"),
@@ -548,7 +543,8 @@ function editText($element, $new_text) {
     $inner.children(".inner-content").replaceWith($new_content);
     $inner.css({
         "width": $new_content.width() + "px",
-        "height": $new_content.height() + "px"
+        "height": $new_content.height() + "px",
+        "z-index": zIndex
     });
     $inner.attr({
         "data-old": "true"
@@ -590,7 +586,12 @@ function createWrapper($inner, idToUse = -1) {
 
     var $newElement = $("<div></div>").append($inner);
 
+    var old = $inner.data("old");
+
     var id = idToUse == -1 ? nextID : idToUse;
+
+    if(old)
+        var zIndex = parseInt($inner.css("z-index"));
 
     $newElement.draggable({
         snap: true,
@@ -703,7 +704,7 @@ function createWrapper($inner, idToUse = -1) {
 
     $newElement.appendTo($content);
 
-    if($inner.data("old")) {
+    if(old) {
         $newElement.css({
             "left": "0px",
             "top": "0px"
@@ -716,15 +717,14 @@ function createWrapper($inner, idToUse = -1) {
             "left": "",
             "top": ""
         });
-        $newElement.css({
-            "z-index": $inner.css("z-index")
-        });
-        giveZIndex($newElement, parseInt($inner.css("z-index")));
+        giveZIndex($newElement, zIndex);
     }
     else {
         giveZIndex($newElement);
     }
     
+    $inner.css("z-index", 1);
+
     selectElement($newElement);
     unselectElement();
     
@@ -768,6 +768,7 @@ function toggleSelectedAspectRatio() {
 
 function removeSelectedElement() {
     var id = $selectedElement.attr("id");
+    removeZIndex($selectedElement);
     savePositions(id);
     $selectedElement.remove();
     resetPositions(id);
@@ -776,46 +777,46 @@ function removeSelectedElement() {
 
 // Code: z Index
 
-function getZIndex($element) {
-    for(var i = 0; i < zIndexOrder.length; i++)
-        if($element.attr("id") == getZIndex[i].attr("id"))
-            return i;
-}
-
 function giveZIndex($element, index = -1) {
-    if(index != -1) {
+    if(index == -1) {
         zIndexOrder.push($element);
-        $element.css("z-index", zIndexOrder.length - 1);
+        $element.css("z-index", zIndexOrder.length);
     }
     else {
-        zIndexOrder[index] = $element;
+        zIndexOrder[index - 1] = $element;
         $element.css("z-index", index);
     }
 }
 
 function removeZIndex($element) {
-    zIndexOrder.splice(getZIndex($element), 1);
+    zIndexOrder.splice(parseInt($element.css("z-index")) - 1, 1);
+    updateZIndeces();
+}
+
+function updateZIndeces() {
+    for(var i = 0; i < zIndexOrder.length; i++)
+        zIndexOrder[i].css("z-index", i + 1);
 }
 
 function pullForward($element) {
-    var pos = getZIndex($element);
+    var pos = parseInt($element.css("z-index")) - 1;
     if(pos != zIndexOrder.length - 1) {
         var tmp = zIndexOrder[pos];
         zIndexOrder[pos] = zIndexOrder[pos + 1];
         zIndexOrder[pos + 1] = tmp;
-        $element.css("z-index", pos + 1);
-        zIndexOrder[pos].css("z-index", pos);
+        $element.css("z-index", pos + 2);
+        zIndexOrder[pos].css("z-index", pos + 1);
     }
 }
 
 function pushBackwards($element) {
-    var pos = getZIndex($element);
-    if(pos > 1) {
+    var pos = parseInt($element.css("z-index")) - 1;
+    if(pos > 0) {
         var tmp = zIndexOrder[pos];
         zIndexOrder[pos] = zIndexOrder[pos - 1];
         zIndexOrder[pos] = tmp;
-        $element.css("z-index", pos);
-        zIndexOrder[pos].css("z-index", pos - 1);
+        $element.css("z-index", pos + 1);
+        zIndexOrder[pos].css("z-index", pos);
     }
 }
 

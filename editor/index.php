@@ -328,7 +328,7 @@
             </div>
         </div>
 
-        <div id="content" class="container" data-type="content" onclick="unselectElement();" style="position: relative; z-index: -1;">
+        <div id="content" class="container" data-type="content" onclick="unselectElement();" style="position: relative;">
 
         </div>
 
