@@ -102,7 +102,7 @@
                 </a>
             </li>
             <li>
-                <a class="blue-text" onclick="openDialog('#text-edit-dialog')">
+                <a class="blue-text" onclick="openDialog('#text-edit-dialog');textEditEditor.content.set($selectedElement.find('.inner-content').html());">
                     <i class="material-icons blue-text">edit</i>
                     Editar
                 </a>
@@ -328,7 +328,7 @@
             </div>
         </div>
 
-        <div id="content" class="container" data-type="content" onclick="unselectElement();" style="position: relative;">
+        <div id="content" class="container" data-type="content" onclick="unselectElement();" style="position: relative; z-index: -1;">
 
         </div>
 

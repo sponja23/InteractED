@@ -17,7 +17,7 @@ var positions;
 var debugSaveEnabled = false;
 var onDialog = false;
 
-var zIndexOrder = [];
+var zIndexOrder = [null];
 
 $(document).ready(function() {
     if(oldPost)
@@ -27,7 +27,6 @@ $(document).ready(function() {
             data: { ID : PostID },
             success: function(content) {
                 pageContent = content;
-                console.log(pageContent);
                 init();
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -62,6 +61,10 @@ function init() {
     $("#side-nav-button").sideNav();
     $(".collapsible").collapsible();
 
+    for(var i = 0; i < pageContent.children().length; i++) {
+        zIndexOrder.push(null);
+    }
+
     $(pageContent).children().each(function(){
         $element = $(this);
         console.log("Loading " + $element.data("type"));
@@ -69,6 +72,7 @@ function init() {
         switch($element.data("type")) {
             case "image":
                 createImage($element.attr("src"), true, {
+                    "z-index": $element.css("z-index"),
                     "left": $element.css("left"),
                     "top": $element.css("top"),
                     "width": $element.css("width"),
@@ -77,12 +81,14 @@ function init() {
                 break;
             case "text":
                 createText($element.children(), true, {
+                    "z-index": $element.css("z-index"),
                     "left": $element.css("left"),
                     "top": $element.css("top")
                 });
                 break;
             case "video":
                 createVideo($element, true, {
+                    "z-index": $element.css("z-index"),
                     "left": $element.css("left"),
                     "top": $element.css("top")
                 });
@@ -375,6 +381,7 @@ function openEditPageDialog() {
 
 function openDialog(id) {
     $(id).modal("open");
+    onDialog = true;
 }
 
 function editPage() {
@@ -695,7 +702,7 @@ function createWrapper($inner, idToUse = -1) {
     });
 
     $newElement.appendTo($content);
-    
+
     if($inner.data("old")) {
         $newElement.css({
             "left": "0px",
@@ -709,6 +716,13 @@ function createWrapper($inner, idToUse = -1) {
             "left": "",
             "top": ""
         });
+        $newElement.css({
+            "z-index": $inner.css("z-index")
+        });
+        giveZIndex($newElement, parseInt($inner.css("z-index")));
+    }
+    else {
+        giveZIndex($newElement);
     }
     
     selectElement($newElement);
@@ -760,13 +774,48 @@ function removeSelectedElement() {
     changeMade = true;
 }
 
-function openEditDialog(type) {
-    console.log("opening: #" + type + "-edit-dialog");
-    $("#" + type + "-edit-dialog").modal("open");
-    $(".sideNav-button").sideNav("hide");
-    switch(type) {
-        case "text":
-            textEditEditor.content.set($selectedElement.find(".inner-content").html());
+// Code: z Index
+
+function getZIndex($element) {
+    for(var i = 0; i < zIndexOrder.length; i++)
+        if($element.attr("id") == getZIndex[i].attr("id"))
+            return i;
+}
+
+function giveZIndex($element, index = -1) {
+    if(index != -1) {
+        zIndexOrder.push($element);
+        $element.css("z-index", zIndexOrder.length - 1);
+    }
+    else {
+        zIndexOrder[index] = $element;
+        $element.css("z-index", index);
+    }
+}
+
+function removeZIndex($element) {
+    zIndexOrder.splice(getZIndex($element), 1);
+}
+
+function pullForward($element) {
+    var pos = getZIndex($element);
+    if(pos != zIndexOrder.length - 1) {
+        var tmp = zIndexOrder[pos];
+        zIndexOrder[pos] = zIndexOrder[pos + 1];
+        zIndexOrder[pos + 1] = tmp;
+        $element.css("z-index", pos + 1);
+        zIndexOrder[pos].css("z-index", pos);
+    }
+}
+
+function pushBackwards($element) {
+    var pos = getZIndex($element);
+    if(pos > 1) {
+        var tmp = zIndexOrder[pos];
+        zIndexOrder[pos] = zIndexOrder[pos - 1];
+        zIndexOrder[pos] = tmp;
+        $element.css("z-index", pos);
+        zIndexOrder[pos].css("z-index", pos - 1);
     }
 }
 
@@ -789,15 +838,17 @@ function savePage() {
                     "data-extension": $inner.data("extension"),
                     "data-old": "true"
                 }).css({
+                    "z-index": $(this).css("z-index"),
                     "width": $inner.width() + "px",
                     "height": $inner.height() + "px"
                 });
-                console.log($elem.attr("src"));
                 break;
             case "text":
                 var $elem = $inner.children().clone().attr({
                     "data-type": "text",
                     "data-old": "true"
+                }).css({
+                    "z-index": $(this).css("z-index")
                 });
                 pageTranscript += $elem.text() + " ";
                 break;
@@ -808,6 +859,7 @@ function savePage() {
                     "width": $(this).width() + "px",
                     "height": $(this).height() + "px"
                 }).css({
+                    "z-index": $(this).css("z-index"),
                     "width": $(this).width() + "px",
                     "height": $(this).height() + "px"
                 });
@@ -828,7 +880,6 @@ function savePage() {
 
     $newContent.css({
         "position": "relative",
-        //"width": $("#content").width() + "px",
         "height": maxHeight + "px"
     });
 
