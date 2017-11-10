@@ -22,7 +22,8 @@ else
     header("Location: ../");
 
 $sql = "INSERT INTO Visited (PostID, UserCode, DateLastVisited)
-        VALUES (" . $PostID . ", " . $_SESSION["UserCode"] . ", CURDATE());";
+        VALUES (" . $PostID . ", " . $_SESSION["UserCode"] . ", CURTIME());";
+
 $conn->query($sql);
 ?>
 <!DOCTYPE html>

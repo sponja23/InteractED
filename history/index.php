@@ -30,7 +30,7 @@
         <?php require "../components/navigation/navigation.php"; ?>
 
         <div class="container">
-            <h5>History</h5>
+            <h5>Historial</h5>
             <?php
                 include "recents.php";
                 GetRecents();
@@ -39,19 +39,6 @@
         <script>
             $( ".item" ).click(function() {
                 window.location.href = "../post?id=" + $(this).attr("id");
-            });
-            $( ".watch-later"  ).click(function() {
-                $.ajax({
-                        url: "../watchlater/add.php",
-                        type: "POST",
-                        data: { id: $(this).attr("id")} ,
-                        success: function (response) {
-                            alert("Added to Watch Later");
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus, errorThrown);
-                        }
-                    });
             });
         </script>
     </body>
