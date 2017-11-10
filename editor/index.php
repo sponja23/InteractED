@@ -50,7 +50,7 @@
                 <a href="../" class="logo blue-text">InteractED</a>
                 <ul class="right">
                     <li><a onclick="savePage()"><i class="material-icons blue-text">save</i></a></li>
-                    <li><a class="btn blue waves-effect waves-light" style="padding: 0 15px;" onclick="openSharePageDialog()"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a></li>
+                    <li><a class="btn blue waves-effect waves-light" style="padding: 0 15px;" onclick="openDialog('#share-page-dialog')"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a></li>
                 </ul>
             </div>
         </nav>
@@ -58,35 +58,36 @@
         <a id="content-dropdown-activator" class="dropdown-button hide" data-activates="content-dropdown" data-constrainWidth="false"></a> 
         <a id="text-dropdown-activator" class="dropdown-button hide" data-activates="text-dropdown" data-constrainWidth="false"></a>
         <a id="image-dropdown-activator" class="dropdown-button hide" data-activates="image-dropdown" data-constrainWidth="false"></a>
+        <a id="video-dropdown-activator" class="dropdown-button hide" data-activates="video-dropdown" data-constrainWidth="false"></a>
 
         <ul id="content-dropdown" class="dropdown-content">
             <li>
-                <a class="blue-text" onclick="openCreateDialog('text')">
+                <a class="blue-text" onclick="openDialog('#text-create-dialog')">
                     <i class="material-icons blue-text">format_shapes</i>
                     Crear texto
                 </a>
             </li>
             <li>
-                <a class="blue-text" onclick="openCreateDialog('image')">
+                <a class="blue-text" onclick="openDialog('#image-create-dialog')">
                     <i class="material-icons blue-text">photo</i>
                     Crear imagen
                 </a>
             </li>
             <li>
-                <a class="blue-text" onclick="openCreateDialog('video')">
+                <a class="blue-text" onclick="openDialog('#video-create-dialog')">
                     <i class="material-icons blue-text">ondemand_video</i>
                     Crear video
                 </a>
             </li>
             <li>
-                <a class="blue-text" onclick="openCreateDialog('custom')">
+                <a class="blue-text" onclick="openDialog('#custom-create-dialog')">
                     <i class="material-icons blue-text">code</i>
                     Crear personalizado
                 </a>
             </li>
             <li class="divider"></li>
             <li>
-                <a class="blue-text" onclick="openEditPageDialog()">
+                <a class="blue-text" onclick="openDialog('#edit-page-dialog')">
                     <i class="material-icons blue-text">settings</i>
                     Propiedades de la pagina
                 </a>
@@ -101,7 +102,7 @@
                 </a>
             </li>
             <li>
-                <a class="blue-text" onclick="openEditDialog('text')">
+                <a class="blue-text" onclick="openDialog('#text-edit-dialog')">
                     <i class="material-icons blue-text">edit</i>
                     Editar
                 </a>
@@ -137,24 +138,40 @@
             </li>
         </ul>
 
+        <ul id="video-dropdown" class="dropdown-content">
+            <li>
+                <a class="blue-text toggle" onclick="toggleSelectedSnap()">
+                    <i class="material-icons blue-text" data-option="snap"></i>
+                    Alinear con objetos
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a class="blue-text" onclick="removeSelectedElement()">
+                    <i class="material-icons blue-text">delete</i>
+                    Borrar
+                </a>
+            </li>
+        </ul>
+
         <div class="fixed-action-btn">
             <a class="btn-floating btn-large blue darken-2">
                 <i class="material-icons">add</i>
             </a>
             <ul>
-                <li class="valign-wrapper" onclick="openCreateDialog('text')">
+                <li class="valign-wrapper" onclick="openDialog('#text-create-dialog')">
                     <a class="btn-floating blue darken-3 mobile-fab-button"><i class="material-icons">format_shapes</i></a>
                     <a class="btn-floating blue darken-3 mobile-fab-tip">Crear texto</a>
                 </li>
-                <li class="valign-wrapper" onclick="openCreateDialog('image')">
+                <li class="valign-wrapper" onclick="openDialog('#image-create-dialog')">
                     <a class="btn-floating blue darken-3 mobile-fab-button"><i class="material-icons">photo</i></a>
                     <a class="btn-floating blue darken-3 mobile-fab-tip">Crear imagen</a>
                 </li>
-                <li class="valign-wrapper" onclick="openCreateDialog('video')">
+                <li class="valign-wrapper" onclick="openDialog('#video-create-dialog')">
                     <a class="btn-floating blue darken-3 mobile-fab-button"><i class="material-icons">ondemand_video</i></a>
                     <a class="btn-floating blue darken-3 mobile-fab-tip">Crear video</a>
                 </li>
-                <li class="valign-wrapper" onclick="openCreateDialog('custom')">
+                <li class="valign-wrapper" onclick="openDialog('#custom-create-dialog')">
                     <a class="btn-floating blue darken-3 mobile-fab-button"><i class="material-icons">code</i></a>
                     <a class="btn-floating blue darken-3 mobile-fab-tip">Crear personalizado</a>
                 </li>
@@ -187,14 +204,14 @@
             </div>
             <div id="share-page-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    <h5>Agregar Editores</h5>
+                    <h5 style="margin-bottom: 40px">Agregar Editores</h5>
                     <div class="col s12" id="share-page-inputs">
-                        <div class="chips" id="share-page-users"></div>
+                        <div class="chips-placeholder" id="share-page-users"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <a class="modal-action modal-close waves-effect waves-light btn-flat" id="share-page-cancel">Cancelar</a>
-                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="edit-page-button">Guardar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="share-page-button">Compartir</a>
                 </div>
             </div>
             <div id="image-create-dialog" class="modal valign-modal">
@@ -212,6 +229,8 @@
                             <strong>Alto:</strong>
                             <br>
                             <span id="image-create-height" class="input" data-parameter="height">200</span>px
+                            <br>
+                            <div id="image-create-message"></div>
                         </p>
                     </div>
                     <div class="input-field col s12">

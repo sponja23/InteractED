@@ -1,5 +1,6 @@
 var categories;
 var textCreateEditor;
+var textEditEditor;
 
 var pageContent;
 
@@ -14,6 +15,9 @@ var saveInterval;
 var positions;
 
 var debugSaveEnabled = false;
+var onDialog = false;
+
+var zIndexOrder = [];
 
 $(document).ready(function() {
     if(oldPost)
@@ -82,7 +86,9 @@ function init() {
                     "left": $element.css("left"),
                     "top": $element.css("top")
                 });
+                break;
             default:
+
                 console.log("No type detected");
         }
     });
@@ -155,7 +161,10 @@ function initDialogs() {
     $("#edit-page-dialog").modal({
         dismissible: true,
         endingTop: "50%",
-        opacity: 0.5
+        opacity: 0.5,
+        complete: function() {
+            onDialog = false;
+        }
     });
 
     $("#edit-page-name").val(pageName);
@@ -167,17 +176,33 @@ function initDialogs() {
     // Share Page Dialog
 
     $("#share-page-dialog").modal({
-    	dismissible: true,
-    	endingTop: "50%",
-    	complete: function() {
-
-    	}
+        dismissible: true,
+        endingTop: "50%",
+        complete: function() {
+            onDialog = false;
+        }
     });
 
-    $("#share-page-users").material_chip();
+    $.ajax({
+        url: "get_editors.php",
+        type: "POST",
+        async: true,
+        dataType: "json",
+        data: { 
+            id: PostID
+        },
+        success: function(editors) {
+            for(var i = 0; i < editors.length; i++)
+                $("<div class='chip'>" + editors[i] + "<i class='material-icons close'>close</i></div>").insertBefore('input[placeholder="Agregar editores"]');
+        }
+    });
+
+    $("#share-page-users").material_chip({
+        placeholder: "Agregar editores"
+    });
 
     $("#share-page-button").click(function(e) {
-    	sharePage();
+        sharePage();
     });
 
     // Image Dialog
@@ -192,6 +217,7 @@ function initDialogs() {
                 });
                 invalidateImage();
             }
+            onDialog = false;
         } 
     });
 
@@ -244,7 +270,7 @@ function initDialogs() {
             $("#text-create-border-style").val('none');
             $("#text-create-border-color").val('#000000');
             $("#text-create-border-width").val('0');
-            
+            onDialog = false;
         }
     });
 
@@ -272,7 +298,7 @@ function initDialogs() {
         languages: ['en', 'es'],
         ui: {
             toolbar:  {
-                items: [ 'undo', 'style', 'emphasis', 'align', 'listindent', 'format', 'tools' ]
+                items: [ 'undo', 'style', 'format', 'emphasis', 'align', 'listindent', 'tools' ]
             }
         }
     });
@@ -286,6 +312,7 @@ function initDialogs() {
         endingTop: '50%',
         complete: function() {
             textEditEditor.content.set('');
+            onDialog = false;
         }
     });
 
@@ -320,7 +347,7 @@ function initDialogs() {
         editText($selectedElement, $(textEditEditor.content.get()));
     });
 
-    //$("#video-create-preview").css("margin-left", $("#video-create-dialog").width() - $(""));
+    // Video Dialog
 
     $("#video-create-dialog").modal({
         dismissible: true,
@@ -330,11 +357,12 @@ function initDialogs() {
                 $(this).val('').blur().removeClass("valid invalid");
             });
             $("#video-create-preview").attr("src", "");
+            onDialog = false;
         }
     });
 
     $("#video-create-button").click(function() {
-    	createVideo($("#video-create-embed-link").val());
+        createVideo($("#video-create-embed-link").val());
     });
 }
 
@@ -342,6 +370,11 @@ function initDialogs() {
 
 function openEditPageDialog() {
     $("#edit-page-dialog").modal("open");
+    onDialog = true;
+}
+
+function openDialog(id) {
+    $(id).modal("open");
 }
 
 function editPage() {
@@ -354,23 +387,25 @@ function editPage() {
 // Code: Add editors
 
 function openSharePageDialog() {
-	$("#share-page-dialog").modal("open");
+    $("#share-page-dialog").modal("open");
+    onDialog = true;
 }
 
 function sharePage() {
-	var data = $("#share-page-users").material_chip("data");
-	var users = [];
-	for(var chip in data)
-		users.push(chip.tag);
-	$.ajax({
-		url: "add_editors.php",
-		type: "POST",
-		async: true,
-		data: {
-			users: users,
-			id: PostID
-		}
-	});
+    var data = $("#share-page-users").material_chip("data");
+    var users = [];
+    for(var i = 0; i < data.length; i++)
+        users.push(data[i].tag);
+    console.log(users);
+    $.ajax({
+        url: "add_editors.php",
+        type: "POST",
+        async: true,
+        data: {
+            users: users,
+            id: PostID
+        }
+    });
 }
 
 // Code: Image creation
@@ -422,8 +457,8 @@ function invalidateImage() {
 }
 
 function updateVideoPreview() {
-	var $embedCode = $($("#video-create-embed-link").val()).attr("src");
-	$("#video-create-preview").attr("src", $embedCode);
+    var $embedCode = $($("#video-create-embed-link").val()).attr("src");
+    $("#video-create-preview").attr("src", $embedCode);
 }
 
 function openCreateDialog(type) {
@@ -518,9 +553,27 @@ function editText($element, $new_text) {
 
 function createVideo(embed_code, old=false, extra_css={}) {
     var $video = $(embed_code);
+    var attr = {
+        "data-type": "video",
+        "data-snap": "true"
+    };
+    if(!old)
+        var css = {
+            "width": "368px",
+            "height": "207px"
+        }
+    else
+        var css = {
+            "width": $video.attr("width"),
+            "height": $video.attr("height")
+        }
     $video.css(extra_css)
-    .attr("data-old", "true")
+    .attr(attr)
+    .css(css)
     .addClass("inner");
+    if(old) {
+        $video.attr("data-old", "true");
+    }
     createWrapper($video);
 }
 
@@ -570,8 +623,13 @@ function createWrapper($inner, idToUse = -1) {
         $newElement.children(".handle").hide();
     }
 
-    if($inner.data("type") == "video")
-        $newElement.append("<div class='overlay'><i class='material-icons large'>open with</i></div>");
+    if($inner.data("type") == "video") {
+        $newElement.append("<div class='overlay'><i class='material-icons large blue-text'>open_with</i></div>");
+        $inner.attr({
+            "width": "100%",
+            "height": "100%"
+        })
+    }
 
 
     $newElement.children(".inner").css({
@@ -606,7 +664,7 @@ function createWrapper($inner, idToUse = -1) {
 
             var $target = $(e.target);
             while(!$target.hasClass("object"))
-            	$target = $target.parent();
+                $target = $target.parent();
 
             var type = $target.data("type");
             var contextMenuID = "#" + type + "-dropdown";
@@ -644,8 +702,8 @@ function createWrapper($inner, idToUse = -1) {
             "top": "0px"
         });
         $newElement.css({
-            "left": parseInt($inner.css("left").slice(0, $inner.css("left").lastIndexOf("px"))) - $inner.offset().left + $content.offset().left,
-            "top": parseInt($inner.css("top").slice(0, $inner.css("top").lastIndexOf("px"))) - $inner.offset().top + $content.offset().top
+            "left": parseInt($inner.css("left").slice(0, $inner.css("left").lastIndexOf("px"))) - $newElement.offset().left + $content.offset().left,
+            "top": parseInt($inner.css("top").slice(0, $inner.css("top").lastIndexOf("px"))) - $newElement.offset().top + $content.offset().top
         });
         $inner.css({
             "left": "",
@@ -682,16 +740,16 @@ function unselectElement() {
 }
 
 function toggleSelectedSnap() {
-	$selectedElement.attr("data-snap", !($selectedElement.attr("data-snap") == "true"));
-	$selectedElement.draggable("option", "snap", !$selectedElement.draggable("option", "snap"));
+    $selectedElement.attr("data-snap", !($selectedElement.attr("data-snap") == "true"));
+    $selectedElement.draggable("option", "snap", !$selectedElement.draggable("option", "snap"));
 }
 
 function toggleSelectedAspectRatio() {
-	$selectedElement.attr("data-aspect-ratio", !($selectedElement.attr("data-aspect-ratio") == "true"));
-	if($selectedElement.resizable("option", "aspectRatio") != false)
-		$selectedElement.resizable("option", "aspectRatio", false);
-	else
-		$selectedElement.resizable("option", "aspectRatio", $selectedElement.width() / $selectedElement.height());
+    $selectedElement.attr("data-aspect-ratio", !($selectedElement.attr("data-aspect-ratio") == "true"));
+    if($selectedElement.resizable("option", "aspectRatio") != false)
+        $selectedElement.resizable("option", "aspectRatio", false);
+    else
+        $selectedElement.resizable("option", "aspectRatio", $selectedElement.width() / $selectedElement.height());
 }
 
 function removeSelectedElement() {
@@ -747,8 +805,11 @@ function savePage() {
                 var $elem = $inner.clone().attr({
                     "data-type": "video",
                     "data-old": "true",
-                    "width": $inner.width() + "px",
-                    "height": $inner.height() + "px"
+                    "width": $(this).width() + "px",
+                    "height": $(this).height() + "px"
+                }).css({
+                    "width": $(this).width() + "px",
+                    "height": $(this).height() + "px"
                 });
                 break;
         }
