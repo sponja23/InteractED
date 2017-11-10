@@ -9,12 +9,10 @@ function GetCategories() {
     if ($result->num_rows > 0) 
     {
         while ($row = $result->fetch_assoc()) {
-            $Extension = glob("../images/categories/" . $row['CategoryID'] . ".*");
-            $Extension = pathinfo($Extension[0]);
-            $Extension = $Extension['extension'];
+            $Image = glob("../images/categories/" . $row['CategoryID'] . ".*");
 
-            echo '<a class="categoryOption waves-effect" id="' . $row['CategoryName'] . '">
-                      <img src="../images/categories/' . $row['CategoryID'] . '.' . $Extension . '" class="circle" width="56" height="56">
+            echo '<a id="' . $row['CategoryName'] . '" class="categoryOption waves-effect waves-light">
+                      <img src="' . $Image[0] . '" class="circle" width="56" height="56">
                   </a>';
         }
     }

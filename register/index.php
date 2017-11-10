@@ -117,6 +117,8 @@
                                 $( "#error-message" ).html("Ya esta en uso ese usuario, debe elegir otro");
                             else if (response == '2')
                                 $( "#error-message" ).html("Ya esta en uso ese email, debe usar otro");
+                            else if (response == '12' || response == '21')
+                                $( "#error-message" ).html("Ya estan en uso ese email y ese usuario, debe usar otros");
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log(textStatus, errorThrown);

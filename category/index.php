@@ -13,12 +13,6 @@
                 cursor: pointer;
                 cursor: hand;
             }
-
-            .results {
-                font-size: 1.1rem;
-                font-weight: 400;
-                line-height: 2rem;
-            }
         </style>
 
         <?php require "../include/scripts.html"; ?>
