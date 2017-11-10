@@ -69,11 +69,7 @@
                 });
             });
             $( "#add-button" ).click(function() {
-                /*if ($( "#image-path" ).val() == "")
-                {
-                    $( "#error-message" ).html("Debe seleccionar una imagen");
-                }
-                else */if ($( "#category" ).val() == "")
+                if ($( "#category" ).val() == "")
                 {
                     $( "#category" ).addClass("validate invalid").focus();
                 }
@@ -85,7 +81,6 @@
                         data: { Category: $( "#category" ).val()} ,
                         success: function (response) {
                             if (response == '0'){
-                                //$( "#new-button" ).submit();
                                 $( "#error-message" ).html("Esta categoria ya existe");
                             }
                             if (response == '1'){
@@ -96,11 +91,11 @@
                                     success: function (response) {
                                         if (response == '1'){
                                             alert("Solicitud de categoria enviada correctamente");
-                                            window.back.history();
+                                            window.history.back();
                                         }
                                         if (response == '0') {
                                             alert ("Error al mandar la solicitud, intente luego");
-                                            window.back.history();
+                                            window.history.back();
                                         }
                                         
                                     },

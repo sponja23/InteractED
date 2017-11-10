@@ -31,6 +31,7 @@
 						else{
 							var loc = "confirmed/?id=";
 							window.location.href = loc.concat(response);
+
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown) {

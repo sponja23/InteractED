@@ -25,8 +25,8 @@
                 <div class="col s12 m6 offset-m3">
                     <div class="card-panel black-text">
                         <span id="logo" class="blue-text">InteractED</span>
-                        <h1 id="title">Add Photo to New Category</h1>
-                        <form id="new" action="result/" method="post" enctype="multipart/form-data">
+                        <h4 id="title">Add Photo to new category</h4>
+                        <form id="new" action="upload.php" method="post" enctype="multipart/form-data">
                             <div class="file-field input-field">
                                 <div class="btn blue">
                                     <span>Imagen</span>
@@ -36,6 +36,7 @@
                                     <input id="image-path" class="file-path" type="text">
                                 </div>
                             </div>
+                            <input type="text" name="id" id="hiddenId" value="<?php echo $_GET["ID"];?>">
                             <label id="error-message" class="red-text">&nbsp;</label>
                             <br><br>
                             <a id="cancel" class="btn-flat blue-text waves-effect">Cancelar</a>
@@ -48,6 +49,10 @@
 
         <?php require "../../include/scripts.html"; ?>
         <script type="text/javascript">
+            $(document).ready(function(){
+                $("#hiddenId").hide();
+            });
+
         	$( "#add-button" ).click(function() {
                 if ($( "#image-path" ).val() == "")
                 {
@@ -55,22 +60,13 @@
                 }
                 else
                 {
-                	var formData = new FormData();
-                	formData.append("image", $("#image-input")[0].files[0])
-                	$.ajax({
-                    	url: "upload_category.php?name=" + $( "#category" ).val(),
-                        type: "POST",
-                        processData: false,
-                        contentType: false,
-                        data: formData,
-                        success: function() {
-                        	window.history.back();
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                        	console.log(textStatus, errorThrown);
-                        }
-                    });
+                	("#new").submit();
                 }
+                });
+                $( "#cancel" ).click(function() {
+                    window.history.back();
+                    //FALTA QUE NO SE ACEPTE LO QUE SE ACEPTO
+                });
         </script>
     </body>
 </html>
