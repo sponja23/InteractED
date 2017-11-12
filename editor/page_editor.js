@@ -62,42 +62,13 @@ function init() {
         e.preventDefault();
     });
 
-    $("#side-nav-button").sideNav();
-    $(".collapsible").collapsible();
+    loadPage();
 
-    $(pageContent).children().each(function(){
-        $element = $(this);
-        console.log("Loading " + $element.data("type"));
-        console.log($element[0]);
-        switch($element.data("type")) {
-            case "image":
-                createImage($element.attr("src"), true, {
-                    "z-index": $element.css("z-index"),
-                    "left": $element.css("left"),
-                    "top": $element.css("top"),
-                    "width": $element.css("width"),
-                    "height": $element.css("height")
-                });
-                break;
-            case "text":
-                createText($element.children(), true, {
-                    "z-index": $element.css("z-index"),
-                    "left": $element.css("left"),
-                    "top": $element.css("top")
-                });
-                break;
-            case "video":
-                createVideo($element, true, {
-                    "z-index": $element.css("z-index"),
-                    "left": $element.css("left"),
-                    "top": $element.css("top")
-                });
-                break;
-            default:
-
-                console.log("No type detected");
-        }
+    $(document).keydown(function(e) {
+        processKey(e);
     });
+
+    $(".collapsible").collapsible();
 
     $.ajax({
         url: "../category/get_categories_with_images.php",
@@ -374,11 +345,6 @@ function initDialogs() {
 
 // Code: Page edit
 
-function openEditPageDialog() {
-    $("#edit-page-dialog").modal("open");
-    onDialog = true;
-}
-
 function openDialog(id) {
     $(id).modal("open");
     onDialog = true;
@@ -537,7 +503,7 @@ function editText($element, $new_text) {
     var id = parseInt($element.attr("id").slice($element.attr("id").lastIndexOf('-') + 1));
     console.log(id);
     $content.append($inner);
-    removeSelectedElement();
+    removeElement($selectedElement);
     $new_text.css("display", "block");
     var $new_content = $("<div></div>").append($new_text).addClass("inner-content").css("display", "inline-block");
     $inner.children(".inner-content").replaceWith($new_content);
@@ -766,11 +732,11 @@ function toggleSelectedAspectRatio() {
         $selectedElement.resizable("option", "aspectRatio", $selectedElement.width() / $selectedElement.height());
 }
 
-function removeSelectedElement() {
-    var id = $selectedElement.attr("id");
-    removeZIndex($selectedElement);
+function removeElement($element) {
+    var id = $element.attr("id");
+    removeZIndex($element);
     savePositions(id);
-    $selectedElement.remove();
+    $element.remove();
     resetPositions(id);
     changeMade = true;
 }
@@ -779,11 +745,11 @@ function removeSelectedElement() {
 
 function giveZIndex($element, index = -1) {
     if(index == -1) {
-        zIndexOrder.push($element);
+        zIndexOrder.push("#" + $element.attr("id"));
         $element.css("z-index", zIndexOrder.length);
     }
     else {
-        zIndexOrder[index - 1] = $element;
+        zIndexOrder[index - 1] = "#" + $element.attr("id");
         $element.css("z-index", index);
     }
 }
@@ -795,7 +761,7 @@ function removeZIndex($element) {
 
 function updateZIndeces() {
     for(var i = 0; i < zIndexOrder.length; i++)
-        zIndexOrder[i].css("z-index", i + 1);
+        $(zIndexOrder[i]).css("z-index", i + 1);
 }
 
 function pullForward($element) {
@@ -805,7 +771,8 @@ function pullForward($element) {
         zIndexOrder[pos] = zIndexOrder[pos + 1];
         zIndexOrder[pos + 1] = tmp;
         $element.css("z-index", pos + 2);
-        zIndexOrder[pos].css("z-index", pos + 1);
+        $(zIndexOrder[pos]).css("z-index", pos + 1);
+        changeMade = true;
     }
 }
 
@@ -814,10 +781,145 @@ function pushBackwards($element) {
     if(pos > 0) {
         var tmp = zIndexOrder[pos];
         zIndexOrder[pos] = zIndexOrder[pos - 1];
-        zIndexOrder[pos] = tmp;
-        $element.css("z-index", pos + 1);
-        zIndexOrder[pos].css("z-index", pos);
+        zIndexOrder[pos - 1] = tmp;
+        $element.css("z-index", pos);
+        $(zIndexOrder[pos]).css("z-index", pos + 1);
+        changeMade = true;
     }
+}
+
+// Code: Key movement
+
+var directions = {
+    left: 0,
+    up: 1,
+    right: 2,
+    down: 3
+};
+
+function moveElement($element, direction, amount) {
+    switch(direction) {
+        case directions.left:
+            var element_left = $element.offset().left;
+            var content_left = $content.offset().left;
+            if(element_left > content_left)
+                if(element_left - amount < content_left)
+                    $element.css({ left: "-=" + (content_left - element_left) + "px" });
+                else
+                    $element.css({ left: "-=" + amount + "px" });
+            break;
+        case directions.up:
+            var element_top = $element.offset().top;
+            var content_top = $content.offset().top;
+            if(element_top > content_top)
+                if(element_top - amount < content_top)
+                    $element.css({ top: "-=" + (content_top - element_top) + "px" });
+                else
+                    $element.css({ top: "-=" + amount + "px" });
+            break;
+        case directions.right:
+            var element_right = $element.offset().left + $element.outerWidth();
+            var content_right = $content.offset().left + $content.outerWidth();
+            if(element_right < content_right)
+                if(element_right + amount > content_right)
+                    $element.css({ left: "+=" + (content_right - element_right) + "px" });
+                else
+                    $element.css({ left: "+=" + amount + "px" });
+            break;
+        case directions.down:
+            var element_bottom = $element.offset().top + $element.outerHeight();
+            var content_bottom = $content.offset().top + $content.outerHeight();
+            if(element_bottom < content_bottom)
+                if(element_right + amount > content_right)
+                    $element.css({ top: "+=" + (content_bottom - element_bottom) + "px" });
+                else
+                    $element.css({ top: "+=" + amount + "px" });
+            break;
+    }
+    changeMade = true;
+}
+
+// Code: Key Processing
+
+function processKey(event) {
+    switch(event.which) {
+        case 46:
+            // Delete
+            removeElement($selectedElement);
+            break;
+        case 37:
+            // Arrow left
+            if(event.shiftKey)
+                moveElement($selectedElement, directions.left, 20);
+            else
+                moveElement($selectedElement, directions.left, 5);
+            break;
+        case 38:
+            // Arrow up
+            if(event.shiftKey)
+                moveElement($selectedElement, directions.up, 20);
+            else
+                moveElement($selectedElement, directions.up, 5);
+            break;
+        case 39:
+            // Arrow right
+            if(event.shiftKey)
+                moveElement($selectedElement, directions.right, 20);
+            else
+                moveElement($selectedElement, directions.right, 5);
+            break;
+        case 40:
+            // Arrow down
+            if(event.shiftKey)
+                moveElement($selectedElement, directions.down, 20);
+            else
+                moveElement($selectedElement, directions.down, 5);
+            break;
+        case 83:
+            // 's'
+            if(event.ctrlKey){
+                savePage();
+                event.preventDefault();
+            }
+    }
+}
+
+// Code: Loading
+
+function loadPage() {
+    $(pageContent).children().each(function(){
+        $element = $(this);
+        console.log("Loading " + $element.data("type"));
+        console.log($element[0]);
+        switch($element.data("type")) {
+            case "image":
+                createImage($element.attr("src"), true, {
+                    "z-index": $element.css("z-index"),
+                    "left": $element.css("left"),
+                    "top": $element.css("top"),
+                    "width": $element.css("width"),
+                    "height": $element.css("height")
+                });
+                break;
+            case "text":
+                createText($element.children(), true, {
+                    "z-index": $element.css("z-index"),
+                    "left": $element.css("left"),
+                    "top": $element.css("top")
+                });
+                break;
+            case "video":
+                createVideo($element, true, {
+                    "z-index": $element.css("z-index"),
+                    "left": $element.css("left"),
+                    "top": $element.css("top")
+                });
+                break;
+            default:
+
+                console.log("No type detected");
+        }
+    });
 }
 
 // Code: Saving

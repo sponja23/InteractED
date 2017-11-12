@@ -109,7 +109,20 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a class="blue-text" onclick="removeSelectedElement()">
+                <a class="blue-text" onclick="pullForward($selectedElement)">
+                    <i class="material-icons blue-text">keyboard_arrow_up</i>
+                    Una capa adelante
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="pushBackwards($selectedElement)">
+                    <i class="material-icons blue-text">keyboard_arrow_down</i>
+                    Una capa atrás
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a class="blue-text" onclick="removeElement($selectedElement)">
                     <i class="material-icons blue-text">delete</i>
                     Borrar
                 </a>
@@ -131,7 +144,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a class="blue-text" onclick="removeSelectedElement()">
+                <a class="blue-text" onclick="removeElement($selectedElement)">
                     <i class="material-icons blue-text">delete</i>
                     Borrar
                 </a>
@@ -147,7 +160,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a class="blue-text" onclick="removeSelectedElement()">
+                <a class="blue-text" onclick="removeElement($selectedElement)">
                     <i class="material-icons blue-text">delete</i>
                     Borrar
                 </a>
