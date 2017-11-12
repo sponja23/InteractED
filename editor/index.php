@@ -109,16 +109,11 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a class="blue-text" onclick="pullForward($selectedElement)">
-                    <i class="material-icons blue-text">keyboard_arrow_up</i>
-                    Una capa adelante
+                <a class="dropdown-button blue-text" data-activates="layer-dropdown" data-hover="hover" data-constrainWidth="false">
+                    Capas
+                    <i class="material-icons blue-text right-align">keyboard_arrow_right</i>
                 </a>
             </li>
-            <li>
-                <a class="blue-text" onclick="pushBackwards($selectedElement)">
-                    <i class="material-icons blue-text">keyboard_arrow_down</i>
-                    Una capa atrás
-                </a>
             </li>
             <li class="divider"></li>
             <li>
@@ -136,10 +131,11 @@
                     Alinear con objetos
                 </a>
             </li>
+            <li class="divider"></li>
             <li>
-                <a class="blue-text toggle" onclick="toggleSelectedAspectRatio()">
-                    <i class="material-icons blue-text" data-option="aspect-ratio"></i>
-                    Mantener proporciones
+                <a class="dropdown-button blue-text" data-activates="layer-dropdown" data-hover="hover" data-constrainWidth="false">
+                    Capas
+                    <i class="material-icons blue-text right-align">keyboard_arrow_right</i>
                 </a>
             </li>
             <li class="divider"></li>
@@ -160,9 +156,31 @@
             </li>
             <li class="divider"></li>
             <li>
+                <a class="dropdown-button blue-text" data-activates="layer-dropdown" data-hover="hover" data-constrainWidth="false">
+                    Capas
+                    <i class="material-icons blue-text right-align">keyboard_arrow_right</i>
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
                 <a class="blue-text" onclick="removeElement($selectedElement)">
                     <i class="material-icons blue-text">delete</i>
                     Borrar
+                </a>
+            </li>
+        </ul>
+
+        <ul id="layer-dropdown" class="dropdown-content nested-dropdown">
+            <li>
+                <a class="blue-text" onclick="pullForward($selectedElement)">
+                    <i class="material-icons blue-text">keyboard_arrow_up</i>
+                    Una adelante
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="pushBackwards($selectedElement)">
+                    <i class="material-icons blue-text">keyboard_arrow_down</i>
+                    Una atrás
                 </a>
             </li>
         </ul>

@@ -17,7 +17,9 @@ var positions;
 var debugSaveEnabled = false;
 var onDialog = false;
 
-var zIndexOrder = [];
+var $clipboard = null;
+
+var layerOrder = [];
 
 $(document).ready(function() {
     if(oldPost)
@@ -29,7 +31,7 @@ $(document).ready(function() {
                 pageContent = content;
                 var numObjects = $(pageContent).children().length;
                 for(var i = 0; i < numObjects; i++) {
-                    zIndexOrder.push(null);
+                    layerOrder.push(null);
                 }
                 init();
             },
@@ -494,7 +496,7 @@ function createText($inner_text, old=false, extra_css={}) {
 }
 
 function editText($element, $new_text) {
-    var zIndex = $element.css("z-index");
+    var Layer = $element.css("z-index");
     var $inner = $element.children(".inner");
     $inner.css({
         "left": $element.css("left"),
@@ -510,7 +512,7 @@ function editText($element, $new_text) {
     $inner.css({
         "width": $new_content.width() + "px",
         "height": $new_content.height() + "px",
-        "z-index": zIndex
+        "z-index": Layer
     });
     $inner.attr({
         "data-old": "true"
@@ -557,7 +559,7 @@ function createWrapper($inner, idToUse = -1) {
     var id = idToUse == -1 ? nextID : idToUse;
 
     if(old)
-        var zIndex = parseInt($inner.css("z-index"));
+        var Layer = $inner.css("z-index");
 
     $newElement.draggable({
         snap: true,
@@ -683,10 +685,13 @@ function createWrapper($inner, idToUse = -1) {
             "left": "",
             "top": ""
         });
-        giveZIndex($newElement, zIndex);
+        if(Layer != "auto")
+            giveLayer($newElement, parseInt(Layer));
+        else
+            giveLayer($newElement);
     }
     else {
-        giveZIndex($newElement);
+        giveLayer($newElement);
     }
     
     $inner.css("z-index", 1);
@@ -733,8 +738,9 @@ function toggleSelectedAspectRatio() {
 }
 
 function removeElement($element) {
+    console.log($element);
     var id = $element.attr("id");
-    removeZIndex($element);
+    removeLayer($element);
     savePositions(id);
     $element.remove();
     resetPositions(id);
@@ -743,35 +749,37 @@ function removeElement($element) {
 
 // Code: z Index
 
-function giveZIndex($element, index = -1) {
+function giveLayer($element, index = -1) {
     if(index == -1) {
-        zIndexOrder.push("#" + $element.attr("id"));
-        $element.css("z-index", zIndexOrder.length);
+        layerOrder.push("#" + $element.attr("id"));
+        $element.css("z-index", layerOrder.length);
     }
     else {
-        zIndexOrder[index - 1] = "#" + $element.attr("id");
+        layerOrder[index - 1] = "#" + $element.attr("id");
         $element.css("z-index", index);
     }
 }
 
-function removeZIndex($element) {
-    zIndexOrder.splice(parseInt($element.css("z-index")) - 1, 1);
+function removeLayer($element) {
+    layerOrder.splice(parseInt($element.css("z-index")) - 1, 1);
     updateZIndeces();
 }
 
 function updateZIndeces() {
-    for(var i = 0; i < zIndexOrder.length; i++)
-        $(zIndexOrder[i]).css("z-index", i + 1);
+    for(var i = 0; i < layerOrder.length; i++)
+        $(layerOrder[i]).css("z-index", i + 1);
 }
 
 function pullForward($element) {
     var pos = parseInt($element.css("z-index")) - 1;
-    if(pos != zIndexOrder.length - 1) {
-        var tmp = zIndexOrder[pos];
-        zIndexOrder[pos] = zIndexOrder[pos + 1];
-        zIndexOrder[pos + 1] = tmp;
+    if(pos != layerOrder.length - 1) {
+
+        var tmp = layerOrder[pos];
+        layerOrder[pos] = layerOrder[pos + 1];
+        layerOrder[pos + 1] = tmp;
+
         $element.css("z-index", pos + 2);
-        $(zIndexOrder[pos]).css("z-index", pos + 1);
+        $(layerOrder[pos]).css("z-index", pos + 1);
         changeMade = true;
     }
 }
@@ -779,11 +787,13 @@ function pullForward($element) {
 function pushBackwards($element) {
     var pos = parseInt($element.css("z-index")) - 1;
     if(pos > 0) {
-        var tmp = zIndexOrder[pos];
-        zIndexOrder[pos] = zIndexOrder[pos - 1];
-        zIndexOrder[pos - 1] = tmp;
+
+        var tmp = layerOrder[pos];
+        layerOrder[pos] = layerOrder[pos - 1];
+        layerOrder[pos - 1] = tmp;
+
         $element.css("z-index", pos);
-        $(zIndexOrder[pos]).css("z-index", pos + 1);
+        $(layerOrder[pos]).css("z-index", pos + 1);
         changeMade = true;
     }
 }
@@ -839,49 +849,98 @@ function moveElement($element, direction, amount) {
     changeMade = true;
 }
 
+// Code: Copy/Paste
+
+function copyElement($element) {
+    $clipboard = $element.clone();
+}
+
+function pasteElement() {
+    if($clipboard != null) {
+        switch($clipboard.data("type")) {
+            case "image":
+                $("#image-create-width").html($clipboard.outerWidth());
+                $("#image-create-height").html($clipboard.outerHeight());
+                createImage($clipboard.children(".inner").attr("src"));
+                $("#image-create-width").html("200");
+                $("#image-create-height").html("200");
+                break;
+            case "text":
+                createText($clipboard.find(".inner-content").clone());
+                break;
+            case "video":
+                createVideo($clipboard.children(".inner").clone());
+                break;
+        }
+    }
+}
+
 // Code: Key Processing
 
 function processKey(event) {
-    switch(event.which) {
-        case 46:
-            // Delete
-            removeElement($selectedElement);
-            break;
-        case 37:
-            // Arrow left
-            if(event.shiftKey)
-                moveElement($selectedElement, directions.left, 20);
-            else
-                moveElement($selectedElement, directions.left, 5);
-            break;
-        case 38:
-            // Arrow up
-            if(event.shiftKey)
-                moveElement($selectedElement, directions.up, 20);
-            else
-                moveElement($selectedElement, directions.up, 5);
-            break;
-        case 39:
-            // Arrow right
-            if(event.shiftKey)
-                moveElement($selectedElement, directions.right, 20);
-            else
-                moveElement($selectedElement, directions.right, 5);
-            break;
-        case 40:
-            // Arrow down
-            if(event.shiftKey)
-                moveElement($selectedElement, directions.down, 20);
-            else
-                moveElement($selectedElement, directions.down, 5);
-            break;
-        case 83:
-            // 's'
-            if(event.ctrlKey){
-                savePage();
-                event.preventDefault();
-            }
-    }
+    if(!onDialog)
+        switch(event.which) {
+            case 46:
+                // Delete
+                removeElement($selectedElement);
+                break;
+            case 37:
+                // Arrow left
+                if(event.shiftKey)
+                    moveElement($selectedElement, directions.left, 20);
+                else
+                    moveElement($selectedElement, directions.left, 5);
+                break;
+            case 38:
+                // Arrow up
+                if(event.shiftKey)
+                    moveElement($selectedElement, directions.up, 20);
+                else
+                    moveElement($selectedElement, directions.up, 5);
+                break;
+            case 39:
+                // Arrow right
+                if(event.shiftKey)
+                    moveElement($selectedElement, directions.right, 20);
+                else
+                    moveElement($selectedElement, directions.right, 5);
+                break;
+            case 40:
+                // Arrow down
+                if(event.shiftKey)
+                    moveElement($selectedElement, directions.down, 20);
+                else
+                    moveElement($selectedElement, directions.down, 5);
+                break;
+            case 83:
+                // 's'
+                if(event.ctrlKey) {
+                    savePage();
+                    event.preventDefault();
+                }
+                break;
+            case 67:
+                // 'c'
+                if(event.ctrlKey) {
+                    copyElement($selectedElement);
+                    event.preventDefault();
+                }
+                break;
+            case 86:
+                // 'v'
+                if(event.ctrlKey) {
+                    pasteElement();
+                    event.preventDefault();
+                }
+                break;
+            case 88:
+                // 'x'
+                if(event.ctrlKey) {
+                    copyElement($selectedElement);
+                    removeElement($selectedElement);
+                    event.preventDefault();
+                }
+        }
 }
 
 // Code: Loading
