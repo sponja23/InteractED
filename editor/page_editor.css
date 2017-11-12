@@ -18,8 +18,15 @@
     margin: auto;
 }
 
+#image-create-message {
+    position: absolute;
+    top: 27%;
+    left: 62%;
+    width: 28%;
+}
+
 #image-create-lengths {
-	margin-left: 20px;
+    margin-left: 20px;
 }
 
 .selected {
@@ -62,12 +69,20 @@
     margin-left: calc(50% - 184px);
 }
 
-.dropdown-content {
-    overflow-y: visible;
+#custom-create-preview-wrapper {
+    position: relative;
+    margin-left: calc(50% - 300px);
+}
+
+#custom-create-preview {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    border: solid black 2px;
 }
 
 .dropdown-content {
-    overflow-y: normal;
+    overflow-y: visible;
 }
 
 .nested-dropdown {
@@ -87,7 +102,7 @@
 }
 
 .overlay > i {
-	position: absolute;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);

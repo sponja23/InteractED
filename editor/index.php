@@ -96,7 +96,7 @@
 
         <ul id="text-dropdown" class="dropdown-content">
             <li>
-                <a class="blue-text toggle" onclick="toggleSelectedSnap()">
+                <a class="blue-text toggle" onclick="toggleSnap($selectedElement)">
                     <i class="material-icons blue-text" data-option="snap"></i>
                     Alinear con objetos
                 </a>
@@ -126,7 +126,7 @@
 
         <ul id="image-dropdown" class="dropdown-content">
             <li>
-                <a class="blue-text toggle" onclick="toggleSelectedSnap()">
+                <a class="blue-text toggle" onclick="toggleSnap($selectedElement)">
                     <i class="material-icons blue-text" data-option="snap"></i>
                     Alinear con objetos
                 </a>
@@ -149,7 +149,7 @@
 
         <ul id="video-dropdown" class="dropdown-content">
             <li>
-                <a class="blue-text toggle" onclick="toggleSelectedSnap()">
+                <a class="blue-text toggle" onclick="toggleSnap($selectedElement)">
                     <i class="material-icons blue-text" data-option="snap"></i>
                     Alinear con objetos
                 </a>
@@ -318,6 +318,9 @@
                         <div id="image-create-preview" class="valign-wrapper">
                             <img src="no_image_selected.gif" />
                         </div>
+                        <span class="red-text hide" id="image-create-message"> <!-- Pone esto en un lugar lindo -->
+                            El tamaño de la imagen se reducirá para que entre en la página
+                        </span>
                         <p id="image-create-lengths">
                             <strong>Ancho:</strong>
                             <br>
@@ -421,6 +424,34 @@
                 <div class="modal-footer">
                     <a class="modal-action modal-close waves-effect waves-light btn-flat" id="video-create-cancel">Cancelar</a>
                     <a class="modal-action modal-close waves-effect waves-light btn-flat" id="video-create-button">Crear</a>
+                </div>
+            </div>
+            <div id="custom-create-dialog" class="modal valign-modal">
+                <div class="modal-content row">
+                    <h5 style="margin-bottom: 20px">Crear personalizado</h5>
+                    <div>
+                        <div class="row">
+                            <div id="custom-create-preview-wrapper" class="valign-wrapper">
+                                <div id="custom-create-preview"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="custom-create-code" class="input materialize-textarea" onchange="updateCustomPreview()"></textarea>
+                                <label for="custom-create-code">Código</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            Tamaño
+                            <p class="range-field">
+                                <input type="range" id="custom-create-size" min="0" max="100" onchange="updateCustomPreview()">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="custom-create-cancel">Cancelar</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="custom-create-button">Crear</a>
                 </div>
             </div>
         </div>

@@ -342,6 +342,20 @@ function initDialogs() {
     $("#video-create-button").click(function() {
         createVideo($("#video-create-embed-link").val());
     });
+
+    $("#custom-create-dialog").modal({
+        dismissible: true,
+        endingTop: '50%',
+        complete: function() {
+            $("#custom-create-code").val('').trigger("autoresize");
+            $("#video-create-preview").attr("src", "");
+            onDialog = false;
+        }
+    });
+
+    $("#custom-create-button").click(function() {
+        createCustom($("#custom-create-code"));
+    })
 }
 
 // Code: Page edit
@@ -406,6 +420,12 @@ function updateImagePreview(method) {
             $("#image-create-width").html(tmpImg.width);
             $("#image-create-height").html(tmpImg.height);
 
+            if(tmpImg.width > $content.width())
+                $("#image-create-message").show();
+            else
+                $("#image-create-message").hide();
+
+
             if(tmpImg.width > tmpImg.height)
                 $preview.addClass("adjust-width").removeClass("adjust-height");
             else
@@ -426,6 +446,8 @@ function invalidateImage() {
     else
         $url.removeClass("valid").addClass("invalid");
 
+    $("#image-create-message").hide();
+
     $("#image-create-width, #image-create-height").html("200");
     $("#image-create-preview > img").attr("src", "no_image_selected.gif");
 }
@@ -435,6 +457,14 @@ function updateVideoPreview() {
     $("#video-create-preview").attr("src", $embedCode);
 }
 
+function updateCustomPreview() {
+    var code = $("#custom-create-code").val();
+    $("#custom-create-preview").html(code);
+    var aspectRatio = $("#custom-create-size").val() / 100;
+    $("#custom-create-preview").css("width", (aspectRatio * 300) + "px");
+    $("#custom-create-preview").css("height", ((1 - aspectRatio) * 300) + "px");
+}
+
 function createImage(src, old=false, other_css={}) {
     var attributes = {
         "src": src,
@@ -442,11 +472,22 @@ function createImage(src, old=false, other_css={}) {
         "data-snap": "true",
         "data-aspect-ratio": "true"
     };
-    if(!old)
-        var css = {
-            "width": $("#image-create-width").html() + "px",
-            "height": $("#image-create-height").html() + "px"
-        };
+    if(!old) {
+        var width = parseInt($("#image-create-width").html());
+        var height = parseInt($("#image-create-height").html());
+        if(width > $content.width()) {
+            var css = {
+                "width": $content.width() + "px",
+                "height": ($content.width() / width) * height + "px"
+            };
+        }
+        else {
+            var css = {
+                "width": $("#image-create-width").html() + "px",
+                "height": $("#image-create-height").html() + "px"
+            };
+        }
+    }
     else
         var css = other_css;
     var $image = $("<img />")
@@ -547,6 +588,36 @@ function createVideo(embed_code, old=false, extra_css={}) {
     createWrapper($video);
 }
 
+// Code: Custom Creation
+
+function createCustom(code, old=false, extra_css={}) {
+    var $custom = $(code);
+    var attr = {
+        "data-type": "custom",
+        "data-snap": "true"
+    };
+    if(!old) {
+        var aspectRatio = $("#custom-create-size").val() / 100;
+        var css = {
+            "width":  (aspectRatio * 300) + "px",
+            "height": ((1 - aspectRatio) * 300) + "px"
+        };
+    }
+    else
+        var css = {
+            "width": $custom.css("width"),
+            "height": $custom.css("height")
+        };
+    $custom.css(extra_css)
+    .attr(attr)
+    .css(css)
+    .addClass("inner");
+    if(old) {
+        $custom.attr("data-old", "true");
+    }
+    createWrapper($custom);
+}
+
 // Code: Wrapper
 
 function createWrapper($inner, idToUse = -1) {
@@ -598,7 +669,7 @@ function createWrapper($inner, idToUse = -1) {
         $newElement.children(".handle").hide();
     }
 
-    if($inner.data("type") == "video") {
+    if($inner.data("type") == "video" || $inner.data("type") == "custom") {
         $newElement.append("<div class='overlay'><i class='material-icons large blue-text'>open_with</i></div>");
         $inner.attr({
             "width": "100%",
@@ -723,17 +794,17 @@ function unselectElement() {
     $selectedElement = $content;
 }
 
-function toggleSelectedSnap() {
-    $selectedElement.attr("data-snap", !($selectedElement.attr("data-snap") == "true"));
-    $selectedElement.draggable("option", "snap", !$selectedElement.draggable("option", "snap"));
+function toggleSnap($element) {
+    $element.attr("data-snap", !($element.attr("data-snap") == "true"));
+    $element.draggable("option", "snap", !$element.draggable("option", "snap"));
 }
 
-function toggleSelectedAspectRatio() {
-    $selectedElement.attr("data-aspect-ratio", !($selectedElement.attr("data-aspect-ratio") == "true"));
-    if($selectedElement.resizable("option", "aspectRatio") != false)
-        $selectedElement.resizable("option", "aspectRatio", false);
+function toggleAspectRatio($element) {
+    $element.attr("data-aspect-ratio", !($element.attr("data-aspect-ratio") == "true"));
+    if($element.resizable("option", "aspectRatio") != false)
+        $element.resizable("option", "aspectRatio", false);
     else
-        $selectedElement.resizable("option", "aspectRatio", $selectedElement.width() / $selectedElement.height());
+        $element.resizable("option", "aspectRatio", $element.width() / $element.height());
 }
 
 function removeElement($element) {
@@ -908,6 +979,11 @@ function pasteElement() {
             case "video":
                 createVideo($clipboard.children(".inner").clone());
                 break;
+            case "custom":
+                $("#custom-create-size").val(($clipboard.outerWidth() / $clipboard.outerHeight())) // Tengo que arreglar esto
+                createCustom($clipboard.children(".inner").clone());
+                $("#custom-create-size").val(50);
+                break;
         }
     }
 }
@@ -1011,8 +1087,16 @@ function loadPage() {
                     "top": $element.css("top")
                 });
                 break;
+            case "custom":
+                createCustom($element, true, {
+                    "z-index": $element.css("z-index"),
+                    "left": $element.css("left"),
+                    "top": $element.css("top"),
+                    "width": $element.css("width"),
+                    "height": $element.css("height")
+                });
+                break;
             default:
-
                 console.log("No type detected");
         }
     });
@@ -1033,32 +1117,27 @@ function savePage() {
             case "image":
                 var $elem = $("<img />").attr({
                     "src": $inner.attr("src"),
-                    "data-type": $inner.data("type"),
-                    "data-extension": $inner.data("extension"),
-                    "data-old": "true"
+                    "data-extension": $inner.data("extension")
                 }).css({
-                    "z-index": $(this).css("z-index"),
                     "width": $inner.width() + "px",
                     "height": $inner.height() + "px"
                 });
                 break;
             case "text":
-                var $elem = $inner.children().clone().attr({
-                    "data-type": "text",
-                    "data-old": "true"
-                }).css({
-                    "z-index": $(this).css("z-index")
-                });
+                var $elem = $inner.children().clone();
                 pageTranscript += $elem.text() + " ";
                 break;
             case "video":
                 var $elem = $inner.clone().attr({
-                    "data-type": "video",
-                    "data-old": "true",
                     "width": $(this).width() + "px",
                     "height": $(this).height() + "px"
                 }).css({
-                    "z-index": $(this).css("z-index"),
+                    "width": $(this).width() + "px",
+                    "height": $(this).height() + "px"
+                });
+                break;
+            case "custom":
+                var $elem = $inner.clone().css({
                     "width": $(this).width() + "px",
                     "height": $(this).height() + "px"
                 });
@@ -1066,8 +1145,12 @@ function savePage() {
         }
         $elem.css({
             "position": "absolute",
+            "z-index": $(this).css("z-index"),
             "left": ($(this).offset().left - $content.offset().left) + "px",
             "top": ($(this).offset().top - $content.offset().top) + "px"
+        }).attr({
+            "data-type": type,
+            "data-old": "true"
         });
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
