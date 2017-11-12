@@ -34,6 +34,9 @@
             GetCategories();
             ?>
         <div>
+
+        <script src="../components/navigation/navigation.js"></script>
+
         <script>
             $( ".categoryOption" ).click(function() {
                 window.location.href = "../category/articles/?id=" + $(this).attr("id");

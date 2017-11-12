@@ -42,3 +42,19 @@ $('.rating input').change(function() {
         }
     });
 });
+
+$( ".rating #reset" ).click(function() {
+    $.ajax({
+        url: "../components/rating/rating.php",
+        type: "POST",
+        data: { ID: ID, Action: "Reset" },
+        success: function (response) {
+            if (response == '1')
+                for (i = 1; i <= 5; i++)
+                    $( "#star" + i ).prop( "checked", false );
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+    });
+});

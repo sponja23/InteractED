@@ -27,6 +27,12 @@ $.ajax({
                 }
             });
 
+            $( "#comment" ).keypress(function(e) {
+                if(e.which == 13 && !e.shiftKey) {
+                    $( "#publish" ).trigger( "click" );
+                }
+            });
+
             $( "#publish" ).click(function() {
                 UploadComment($( "#comment" ).val().replace(/\n/g, "<br>"));
             });

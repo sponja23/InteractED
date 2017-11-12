@@ -23,9 +23,16 @@ if ($_POST["Action"] == "Upload") {
 
     $conn->query($sql);
 }
-else if ($_POST["Action"] == "Get")
+else if ($_POST["Action"] == "Get") {
     while ($row = $result->fetch_assoc())
         echo $row["Stars"];
+}
+else if ($_POST["Action"] == "Reset") {
+    $sql = 'DELETE FROM Ratings WHERE MD5(PostID) = "' . $_POST["ID"] . '" AND UserCode = ' . $_SESSION["UserCode"];
+
+    if ($conn->query($sql) === TRUE)
+        echo '1';
+}
 
 $conn->close();
 ?>

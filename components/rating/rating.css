@@ -54,3 +54,8 @@
 .rating > input:checked ~ label:hover ~ label {
     color: #FFED85;
 }
+
+.rating > #reset {
+    padding: 0 1rem;
+    margin-left: 5px;
+}

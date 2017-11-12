@@ -21,6 +21,21 @@ if ($result->num_rows > 0)
 else
     header("Location: ../");
 
+$sql = "SELECT count(*) Visits FROM Visited WHERE PostID = " . $PostID;
+$result = $conn->query($sql);
+
+while ($row = $result->fetch_assoc())
+    $Visits = $row["Visits"];
+
+$sql = "SELECT Stars FROM Ratings WHERE PostID = " . $PostID;
+$result = $conn->query($sql);
+
+$TotalStars = $result->num_rows;
+$Stars = 0;
+
+while ($row = $result->fetch_assoc())
+    $Stars += $row["Stars"];
+
 $sql = "INSERT INTO Visited (PostID, UserCode, DateLastVisited)
         VALUES (" . $PostID . ", " . $_SESSION["UserCode"] . ", CURTIME());";
 
@@ -44,6 +59,7 @@ $conn->query($sql);
         <div class="container">
             <img id="post-image" src=<?= '"' . $PostImage[0] . '"' ?>>
             <h5 id="post-title"><?= $Title ?></h5>
+            <p><?= $Visits ?> visitas&nbsp;&nbsp;-&nbsp;&nbsp;<i class="material-icons" style="vertical-align: text-bottom;">star</i>&nbsp;<?= round($Stars / $TotalStars, 2) ?></p>
             <div class="valign-wrapper">
                 <img id="post-creator-image" class="circle" src=<?= '"' . $UserImage[0] . '"' ?>>
                 <p>

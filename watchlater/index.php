@@ -20,11 +20,6 @@
                 line-height: 2rem;
             }
         </style>
-
-        <?php require "../include/scripts.html"; ?>
-
-        <script src="../components/navigation/navigation.js"></script>
-
     </head>
     <body class="grey lighten-5">
         <?php require "../components/navigation/navigation.php"; ?>
@@ -36,6 +31,11 @@
                 GetWatchLater();
             ?>
         <div>
+
+        <?php require "../include/scripts.html"; ?>
+
+        <script src="../components/navigation/navigation.js"></script>
+
         <script>
             $( ".item" ).click(function() {
                 window.location.href = "../post?id=" + $(this).attr("id");

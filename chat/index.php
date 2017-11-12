@@ -30,7 +30,7 @@ if (file_exists($File)) {
     file_put_contents($File, json_encode($Chats));
 }
 else {
-    if (file_exists("../chats/users"))
+    if (!file_exists("../chats/users/"))
         mkdir("../chats/users");
 
     file_put_contents($File, '{"Chats":[' . $_GET["id"] . ']}');

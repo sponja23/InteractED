@@ -30,32 +30,35 @@
                 $CurrentRow = 1;
 
                 while ($CategoryValues = $Categories->fetch_assoc()) {
-                    echo '<h5>' . $CategoryValues["CategoryName"] . '</h5>';
-
                     $sql = 'SELECT A.PostID, A.Title, U.User FROM Articles A
                             INNER JOIN Users U ON A.CreatorID = U.UserCode
                             WHERE A.CategoryID = "' . $CategoryValues["CategoryID"] . '"';
                     $PostsInCategory = $conn->query($sql);
 
-                    $Cards = 1;
+                    if ($PostsInCategory->num_rows > 0) {
+                        echo '<h5>' . $CategoryValues["CategoryName"] . '</h5>';
 
-                    while ($PostValues = $PostsInCategory->fetch_assoc()) {
-                        $Image = glob("images/posts/" . $PostValues["PostID"] . ".*");
+                        $Cards = 1;
 
-                        if ($Cards == 1)
-                            echo '<div class="row" style="margin-bottom: 0;">';
+                        while ($PostValues = $PostsInCategory->fetch_assoc()) {
+                            $Image = glob("images/posts/" . $PostValues["PostID"] . ".*");
 
-                        addVerticalCard($PostValues["PostID"], $Image[0], $PostValues["Title"], $PostValues["User"]);
+                            if ($Cards == 1)
+                                echo '<div class="row" style="margin-bottom: 0;">';
 
-                        if ($Cards++ == 4) {
-                            $Cards = 1;
-                            echo '</div>';
+                            addVerticalCard($PostValues["PostID"], $Image[0], $PostValues["Title"], $PostValues["User"]);
+
+                            if ($Cards++ == 4) {
+                                $Cards = 1;
+                                echo '</div>';
+                            }
                         }
-                    }
-                    echo '</div>';
 
-                    if ($CurrentRow++ < $Categories->num_rows) {
-                        echo '<div class="divider col s12"></div>';
+                        echo '</div>';
+
+                        if ($CurrentRow++ < $Categories->num_rows) {
+                            echo '<div class="divider col s12"></div>';
+                        }
                     }
                 }
                 ?>
