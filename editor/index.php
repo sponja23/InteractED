@@ -109,7 +109,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a class="dropdown-button blue-text" data-activates="layer-dropdown" data-hover="hover" data-constrainWidth="false">
+                <a class="dropdown-button blue-text" data-activates="text-layer-dropdown" data-hover="hover" data-constrainWidth="false">
                     Capas
                     <i class="material-icons blue-text right-align">keyboard_arrow_right</i>
                 </a>
@@ -133,7 +133,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a class="dropdown-button blue-text" data-activates="layer-dropdown" data-hover="hover" data-constrainWidth="false">
+                <a class="dropdown-button blue-text" data-activates="image-layer-dropdown" data-hover="hover" data-constrainWidth="false">
                     Capas
                     <i class="material-icons blue-text right-align">keyboard_arrow_right</i>
                 </a>
@@ -156,7 +156,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a class="dropdown-button blue-text" data-activates="layer-dropdown" data-hover="hover" data-constrainWidth="false">
+                <a class="dropdown-button blue-text" data-activates="video-layer-dropdown" data-hover="hover" data-constrainWidth="false">
                     Capas
                     <i class="material-icons blue-text right-align">keyboard_arrow_right</i>
                 </a>
@@ -170,7 +170,13 @@
             </li>
         </ul>
 
-        <ul id="layer-dropdown" class="dropdown-content nested-dropdown">
+        <ul id="text-layer-dropdown" class="dropdown-content nested-dropdown">
+            <li>
+                <a class="blue-text" onclick="bringFront($selectedElement)">
+                    <i class="material-icons blue-text">arrow_upward</i>
+                    Traer al frente
+                </a>
+            </li>
             <li>
                 <a class="blue-text" onclick="pullForward($selectedElement)">
                     <i class="material-icons blue-text">keyboard_arrow_up</i>
@@ -181,6 +187,66 @@
                 <a class="blue-text" onclick="pushBackwards($selectedElement)">
                     <i class="material-icons blue-text">keyboard_arrow_down</i>
                     Una atrás
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="takeBack($selectedElement)">
+                    <i class="material-icons blue-text">arrow_downward</i>
+                    Llevar atrás
+                </a>
+            </li>
+        </ul>
+
+        <ul id="image-layer-dropdown" class="dropdown-content nested-dropdown">
+            <li>
+                <a class="blue-text" onclick="bringFront($selectedElement)">
+                    <i class="material-icons blue-text">arrow_upward</i>
+                    Traer al frente
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="pullForward($selectedElement)">
+                    <i class="material-icons blue-text">keyboard_arrow_up</i>
+                    Una adelante
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="pushBackwards($selectedElement)">
+                    <i class="material-icons blue-text">keyboard_arrow_down</i>
+                    Una atrás
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="takeBack($selectedElement)">
+                    <i class="material-icons blue-text">arrow_downward</i>
+                    Llevar atrás
+                </a>
+            </li>
+        </ul>
+
+        <ul id="video-layer-dropdown" class="dropdown-content nested-dropdown">
+            <li>
+                <a class="blue-text" onclick="bringFront($selectedElement)">
+                    <i class="material-icons blue-text">arrow_upward</i>
+                    Traer al frente
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="pullForward($selectedElement)">
+                    <i class="material-icons blue-text">keyboard_arrow_up</i>
+                    Una adelante
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="pushBackwards($selectedElement)">
+                    <i class="material-icons blue-text">keyboard_arrow_down</i>
+                    Una atrás
+                </a>
+            </li>
+            <li>
+                <a class="blue-text" onclick="takeBack($selectedElement)">
+                    <i class="material-icons blue-text">arrow_downward</i>
+                    Llevar atrás
                 </a>
             </li>
         </ul>

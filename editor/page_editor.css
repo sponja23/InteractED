@@ -62,12 +62,17 @@
     margin-left: calc(50% - 184px);
 }
 
-.dropdown-button {
+.dropdown-content {
     overflow-y: visible;
+}
+
+.dropdown-content {
+    overflow-y: normal;
 }
 
 .nested-dropdown {
     margin-left: 100%;
+    width: 100%;
 }
 
 .overlay {

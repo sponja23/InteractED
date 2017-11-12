@@ -119,7 +119,6 @@ function resetPositions(exception_id) {
                 "left": "0px",
                 "top": "0px"
             });
-            console.log(positions[id].left - $(this).offset().left + $content.offset().left);
             $(this).css({
                 "left": positions[id].left - $(this).offset().left,
                 "top": positions[id].top - $(this).offset().top
@@ -738,7 +737,6 @@ function toggleSelectedAspectRatio() {
 }
 
 function removeElement($element) {
-    console.log($element);
     var id = $element.attr("id");
     removeLayer($element);
     savePositions(id);
@@ -761,19 +759,19 @@ function giveLayer($element, index = -1) {
 }
 
 function removeLayer($element) {
-    layerOrder.splice(parseInt($element.css("z-index")) - 1, 1);
-    updateZIndeces();
+    var pos = parseInt($element.css("z-index")) - 1;
+    layerOrder.splice(pos, 1);
+    updateZIndeces(pos, layerOrder.length);
 }
 
-function updateZIndeces() {
-    for(var i = 0; i < layerOrder.length; i++)
+function updateZIndeces(lower_limit, upper_limit) {
+    for(var i = lower_limit; i < upper_limit; i++)
         $(layerOrder[i]).css("z-index", i + 1);
 }
 
 function pullForward($element) {
     var pos = parseInt($element.css("z-index")) - 1;
     if(pos != layerOrder.length - 1) {
-
         var tmp = layerOrder[pos];
         layerOrder[pos] = layerOrder[pos + 1];
         layerOrder[pos + 1] = tmp;
@@ -787,13 +785,52 @@ function pullForward($element) {
 function pushBackwards($element) {
     var pos = parseInt($element.css("z-index")) - 1;
     if(pos > 0) {
-
         var tmp = layerOrder[pos];
         layerOrder[pos] = layerOrder[pos - 1];
         layerOrder[pos - 1] = tmp;
 
         $element.css("z-index", pos);
         $(layerOrder[pos]).css("z-index", pos + 1);
+        changeMade = true;
+    }
+}
+
+function takeBack($element) {
+    var pos = parseInt($element.css("z-index")) - 1;
+    if(pos > 0) {
+        var original = layerOrder[pos];
+
+        var tmp1 = layerOrder[0];
+        var tmp2 = layerOrder[1];
+
+        for(var i = 1; i <= pos; i++) {
+            tmp2 = layerOrder[i];
+            layerOrder[i] = tmp1;
+            tmp1 = tmp2;
+        }
+
+        layerOrder[0] = original;
+        updateZIndeces(0, pos + 1);
+        changeMade = true;
+    }
+}
+
+function bringFront($element) {
+    var pos = parseInt($element.css("z-index")) - 1;
+    if(pos < layerOrder.length) {
+        var original = layerOrder[pos];
+
+        var tmp1 = layerOrder[layerOrder.length - 1];
+        var tmp2 = layerOrder[layerOrder.length - 2];
+
+        for(var i = layerOrder.length - 1; i >= pos; i--) {
+            tmp2 = layerOrder[i];
+            layerOrder[i] = tmp1;
+            tmp1 = tmp2;
+        }
+
+        layerOrder[layerOrder.length - 1] = original;
+        updateZIndeces(pos, layerOrder.length);
         changeMade = true;
     }
 }
