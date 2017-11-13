@@ -657,6 +657,11 @@ function createWrapper($inner, idToUse = -1) {
                 "se": "#handle-" + id
             },
             aspectRatio: $newElement.width() / $newElement.height(),
+            resize: function() {
+                var maxWidth = $content.width() - $newElement.position().left;
+                $newElement.css("max-width", maxWidth);
+                $newElement.css("max-height", maxWidth / ($newElement.width() / $newElement.height()));
+            },
             start: function() {
                 changeMade = true;
                 savePositions($(this).attr("id"));
