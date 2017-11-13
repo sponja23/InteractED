@@ -34,7 +34,8 @@ $.ajax({
             });
 
             $( "#publish" ).click(function() {
-                UploadComment($( "#comment" ).val().replace(/\n/g, "<br>"));
+                if ($( "#comment" ).val().trim().length)
+                    UploadComment($( "#comment" ).val().replace(/\n/g, "<br>"));
             });
 
             function UploadComment(Comment) {

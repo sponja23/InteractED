@@ -675,13 +675,12 @@ function createWrapper($inner, idToUse = -1) {
     }
 
     if($inner.data("type") == "video" || $inner.data("type") == "custom") {
-        $newElement.append("<div class='overlay'><i class='material-icons large blue-text'>open_with</i></div>");
+        $newElement.append("<div class='overlay'></div>");
         $inner.attr({
             "width": "100%",
             "height": "100%"
         })
     }
-
 
     $newElement.children(".inner").css({
         "width": "100%",
