@@ -16,7 +16,7 @@ $.ajax({
     type: "POST",
     success: function (response) {
         if (response == 1) {
-            $( "#comments-section" ).removeClass( "hide" );
+            $( "#comment-box, #bottom-divider" ).removeClass( "hide" );
 
             $( "#comment" ).on('input', function() {
                 if( !$(this).val() ) {

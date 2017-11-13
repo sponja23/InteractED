@@ -91,9 +91,12 @@ $conn->query($sql);
             $result = $conn->query($sql);
 
             while ($row = $result->fetch_assoc())
-                echo '<div class="chip">' . $row["TagName"] . '</div>';
+                echo '<div class="chip">' . htmlspecialchars($row["TagName"]) . '</div>';
             ?>
-            <?php require "../components/rating/index.html"; ?>
+            <?php
+            if (isset($_SESSION["UserCode"]))
+                require "../components/rating/index.html";
+            ?>
             <?php require "../components/comments/index.php"; ?>
         </div>
 
