@@ -96,7 +96,7 @@ function init() {
 
     saveInterval = setInterval(function() {
         if(changeMade)
-            savePage();
+            savePage(0);
         changeMade = false;
     }, 5000);
 }
@@ -1032,7 +1032,7 @@ function processKey(event) {
             case 83:
                 // 's'
                 if(event.ctrlKey) {
-                    savePage();
+                    savePage(1);
                     event.preventDefault();
                 }
                 break;
@@ -1108,7 +1108,7 @@ function loadPage() {
 
 // Code: Saving
 
-function savePage() {
+function savePage(userSaved) {
     console.log("Saving...");
     var $newContent = $("<div id=content></div>");
     var maxHeight = 0;
@@ -1187,6 +1187,8 @@ function savePage() {
             success: function(result) {
                 console.log(result);
                 console.log("saved");
+                if (userSaved)
+                    Materialize.toast('Guardado correctamente', 4000);
             },
             error: function() {
                 console.log("saving error");

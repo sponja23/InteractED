@@ -49,7 +49,7 @@
             <div id="side-nav" class="nav-wrapper white">
                 <a href="../" class="logo blue-text">InteractED</a>
                 <ul class="right">
-                    <li><a onclick="savePage()"><i class="material-icons blue-text">save</i></a></li>
+                    <li><a href=<?= '"../post?id=' . $_GET["id"] . '"' ?>><i class="material-icons blue-text">close</i></a></li>
                     <li><a class="btn blue waves-effect waves-light" style="padding: 0 15px;" onclick="openDialog('#share-page-dialog')"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a></li>
                 </ul>
             </div>
