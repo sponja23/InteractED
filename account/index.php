@@ -3,6 +3,8 @@ session_start();
 
 if (!isset($_SESSION["UserCode"]))
     header("Location: ../");
+
+$Image = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,24 +26,30 @@ if (!isset($_SESSION["UserCode"]))
                     <h1 id="title">Mi cuenta</h1>
                 </div>
                 <div class="card-panel black-text col s12">
-                    <div style="padding-top: 10px;"></div>
-                    <div class="input-field col s12 m6">
-                        <input id="name" name="name" type="text">
-                        <label for="name" data-error="Debe ingresar su nombre">Nombre</label>
-                    </div>
-                    <div class="input-field col s12 m6">
-                        <input id="email" name="email" type="email">
-                        <label for="email">Correo electr&oacute;nico</label>
-                    </div>
-                    <p style="padding-left: 0.75rem;"><strong>Cambiar contrase&ntilde;a:</strong></p>
-                    <div class="input-field col s12 m6">
-                        <input id="password" name="password" type="password">
-                        <label for="password" data-error="Debe ingresar una contrase&ntilde;a">Nueva contrase&ntilde;a</label>
-                    </div>
-                    <div class="input-field col s12 m6">
-                        <input id="confirm-password" type="password">
-                        <label for="confirm-password" data-error="Debe volver a ingresar la contrase&ntilde;a">Confirmar contrase&ntilde;a</label>
-                    </div>
+                    <form id="update-account" action="update.php" method="post" enctype="multipart/form-data">
+                        <div class="col s12 valign-wrapper" style="margin: 20px 0;">
+                            <img id="profile-image" src=<?= '"' . $Image[0] . '"' ?> class="circle" style="width: 100px; height: 100px;">
+                            <a id="change" class="btn blue waves-effect waves-light" style="margin-left: 20px;">Cambiar</a>
+                            <input id="image" name="image" type="file" class="hide">
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="name" name="Name" type="text">
+                            <label for="name" data-error="El nombre no puede estar vac&iacute;o">Nombre</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="email" name="Email" type="email">
+                            <label for="email" data-error="El correo electronico no puede estar vac&iacute;o">Correo electr&oacute;nico</label>
+                        </div>
+                        <p style="padding-left: 0.75rem;"><strong>Cambiar contrase&ntilde;a:</strong></p>
+                        <div class="input-field col s12 m6">
+                            <input id="password" name="Password" type="password">
+                            <label for="password">Nueva contrase&ntilde;a</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="confirm-password" type="password">
+                            <label for="confirm-password" data-error="Debe ingresar la misma contrase&ntilde;a">Confirmar contrase&ntilde;a</label>
+                        </div>
+                    </form>
                     <div class="col s12">
                         <a id="save" class="btn blue waves-effect waves-light">Guardar</a>
                     </div>
@@ -54,38 +62,47 @@ if (!isset($_SESSION["UserCode"]))
         <script src="../components/navigation/navigation.js"></script>
 
         <script>
-            var Name = <?= '"' . $_SESSION["Name"] . '"' ?>;
-            var Email = <?= '"' . $_SESSION["Email"] . '"' ?>;
+            $( "#change" ).click(function() {
+                $( "#image" ).trigger( "click" );
+            });
 
-            $( "#name" ).val(Name);
-            $( "#email" ).val(Email);
+            $( "#image" ).change(function() {
+                var src = document.getElementById("image");
+                var target = document.getElementById("profile-image");
+                var fr = new FileReader();
+
+                fr.onload = function() {
+                    target.src = fr.result;
+                }
+
+                fr.readAsDataURL(src.files[0]);
+            });
+
+            $( "#name" ).val(<?= '"' . $_SESSION["Name"] . '"' ?>);
+            $( "#email" ).val(<?= '"' . $_SESSION["Email"] . '"' ?>);
 
             $( "#save" ).click(function() {
-                var NewData = {};
-
-                if ($( "#name" ).val() != Name && $( "#name" ).val() != "")
-                    NewData.Name = $( "#name" ).val();
-
-                if ($( "#email" ).val() != Email && $( "#email" ).val() != "")
-                    NewData.Email = $( "#email" ).val();
-
-                if ($( "#password" ).val() != "" && $( "#confirm-password" ).val() != "" &&
-                    $( "#password" ).val() == $( "#confirm-password" ).val())
-                    NewData.Password = $( "#password" ).val();
-
-                if (!jQuery.isEmptyObject(NewData)) {
-                    $.ajax({
-                        url: "update.php",
-                        type: "POST",
-                        data: NewData ,
-                        success: function (response) {
-                            if (response == '1')
-                                location.reload();
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus, errorThrown);
+                if ($( "#name" ).val() != "") {
+                    if ($( "#email" ).val() != "") {
+                        if ($( "#password" ).val() == $( "#confirm-password" ).val()) {
+                            $( "#update-account" ).submit();
                         }
-                    });
+                        else
+                            $( "#confirm-password" ).addClass("validate invalid").focus();
+                    }
+                    else
+                        $( "#email" ).addClass("validate invalid").focus();
+                }
+                else
+                    $( "#name" ).addClass("validate invalid").focus();
+            });
+
+            $( "input" ).on('input', function() {
+                if ($(this).val() != "")
+                    $(this).removeClass("validate valid invalid");
+            }).keypress(function(e) {
+                if(e.which == 13) {
+                    $( "#save" ).trigger( "click" );
                 }
             });
         </script>
