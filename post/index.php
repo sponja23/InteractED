@@ -59,7 +59,16 @@ $conn->query($sql);
         <div class="container">
             <img id="post-image" src=<?= '"' . $PostImage[0] . '"' ?>>
             <h5 id="post-title"><?= $Title ?></h5>
-            <p><?= $Visits ?> visitas&nbsp;&nbsp;-&nbsp;&nbsp;<i class="material-icons" style="vertical-align: text-bottom;">star</i>&nbsp;<?= round($Stars / $TotalStars, 2) ?></p>
+            <p>
+                <?= $Visits ?> visitas&nbsp;&nbsp;-&nbsp;
+                <i class="material-icons" style="vertical-align: text-bottom;">star</i>&nbsp;
+                <?php
+                if ($TotalStars > 0)
+                    echo round($Stars / $TotalStars, 2);
+                else
+                    echo "Ninguna persona ha calificado el post";
+                ?>
+            </p>
             <div class="valign-wrapper">
                 <img id="post-creator-image" class="circle" src=<?= '"' . $UserImage[0] . '"' ?>>
                 <p>
