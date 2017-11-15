@@ -5,23 +5,25 @@
 }
 
 .logo {
-    display: inline-block;
-    position: absolute;
-    width: 15%;
-    text-align: center;
-    font-size: 2rem;
+    font-size: 7vw;
     font-family: and_black;
+    position: absolute;
+    margin-left: 5%;
+    text-align: center;
 }
 
-@media only screen and (min-width: 600px) and (max-width: 992px) {
+@media only screen and (min-width: 601px) {
     .logo {
+        font-size: 3vw;
+        margin-left: initial;
         width: 20%;
     }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (min-width: 993px) {
     .logo {
-        margin-left: 5%;
+        font-size: 2.2vw;
+        width: 15%;
     }
 }
 
@@ -120,6 +122,14 @@ nav ul a:hover {
     }
 }
 
+#search-mobile-icon {
+    margin-right: 0.5em;
+}
+
+#category-icon {
+    margin: 0 0.5em;
+}
+
 @media only screen and (max-width: 600px) {
     #login {
         margin-right: 0;
@@ -129,6 +139,31 @@ nav ul a:hover {
 .option:hover {
     cursor: pointer;
     cursor: hand;
+}
+
+#profile-picture {
+    width: 39px;
+    height: 39px;
+    margin-right: 1em;
+    vertical-align: middle;
+}
+
+@media only screen and (min-width: 601px) {
+    #profile-picture {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+#dropdown-profile-picture {
+    width: 50px;
+    height: 50px;
+    margin: 0 20px;
+}
+
+#dropdown-user-info {
+    margin-right: 20px;
+    line-height: 25px;
 }
 
 .notification-box {

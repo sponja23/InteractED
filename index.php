@@ -36,7 +36,7 @@
                     $PostsInCategory = $conn->query($sql);
 
                     if ($PostsInCategory->num_rows > 0) {
-                        echo '<h5>' . $CategoryValues["CategoryName"] . '</h5>';
+                        echo '<h5 class="col s12">' . $CategoryValues["CategoryName"] . '</h5>';
 
                         $Cards = 1;
 

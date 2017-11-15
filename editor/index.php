@@ -14,7 +14,7 @@
 
         $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
+        if ($result->num_rows > 0)
             while($row = $result->fetch_assoc()) {
                 $_SESSION[$_GET["id"] . "-Title"] = $row["Title"];
                 $_SESSION[$_GET["id"] . "-Category"] = $row["CategoryName"];
@@ -23,14 +23,12 @@
                 else
                     $old = "false";
             }
-        }
-        else {
+        else
             header("Location: ../");
-        }
+
         $conn->close();
     }
 ?>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -38,7 +36,7 @@
 
         <?php require "../include/head.html"; ?>
 
-        <link rel="stylesheet" href="/InteractED/include/external/jquery-ui.min.css">
+        <link rel="stylesheet" href="../include/external/jquery-ui.min.css">
         <link rel="stylesheet" href="../include/colorpicker/materialize-colorpicker.min.css">
         <link rel="stylesheet" href="../css/input.css">
         <link rel="stylesheet" href="../css/font.css">
@@ -462,7 +460,7 @@
 
         <?php require "../include/scripts.html"; ?>
 
-        <script src="/InteractED/include/external/jquery-ui.min.js"></script>
+        <script src="../include/external/jquery-ui.min.js"></script>
         <script src="../include/textboxio/textboxio.js"></script>
         <script src="../include/colorpicker/materialize-colorpicker.min.js"></script>
         <script>
@@ -472,6 +470,5 @@
             var oldPost = <?= $old ?>;
         </script>
         <script src="page_editor.js"></script>
-
     </body>
 </html>
