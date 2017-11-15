@@ -99,6 +99,28 @@ function init() {
             savePage(0);
         changeMade = false;
     }, 5000);
+
+    $( "#shared-users" ).on("click", ".delete-shared-user", function() {
+        var UserCode = $(this).attr("id").split('-')[1];
+
+        $.ajax({
+            url: "delete_editor.php",
+            type: "POST",
+            data: { PostID: PostID, UserCode: UserCode } ,
+            success: function (response) {
+                if (response == '1') {
+                    $( "#" + UserCode ).next().remove();
+                    $( "#" + UserCode ).remove();
+
+                    if ($( "#shared-users" ).children().length == 1)
+                        $( "#shared-users" ).empty();
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    });
 }
 
 function savePositions(exception_id) {
@@ -161,19 +183,7 @@ function initDialogs() {
         }
     });
 
-    $.ajax({
-        url: "get_editors.php",
-        type: "POST",
-        async: true,
-        dataType: "json",
-        data: { 
-            id: PostID
-        },
-        success: function(editors) {
-            for(var i = 0; i < editors.length; i++)
-                $("<div class='chip'>" + editors[i] + "<i class='material-icons close'>close</i></div>").insertBefore('input[placeholder="Agregar editores"]');
-        }
-    });
+    loadEditors();
 
     $("#share-page-users").material_chip({
         placeholder: "Agregar editores"
@@ -380,18 +390,25 @@ function openSharePageDialog() {
 }
 
 function sharePage() {
-    var data = $("#share-page-users").material_chip("data");
-    var users = [];
-    for(var i = 0; i < data.length; i++)
-        users.push(data[i].tag);
-    console.log(users);
+    var Data = $("#share-page-users").material_chip("data");
+    var Users = [];
+
+    for (var i = 0; i < Data.length; i++)
+        Users.push(Data[i].tag);
+
     $.ajax({
         url: "add_editors.php",
         type: "POST",
-        async: true,
-        data: {
-            users: users,
-            id: PostID
+        data: { ID: PostID, Users: Users } ,
+        success: function (response) {
+            if (response == '1') {
+                $( "#share-page-users .chip" ).remove();
+                $( "#shared-users" ).empty();
+                loadEditors();
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
         }
     });
 }
@@ -785,14 +802,14 @@ function selectElement($element) {
     unselectElement();
     if($selectedElement.attr("id") != $element.attr("id")) {
         $selectedElement = $element;
-        $selectedElement.addClass("selected");
+        $selectedElement.addClass("selected-element");
         $selectedElement.children(".handle").show();
     }
 }
 
 function unselectElement() {
     if($selectedElement[0].id != "#content") {
-        $selectedElement.removeClass("selected");
+        $selectedElement.removeClass("selected-element");
         $selectedElement.children(".handle").hide();
     }
     $selectedElement = $content;
@@ -1199,4 +1216,46 @@ function savePage(userSaved) {
 function toggleDebugSave() {
     debugSaveEnabled = !debugSaveEnabled;
     console.log("Debug save set to " + debugSaveEnabled);
+}
+
+function loadEditors() {
+    $.ajax({
+        url: "get_editors.php",
+        type: "POST",
+        data: { ID: PostID } ,
+        success: function (response) {
+            if (response != "") {
+                $( "#shared-users" ).append('<div class="divider col s12"></div>');
+
+                var SharedUsers = JSON.parse(response);
+
+                for (Entry in SharedUsers) {
+                    var ID = Entry;
+                    var Name = SharedUsers[ID].Name;
+                    var Email = SharedUsers[ID].Email;
+                    var Image = "../images/users/" + ID + '.' + SharedUsers[ID].Extension;
+
+                    addSharedUser(ID, Name, Email, Image);
+                }
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+    });
+}
+
+function addSharedUser(ID, Name, Email, Image) {
+    $( "#shared-users" ).append(
+        '<div id="' + ID + '" class="col s12 valign-wrapper shared-user-wrapper">' +
+            '<img src="' + Image + '" class="circle shared-user-image">' +
+            '<p class="shared-user-text">' +
+                '<strong>' + Name + '</strong>' +
+                '<br>' +
+                Email +
+            '</p>' +
+            '<i id="delete-' + ID + '" class="material-icons delete-shared-user">close</i>' +
+        '</div>' +
+        '<div class="divider col s12"></div>'
+    );
 }

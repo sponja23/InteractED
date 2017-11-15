@@ -6,7 +6,7 @@
 
 .valign-modal {
     transform: translateY(-50%) !important;
-    max-height: 100% !important;
+    max-height: 90% !important;
 }
 
 #image-create-preview {
@@ -29,7 +29,7 @@
     margin-left: 20px;
 }
 
-.selected {
+.selected-element {
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -101,9 +101,31 @@
     z-index: 2; 
 }
 
-.overlay > i {
+.shared-user-wrapper {
+    margin: 0.5em 0;
+}
+
+.shared-user-image {
+    width: 48px;
+    height: 48px;
+}
+
+.shared-user-text {
+    margin-left: 1em;
+}
+
+.delete-shared-user {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    right: 48px;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.chips.focus {
+    border-bottom: 1px solid var(--blue);
+    box-shadow: 0 1px 0 0 var(--blue);
+}
+
+.chips .chip.selected {
+    background-color: var(--blue) !important;
 }

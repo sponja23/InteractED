@@ -47,8 +47,17 @@
             <div id="side-nav" class="nav-wrapper white">
                 <a href="../" class="logo blue-text">InteractED</a>
                 <ul class="right">
-                    <li><a href=<?= '"../post?id=' . $_GET["id"] . '"' ?>><i class="material-icons blue-text">close</i></a></li>
-                    <li><a class="btn blue waves-effect waves-light" style="padding: 0 15px;" onclick="openDialog('#share-page-dialog')"><i class="material-icons left" style="margin-right: 10px;">link</i>Compartir</a></li>
+                    <li>
+                        <a href=<?= '"../post?id=' . $_GET["id"] . '"' ?>>
+                            <i class="material-icons blue-text">close</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn blue waves-effect waves-light" style="padding: 0 15px;" onclick="openDialog('#share-page-dialog')">
+                            <i class="material-icons left" style="margin-right: 10px;">link</i>
+                            Compartir
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -299,14 +308,15 @@
             </div>
             <div id="share-page-dialog" class="modal valign-modal">
                 <div class="modal-content row">
-                    <h5 style="margin-bottom: 40px">Agregar Editores</h5>
-                    <div class="col s12" id="share-page-inputs">
-                        <div class="chips-placeholder" id="share-page-users"></div>
+                    <h5 style="margin-bottom: 20px">Agregar editores</h5>
+                    <div id="share-page-inputs" class="input-field col s12">
+                        <div id="share-page-users" class="chips chips-placeholder"></div>
                     </div>
+                    <div id="shared-users"></div>
                 </div>
                 <div class="modal-footer">
                     <a class="modal-action modal-close waves-effect waves-light btn-flat" id="share-page-cancel">Cancelar</a>
-                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="share-page-button">Compartir</a>
+                    <a class="modal-action modal-close waves-effect waves-light btn-flat" id="share-page-button">Guardar</a>
                 </div>
             </div>
             <div id="image-create-dialog" class="modal valign-modal">

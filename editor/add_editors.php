@@ -1,37 +1,53 @@
 <?php
-
 include "../include/connect.php";
 
-$result = $conn->query("SELECT PostID FROM Articles WHERE MD5(PostID) = '" . $_POST["id"] . "'");
+$sql = 'SELECT PostID FROM Articles WHERE MD5(PostID) = "' . $_POST["ID"] . '"';
+$result = $conn->query($sql);
+
 $tmp = $result->fetch_assoc();
 $PostID = $tmp["PostID"];
 
-$UserCodes = array();
+foreach ($_POST["Users"] as $User) {
+    $sql = 'SELECT UserCode FROM Users
+            WHERE User = "' . $User . '" OR Email = "' . $User . '"';
+    $result = $conn->query($sql);
 
-$num_users = count($_POST["users"]);
+    $Coincidences = $result->fetch_assoc();
+    $UserCode = $Coincidences["UserCode"];
 
-for($i = 0; $i < $num_users; $i++) {
-    $user = $_POST["users"][$i];
-    $result = $conn->query("SELECT UserCode FROM Users WHERE User = '" . $user . "' OR Name = '" . $user . "' OR Email = '" . $user . "'");
-    if($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $UserCodes[] = $row["UserCode"];
+    if ($UserCode > 0)
+        $UserCodes[] = $UserCode;
+}
+
+if (count($UserCodes) > 0) {
+    $sql = 'SELECT UserCode FROM EditorRelation WHERE MD5(PostID) = "' . $_POST["ID"] . '"';
+    $Shared = $conn->query($sql);
+
+    while ($row = $Shared->fetch_assoc())
+        $SharedUserCodes[] = $row["UserCode"];
+
+    if (count($SharedUserCodes) > 0) {
+        foreach ($UserCodes as $UserCode) {
+            if (in_array($UserCode, $SharedUserCodes)) {
+                $Key = array_search($UserCode, $UserCodes);
+                unset($UserCodes[$Key]);
+            }
         }
+
+        $UserCodes = array_values($UserCodes);
     }
-    else {
-        echo "User " . $user . " not found";
+
+    if (count($UserCodes) > 0) {
+        $sql = 'INSERT INTO EditorRelation (PostID, UserCode) VALUES';
+
+        foreach ($UserCodes as $UserCode) {
+            $sql .= ' (' . $PostID . ', ' . $UserCode . '),';
+        }
+
+        if ($conn->query(substr($sql, 0, -1)) === TRUE)
+            echo '1';
     }
 }
 
-foreach($UserCodes as $UserCode) {
-    $sql = "INSERT INTO EditorRelation (PostID, UserCode)
-            SELECT * FROM (SELECT " . $PostID . ", '" . $UserCode . "') AS tmp
-            WHERE NOT EXISTS (SELECT PostID, UserCode FROM EditorRelation WHERE PostID = " . $PostID . " AND UserCode = " . $UserCode . ") LIMIT 1";
-
-    echo $sql;
-
-    $conn->query($sql);
-}
-
-
+$conn->close();
 ?>
