@@ -31,7 +31,11 @@
             <table>
             <?php
                 include "unconfirmed.php";
-                getUnconfirmed();
+                if($_SESSION["Level"] >= 2)
+                    getUnconfirmed();
+                else 
+                    echo "<script>window.history.back();</script>";
+
             ?>
             </table>
 

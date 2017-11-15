@@ -13,7 +13,7 @@ function GetCategories() {
 
             echo '<a id="' . $row['CategoryName'] . '" class="categoryOption waves-effect waves-light">
                       <img src="' . $Image[0] . '" class="circle" width="56" height="56">
-                  </a>';
+                  </a>&nbsp;';
         }
     }
 }

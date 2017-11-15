@@ -36,10 +36,13 @@
         <div class="container">
             <h5>Categorias</h5>
                 <?php
-                    echo '<a href="addCategory.php" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a><br><br>';
-                    $categories = new Categories();
+                    echo '<a style="padding-right:5px" href="addCategory.php" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a>';
+                    if($_SESSION["Level"] >= 2)
+                        echo '&nbsp;<a href="confirm" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">mode_edit</i></a><br><br>';
+                    else
+                        echo '<br><br>';
 
-                    $categories->GetCategories();
+                    GetCategories();
 
                 ?>
         <div>

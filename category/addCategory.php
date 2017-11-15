@@ -26,7 +26,7 @@
                     <div class="card-panel black-text">
                         <span id="logo" class="blue-text">InteractED</span>
                         <h1 id="title">Add New Category*</h1>
-                        <p style="color:#757575">*Categories must be aproved by our moderators before being approved</p>
+                        <p style="color:#757575">*Categories must be aproved by our moderators before being added</p>
                         <form id="new" action="result/" method="post" enctype="multipart/form-data">
                             <div class="file-field input-field">
                                 <div class="btn blue">
@@ -41,6 +41,10 @@
                                 <input id="category" name="category" type="text">
                                 <label for="category" data-error="Debe ingresar nombre de la categoria a agregar">Categoria</label>
                             </div>
+                            <div class="input-field col s12 m6">
+                                <input id="category-parent" name="parent" type="text" class="autocomplete" autocomplete="on">
+                                <label for="category-parent" data-error="Debe seleccionar una categoria parent">Parent</label>
+                            </div>
                             <label id="error-message" class="red-text">&nbsp;</label>
                             <br><br>
                             <a id="cancel" class="btn-flat blue-text waves-effect">Cancelar</a>
@@ -54,6 +58,29 @@
         <?php require "../include/scripts.html"; ?>
 
         <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: "autocomplete.php",
+                    type: "POST",
+                    async: true,
+                    context: this,
+                    dataType: "json",
+                    success: function(categories) {
+                        console.log(categories);
+                        if(categories) {
+                            $(".autocomplete").autocomplete({
+                                data: categories,
+                                limit: 5,
+                                minLength: 1
+                            });
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            });
+
             $( "#add-button" ).click(function() {
                 if ($( "#image-path" ).val() == "")
                 {
@@ -71,14 +98,13 @@
                         data: { category: $( "#category" ).val()} ,
                         success: function (response) {
                             if (response == '1'){
-                                //$( "#new-button" ).submit();
                                 $( "#error-message" ).html("Esta categoria ya existe");
                             }
                             else if (response == 0){
                                 var formData = new FormData();
                                 formData.append("image", $("#image-input")[0].files[0])
                                 $.ajax({
-                                    url: "upload_category.php?name=" + $( "#category" ).val(),
+                                    url: "upload_category.php?name=" + $( "#category" ).val() + "&parent=" + $( "#category-parent" ).val(),
                                     type: "POST",
                                     processData: false,
                                     contentType: false,
