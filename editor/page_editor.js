@@ -665,7 +665,7 @@ function createWrapper($inner, idToUse = -1) {
         "width": $inner.outerWidth() + "px",
         "height": $inner.outerHeight() + "px",
         "float": "left",
-        "position": "absolute !important"
+        "position": "absolute"
     });
 
     if($inner.data("type") != "text") {
