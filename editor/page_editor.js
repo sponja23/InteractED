@@ -1,4 +1,3 @@
-var categories;
 var textCreateEditor;
 var textEditEditor;
 
@@ -7,12 +6,9 @@ var pageContent;
 var nextID = 0;
 var $content = $("#content");
 var $selectedElement = $content;
-var dragging = false;
-var resizing = false;
 var creatingImage = false;
 var changeMade = false;
 var saveInterval;
-var positions;
 
 var debugSaveEnabled = false;
 var onDialog = false;
@@ -120,32 +116,6 @@ function init() {
                 console.log(textStatus, errorThrown);
             }
         });
-    });
-}
-
-function savePositions(exception_id) {
-    positions = {};
-    $(".object").each(function() {
-        var id = $(this).attr("id"); 
-        if(id != exception_id) {
-            positions[id] = $(this).offset();
-        }
-    });
-}
-
-function resetPositions(exception_id) {
-    $(".object").each(function() {
-        var id = $(this).attr("id");
-        if(id != exception_id) {
-            $(this).css({
-                "left": "0px",
-                "top": "0px"
-            });
-            $(this).css({
-                "left": positions[id].left - $(this).offset().left,
-                "top": positions[id].top - $(this).offset().top
-            });
-        }
     });
 }
 
@@ -651,7 +621,12 @@ function createWrapper($inner, idToUse = -1) {
     $newElement.draggable({
         snap: true,
         scroll: false,
-        containment: "#content"
+        containment: "#content",
+        start: function() {
+            changeMade = true;
+            $(".dropdown-button").dropdown("close");
+            selectElement($(this));
+        }
     });
 
     $newElement.attr({
@@ -674,17 +649,11 @@ function createWrapper($inner, idToUse = -1) {
                 "se": "#handle-" + id
             },
             aspectRatio: $newElement.width() / $newElement.height(),
-            resize: function() {
+            start: function() {
+                changeMade = true;
                 var maxWidth = $content.width() - $newElement.position().left;
                 $newElement.css("max-width", maxWidth);
                 $newElement.css("max-height", maxWidth / ($newElement.width() / $newElement.height()));
-            },
-            start: function() {
-                changeMade = true;
-                savePositions($(this).attr("id"));
-            },
-            stop: function() {
-                resetPositions($(this).attr("id"));
             }
         });
 
@@ -708,23 +677,9 @@ function createWrapper($inner, idToUse = -1) {
 
     $newElement.on({
         "click" : function(e) {
+            $(".dropdown-button").dropdown("close");
             selectElement($(this));
-            $("#" + $(this).data("type") + "-dropdown-activator").dropdown("close");
             e.stopPropagation();
-        },
-        "mousedown" : function(e) {
-            if(!dragging) {
-                selectElement($(this));
-                dragging = true;
-                e.stopPropagation();
-            }
-            if($(".handle:hover").length != 0)
-                dragging = false;
-            $("#" + $(this).data("type") + "-dropdown-activator").dropdown("close");
-            changeMade = true;
-        },
-        "mouseup" : function(e) {
-            dragging = false;
         },
         "contextmenu" : function(e) {
             e.stopPropagation();
@@ -733,15 +688,12 @@ function createWrapper($inner, idToUse = -1) {
             while(!$target.hasClass("object"))
                 $target = $target.parent();
 
+            $(".dropdown-button").dropdown("close");
+
+            selectElement($target);
+
             var type = $target.data("type");
             var contextMenuID = "#" + type + "-dropdown";
-
-            $(".dropdown-button").each(function() {
-                if($(this).attr("id") != contextMenuID + "-activator")
-                    $(this).dropdown("close");
-            });
-
-            //alert($(e.target).data("snap"));
 
             $(contextMenuID + " li .toggle .material-icons").each(function() {
                 var value = $target.attr("data-" + $(this).attr("data-option"));
@@ -829,11 +781,8 @@ function toggleAspectRatio($element) {
 }
 
 function removeElement($element) {
-    var id = $element.attr("id");
     removeLayer($element);
-    savePositions(id);
     $element.remove();
-    resetPositions(id);
     changeMade = true;
 }
 
