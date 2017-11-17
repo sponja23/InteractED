@@ -36,7 +36,6 @@ $(document).ready(function() {
         });
     else
         init();
-    
 });
 
 function init() {
@@ -64,6 +63,7 @@ function init() {
     });
 
     loadPage();
+    changeMade = false;
 
     $(document).keydown(function(e) {
         processKey(e);
@@ -533,7 +533,6 @@ function editText($element, $new_text) {
         "top": $element.css("top")
     });
     var id = parseInt($element.attr("id").slice($element.attr("id").lastIndexOf('-') + 1));
-    console.log(id);
     $content.append($inner);
     removeElement($selectedElement);
     $new_text.css("display", "block");
@@ -1036,8 +1035,6 @@ function processKey(event) {
 function loadPage() {
     $(pageContent).children().each(function(){
         $element = $(this);
-        console.log("Loading " + $element.data("type"));
-        console.log($element[0]);
         switch($element.data("type")) {
             case "image":
                 createImage($element.attr("src"), true, {
@@ -1080,7 +1077,6 @@ function loadPage() {
 // Code: Saving
 
 function savePage(userSaved) {
-    console.log("Saving...");
     var $newContent = $("<div id=content></div>");
     var maxHeight = 0;
     var pageTranscript = "";
@@ -1130,8 +1126,6 @@ function savePage(userSaved) {
         var bottomPos = $(this).position().top + $(this).outerHeight(true);
         if(bottomPos > maxHeight)
             maxHeight = bottomPos;
-        console.log(type + ": ");
-        console.log($elem[0]);
         $newContent.append($elem);
     });
 
@@ -1156,13 +1150,11 @@ function savePage(userSaved) {
             type: "POST",
             data: dataSaved,
             success: function(result) {
-                console.log(result);
-                console.log("saved");
                 if (userSaved)
                     Materialize.toast('Guardado correctamente', 4000);
             },
-            error: function() {
-                console.log("saving error");
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
             }
         });
 }
