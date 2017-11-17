@@ -8,7 +8,6 @@ var $content = $("#content");
 var $selectedElement = $content;
 var creatingImage = false;
 var changeMade = false;
-var saveInterval;
 
 var debugSaveEnabled = false;
 var onDialog = false;
@@ -45,9 +44,15 @@ function init() {
     $content.css({
         "height" : ($(window).height() - $("#side-nav").height()) + "px"
     }).on("contextmenu", function(e) {
+        e.preventDefault();
         e.stopPropagation();
 
+        unselectElement();
+
         var contextMenuID = "#content-dropdown";
+
+        if(!$(contextMenuID).hasClass("active"))
+            $(".dropdown-button").dropdown("close");
 
         $(contextMenuID + "-activator").dropdown("open");
 
@@ -56,8 +61,6 @@ function init() {
             left: e.pageX,
             top: e.pageY
         });
-
-        e.preventDefault();
     });
 
     loadPage();
@@ -90,7 +93,7 @@ function init() {
 
     initDialogs();
 
-    saveInterval = setInterval(function() {
+    setInterval(function() {
         if(changeMade)
             savePage(0);
         changeMade = false;
@@ -651,6 +654,8 @@ function createWrapper($inner, idToUse = -1) {
             aspectRatio: $newElement.width() / $newElement.height(),
             start: function() {
                 changeMade = true;
+                $(".dropdown-button").dropdown("close");
+
                 var maxWidth = $content.width() - $newElement.position().left;
                 $newElement.css("max-width", maxWidth);
                 $newElement.css("max-height", maxWidth / ($newElement.width() / $newElement.height()));
@@ -677,23 +682,25 @@ function createWrapper($inner, idToUse = -1) {
 
     $newElement.on({
         "click" : function(e) {
+            e.stopPropagation();
             $(".dropdown-button").dropdown("close");
             selectElement($(this));
-            e.stopPropagation();
         },
         "contextmenu" : function(e) {
+            e.preventDefault();
             e.stopPropagation();
 
             var $target = $(e.target);
             while(!$target.hasClass("object"))
                 $target = $target.parent();
 
-            $(".dropdown-button").dropdown("close");
-
             selectElement($target);
 
             var type = $target.data("type");
             var contextMenuID = "#" + type + "-dropdown";
+
+            if(!$(contextMenuID).hasClass("active"))
+                $(".dropdown-button").dropdown("close");
 
             $(contextMenuID + " li .toggle .material-icons").each(function() {
                 var value = $target.attr("data-" + $(this).attr("data-option"));
@@ -708,8 +715,6 @@ function createWrapper($inner, idToUse = -1) {
                 left: e.pageX,
                 top: e.pageY
             });
-
-            e.preventDefault();
         }
     });
 
