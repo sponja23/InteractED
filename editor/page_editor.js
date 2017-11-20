@@ -82,15 +82,11 @@ function init() {
     $.ajax({
         url: "../category/get_categories_with_images.php",
         type: "POST",
-        async: true,
-        context: this,
-        dataType: "json",
         success: function(categories) {
             if(categories) {
                 $(".autocomplete").autocomplete({
-                    data: categories,
-                    limit: 5,
-                    minLength: 1
+                    data: JSON.parse(categories),
+                    limit: 5
                 });
             }
         },
@@ -142,7 +138,6 @@ function initDialogs() {
     $("#edit-page-dialog").modal({
         dismissible: true,
         endingTop: "50%",
-        opacity: 0.5,
         complete: function() {
             onDialog = false;
         }
@@ -150,7 +145,8 @@ function initDialogs() {
 
     $("#edit-page-name").val(pageName);
     $("#edit-page-category").val(pageCategory);
-    $("#edit-page-height").val($content.height());
+
+    Materialize.updateTextFields();
 
     $("#edit-page-button").click(editPage);
 
@@ -359,7 +355,6 @@ function openDialog(id) {
 function editPage() {
     pageName = $("#edit-page-name").val();
     pageCategory = $("#edit-page-category").val();
-    $content.height($("#edit-page-height").val());
     changeMade = true;
 }
 

@@ -6,7 +6,7 @@ $result = $conn->query($sql);
 
 while ($row = $result->fetch_assoc()) {
 	$Image = glob("../images/categories/" . $row["CategoryID"] . ".*");
-	$categories[$row["CategoryName"]] = "../" . $Image[0];
+	$categories[$row["CategoryName"]] = $Image[0];
 }
 
 echo json_encode($categories);

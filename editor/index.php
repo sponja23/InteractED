@@ -284,21 +284,17 @@
         
         <div id="dialogs">
             <div id="edit-page-dialog" class="modal valign-modal">
-                <div class="modal-content row">
+                <div class="modal-content row" style="margin-bottom: 0;">
                     <div class="col s12">
                         <h5 style="margin-bottom: 20px;">Editar propiedades de p&aacute;gina</h5>
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s6">
                         <input id="edit-page-name" type="text" class="input">
                         <label for="edit-page-name">Nombre</label>
                     </div>
                     <div class="input-field col s6">
                         <input id="edit-page-category" type="text" class="input autocomplete">
-                        <label for="edit-page-category">Categoría</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="edit-page-height" type="number" class="input" min="0">
-                        <label for="edit-page-height">Altura</label>
+                        <label for="edit-page-category">Categor&iacute;a</label>
                     </div>
                 </div>
                 <div class="modal-footer">
