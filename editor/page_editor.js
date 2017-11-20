@@ -3,6 +3,7 @@ var textEditEditor;
 
 var pageContent;
 
+var firstScroll = true;
 var nextID = 0;
 var $content = $("#content");
 var $selectedElement = $content;
@@ -41,7 +42,7 @@ $(document).ready(function() {
 function init() {
 
     $content.css({
-        "height" : ($(window).height() - $("#side-nav").height()) + "px"
+        "height" : ($(window).height() - $("#side-nav").height() + 50) + "px"
     }).on("contextmenu", function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -64,6 +65,13 @@ function init() {
 
     loadPage();
     changeMade = false;
+
+    $(window).scroll(function() { 
+        if($(window).scrollTop() == ($(document).height() - $(window).height())) {
+            console.log("bottom");
+            $content.css("height", ($content.height() + 200) + "px");
+        }
+    })
 
     $(document).keydown(function(e) {
         processKey(e);
@@ -99,7 +107,7 @@ function init() {
         changeMade = false;
     }, 5000);
 
-    $( "#shared-users" ).on("click", ".delete-shared-user", function() {
+    $("#shared-users").on("click", ".delete-shared-user", function() {
         var UserCode = $(this).attr("id").split('-')[1];
 
         $.ajax({
@@ -108,11 +116,11 @@ function init() {
             data: { PostID: PostID, UserCode: UserCode } ,
             success: function (response) {
                 if (response == '1') {
-                    $( "#" + UserCode ).next().remove();
-                    $( "#" + UserCode ).remove();
+                    $("#" + UserCode).next().remove();
+                    $("#" + UserCode).remove();
 
-                    if ($( "#shared-users" ).children().length == 1)
-                        $( "#shared-users" ).empty();
+                    if ($("#shared-users").children().length == 1)
+                        $("#shared-users").empty();
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
