@@ -21,8 +21,16 @@
         <div class="container">
             <div class="row">
                 <?php
-                include "include/connect.php";
                 include "post/functions.php";
+                require "recommend/recommend.php";
+                ?>
+
+                <?php postsByRatings(); ?>
+
+                <div class="divider"></div>
+
+                <?php
+                include "include/connect.php";
 
                 $sql = "SELECT CategoryID, CategoryName FROM Categories WHERE Implemented = 1 ORDER BY CategoryName";
                 $Categories = $conn->query($sql);
@@ -62,21 +70,9 @@
                     }
                 }
                 ?>
-
-                <div class="col s12">
-                    <?php include "recommend/recommend.php"; ?>
-
-                    <div class="divider"></div>
-                    <h5>Destacados</h5>
-                    <?php postsByRatings(); ?>
-
-                    <div class="divider"></div>
-                    <h5>Recomendados por los articulos visitados</h5>
+                <h5 class="col s12">Destacados</h5>
+                <div class="row" style="margin-bottom: 0;">
                     <?php postsBySimilarTags(); ?>
-
-                    <!--<div class="divider"></div>
-                    <h5>Recomendados por usuarios con intereses similares</h5>
-                    <?php //postsBySimilarPeople(); ?>-->
                 </div>
             </div>
         </div>
