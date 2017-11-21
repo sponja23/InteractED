@@ -18,10 +18,7 @@
             while($row = $result->fetch_assoc()) {
                 $_SESSION[$_GET["id"] . "-Title"] = $row["Title"];
                 $_SESSION[$_GET["id"] . "-Category"] = $row["CategoryName"];
-                if(!is_null($row["LastEditDate"]))
-                    $old = "true";
-                else
-                    $old = "false";
+                $old = $row["LastEditDate"] != "" ? "true" : "false";
             }
         else
             header("Location: ../");
