@@ -35,7 +35,7 @@ $Image = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
                         <div class="col s12 valign-wrapper" style="margin: 20px 0;">
                             <p style="padding-left: 0.75rem;">
                                 <strong>Nivel: 
-                                    <?php switch($_SESSION['Level'])
+                                    <?php switch($_SESSION['Level']) {
                                             case 0:
                                                 echo "B&aacute;sico";
                                             break;
@@ -48,6 +48,7 @@ $Image = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
                                             case 3:
                                                 echo "Nosotros";
                                             break;
+                                        }
                                     ?>
                                 </strong>
                             </p>
