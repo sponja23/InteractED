@@ -3,7 +3,6 @@ var textEditEditor;
 
 var pageContent;
 
-var firstScroll = true;
 var nextID = 0;
 var $content = $("#content");
 var $selectedElement = $content;
@@ -68,10 +67,9 @@ function init() {
 
     $(window).scroll(function() { 
         if($(window).scrollTop() == ($(document).height() - $(window).height())) {
-            console.log("bottom");
-            $content.css("height", ($content.height() + 200) + "px");
+            $content.css("height", ($content.height() + 500) + "px");
         }
-    })
+    });
 
     $(document).keydown(function(e) {
         processKey(e);
@@ -99,7 +97,7 @@ function init() {
 
     setInterval(function() {
         if(changeMade)
-            savePage(0);
+            savePage(false);
         changeMade = false;
     }, 5000);
 
@@ -980,6 +978,7 @@ function processKey(event) {
                     moveElement($selectedElement, directions.left, 20);
                 else
                     moveElement($selectedElement, directions.left, 5);
+                event.preventDefault();
                 break;
             case 38:
                 // Arrow up
@@ -987,6 +986,7 @@ function processKey(event) {
                     moveElement($selectedElement, directions.up, 20);
                 else
                     moveElement($selectedElement, directions.up, 5);
+                event.preventDefault();
                 break;
             case 39:
                 // Arrow right
@@ -994,6 +994,7 @@ function processKey(event) {
                     moveElement($selectedElement, directions.right, 20);
                 else
                     moveElement($selectedElement, directions.right, 5);
+                event.preventDefault();
                 break;
             case 40:
                 // Arrow down
@@ -1001,11 +1002,12 @@ function processKey(event) {
                     moveElement($selectedElement, directions.down, 20);
                 else
                     moveElement($selectedElement, directions.down, 5);
+                event.preventDefault();
                 break;
             case 83:
                 // 's'
                 if(event.ctrlKey) {
-                    savePage(1);
+                    savePage(true);
                     event.preventDefault();
                 }
                 break;
@@ -1079,7 +1081,7 @@ function loadPage() {
 
 // Code: Saving
 
-function savePage(userSaved) {
+function savePage(manualSave) {
     var $newContent = $("<div id=content></div>");
     var maxHeight = 0;
     var pageTranscript = "";
@@ -1153,7 +1155,7 @@ function savePage(userSaved) {
             type: "POST",
             data: dataSaved,
             success: function(result) {
-                if (userSaved)
+                if(manualSave)
                     Materialize.toast('Guardado correctamente', 4000);
             },
             error: function(jqXHR, textStatus, errorThrown) {
