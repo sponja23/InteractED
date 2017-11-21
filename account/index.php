@@ -32,6 +32,27 @@ $Image = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
                             <a id="change" class="btn blue waves-effect waves-light" style="margin-left: 20px;">Cambiar</a>
                             <input id="image" name="image" type="file" class="hide">
                         </div>
+                        <div class="col s12 valign-wrapper" style="margin: 20px 0;">
+                            <p style="padding-left: 0.75rem;">
+                                <strong>Nivel: 
+                                    <?php switch($_SESSION['Level'])
+                                            case 0:
+                                                echo "B&aacute;sico";
+                                            break;
+                                            case 1:
+                                                echo "Edici&oacute;n";
+                                            break;
+                                            case 2:
+                                                echo "Administrador";
+                                            break;
+                                            case 3:
+                                                echo "Nosotros";
+                                            break;
+                                    ?>
+                                </strong>
+                            </p>
+                            <a href="../levelrequest/" id="lvlRequest" class="btn blue waves-effect waves-light" style="margin-left: 45px;">Solicitar Nivel</a>
+                        </div>
                         <div class="input-field col s12 m6">
                             <input id="name" name="Name" type="text">
                             <label for="name" data-error="El nombre no puede estar vac&iacute;o">Nombre</label>
@@ -49,6 +70,8 @@ $Image = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
                             <input id="confirm-password" type="password">
                             <label for="confirm-password" data-error="Debe ingresar la misma contrase&ntilde;a">Confirmar contrase&ntilde;a</label>
                         </div>
+                        
+                        
                     </form>
                     <div class="col s12">
                         <a id="save" class="btn blue waves-effect waves-light">Guardar</a>

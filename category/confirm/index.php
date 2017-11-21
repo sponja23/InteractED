@@ -29,9 +29,14 @@
 
         <div class="container">
             <h5>Categorias en Proceso</h5>
-            <table>
+            <table align="center">
             <?php
-                echo '<a style="padding-right:5px" href="../index.php" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">backspace</i></a>';
+                echo   '<tr> 
+                            <th>Categoria</th>
+                            <th>Padre</th>
+                            <th>Imagen</th>
+                            <th align="center">Respuesta</th>
+                        <tr>';
 
                 include "unconfirmed.php";
                 if($_SESSION["Level"] >= 2)

@@ -1,4 +1,24 @@
 <?php
+function postsByRatings() {
+	require "include/connect.php";
+    include "post/functions.php";
+
+    $sql = "SELECT A.PostID, A.Title, U.Name FROM Ratings R
+			INNER JOIN Articles A ON A.PostID = R.PostID
+			INNER JOIN Users U ON U.UserCode = A.CreatorID
+			GROUP BY R.PostID
+			ORDER BY AVG(R.Stars)";
+	$result = $conn->query($sql);
+	if($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+				$Image = glob("../../images/posts/" . $post_row['PostID'] . ".*");
+				addHorizontalCard($post_row['PostID'], $Image[0], $post_row['Title'], $post_row['Name']);
+			}
+		}
+	}
+}
+
+
 function postsBySimilarTags() {
 	require "include/connect.php";
     include "post/functions.php";

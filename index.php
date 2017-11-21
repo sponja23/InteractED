@@ -63,21 +63,21 @@
                 }
                 ?>
 
-                <!-- <div class="col s12">
-                    <div class="divider"></div>
-                    <h5>Recomendados</h5>
-                    Aca va tu Engine en NODE Sponja
+                <div class="col s12">
+                    <?php include "recommend/recommend.php"; ?>
 
-                    <?php //include "recommend/recommend.php"; ?>
+                    <div class="divider"></div>
+                    <h5>Destacados</h5>
+                    <?php postsByRatings(); ?>
 
                     <div class="divider"></div>
                     <h5>Recomendados por los articulos visitados</h5>
-                    <?php //postsBySimilarTags(); ?>
+                    <?php postsBySimilarTags(); ?>
 
-                    <div class="divider"></div>
+                    <!--<div class="divider"></div>
                     <h5>Recomendados por usuarios con intereses similares</h5>
-                    <?php //postsBySimilarPeople(); ?>
-                </div> -->
+                    <?php //postsBySimilarPeople(); ?>-->
+                </div>
             </div>
         </div>
 
