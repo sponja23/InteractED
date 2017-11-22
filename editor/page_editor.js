@@ -38,6 +38,10 @@ $(document).ready(function() {
         init();
 });
 
+function pxToInt(val) {
+    return parseInt(val.slice(0, val.lastIndexOf("px")));
+}
+
 function init() {
 
     $content.css({
@@ -65,8 +69,8 @@ function init() {
     loadPage();
     changeMade = false;
 
-    $(window).scroll(function() { 
-        if($(window).scrollTop() == ($(document).height() - $(window).height())) {
+    $(window).scroll(function() {
+        if($(window).scrollTop() >= ($(document).height() - $(window).height() - 10)) {
             $content.css("height", ($content.height() + 500) + "px");
         }
     });
@@ -726,8 +730,8 @@ function createWrapper($inner, idToUse = -1) {
             "top": "0px"
         });
         $newElement.css({
-            "left": parseInt($inner.css("left").slice(0, $inner.css("left").lastIndexOf("px"))) - $newElement.offset().left + $content.offset().left,
-            "top": parseInt($inner.css("top").slice(0, $inner.css("top").lastIndexOf("px"))) - $newElement.offset().top + $content.offset().top
+            "left": pxToInt($inner.css("left")) - $newElement.offset().left + $content.offset().left,
+            "top": pxToInt($inner.css("top")) - $newElement.offset().top + $content.offset().top
         });
         $inner.css({
             "left": "",
@@ -737,6 +741,7 @@ function createWrapper($inner, idToUse = -1) {
             giveLayer($newElement, parseInt(Layer));
         else
             giveLayer($newElement);
+        var bottomPos = $newElement.offset().top + $newElement.height();
     }
     else {
         giveLayer($newElement);
@@ -791,7 +796,7 @@ function removeElement($element) {
     changeMade = true;
 }
 
-// Code: z Index
+// Code: Layers
 
 function giveLayer($element, index = -1) {
     if(index == -1) {
@@ -955,7 +960,7 @@ function pasteElement() {
                 createVideo($clipboard.children(".inner").clone());
                 break;
             case "custom":
-                $("#custom-create-size").val(($clipboard.outerWidth() / $clipboard.outerHeight())) // Tengo que arreglar esto
+                $("#custom-create-size").val(($clipboard.outerWidth() / $clipboard.outerHeight())); // Tengo que arreglar esto
                 createCustom($clipboard.children(".inner").clone());
                 $("#custom-create-size").val(50);
                 break;
@@ -1032,6 +1037,10 @@ function processKey(event) {
                     removeElement($selectedElement);
                     event.preventDefault();
                 }
+            case 27:
+                // escape
+                unselectElement();
+                event.preventDefault();
         }
 }
 
@@ -1040,6 +1049,14 @@ function processKey(event) {
 function loadPage() {
     $(pageContent).children().each(function(){
         $element = $(this);
+
+        $content.append($element);
+        var bottomPos = pxToInt($element.css("top")) + $element.height();
+        $element.remove();
+
+        if(bottomPos > $content.height())
+            $content.css("height", bottomPos + "px");
+
         switch($element.data("type")) {
             case "image":
                 createImage($element.attr("src"), true, {
