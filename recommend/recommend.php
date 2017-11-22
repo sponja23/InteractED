@@ -45,6 +45,7 @@ function postsBySimilarTags() {
                             AND A.PostID NOT IN(SELECT PostID FROM Visited WHERE UserCode = '" . $_SESSION["UserCode"] . "')";
                     $result3 = $conn->query($sql);
                     if($result3->num_rows > 0){
+						echo '<h5 class="col s12">Recomendaciones</h5>';
                         while($row3 = $result3->fetch_assoc()){
                             addHorizontalCard($row3['PostID'], $Image[0], $row3['Title'], $row3['Name']);
                         }

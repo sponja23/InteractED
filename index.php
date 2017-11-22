@@ -70,10 +70,10 @@
                     }
                 }
                 ?>
-                <h5 class="col s12">Post by Visited</h5>
                 <div class="row" style="margin-bottom: 0;">
                     <?php postsBySimilarTags(); ?>
                 </div>
+                
             </div>
         </div>
 
