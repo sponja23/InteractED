@@ -3,8 +3,16 @@ require "../include/connect.php";
 
 $fileError = $_FILES["image"]["error"];
 
+$categoryName =  $_GET["name"];
+
+if ($_GET["parent"] == "")
+	$categoryParent = "root";
+else
+	$categoryParent = $_GET["parent"];
+
+
 if($fileError == UPLOAD_ERR_OK) {
-    $sql = 'INSERT INTO Categories (CategoryName, CategoryParent, Implemented) VALUES ("' . $_GET["name"] . '", "' . $_GET["parent"] . '", 0)';
+    $sql = 'INSERT INTO Categories (CategoryName, CategoryParent, Implemented) VALUES ("' . $categoryName . '", "' . $categoryParent . '", 0)';
 
     if ($conn->query($sql) === TRUE) {
         $File = "../images/categories/" . $conn->insert_id . "." . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
