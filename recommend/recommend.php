@@ -5,6 +5,7 @@ function postsByRatings() {
     $sql = "SELECT A.PostID, A.Title, U.Name FROM Ratings R
             INNER JOIN Articles A ON A.PostID = R.PostID
             INNER JOIN Users U ON U.UserCode = A.CreatorID
+            WHERE A.PostID NOT IN(SELECT PostID FROM Visited WHERE UserCode = '" . $_SESSION["UserCode"] . "')
             GROUP BY R.PostID
             ORDER BY AVG(R.Stars)
             LIMIT 4";
@@ -25,6 +26,56 @@ function postsByRatings() {
 
 function postsBySimilarTags() {
     require "include/connect.php";
+
+    $sql = "SELECT A.PostID FROM Articles A
+            INNER JOIN Visited V ON A.PostID = V.PostID
+            WHERE V.UserCode = ". $_SESSION["UserCode"];
+    $result = $conn->query($sql);
+    if($result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            $sql = "SELECT TagName FROM Tags
+                    WHERE PostID = ".$row['PostID'];
+            $result2 = $conn->query($sql);
+            if($result2->num_rows > 0){
+                while($row2 = $result2->fetch_assoc()){
+                    $sql = "SELECT A.PostID, A.Title, U.Name FROM Tags T
+                            INNER JOIN Articles A ON T.PostID = A.PostID
+                            INNER JOIN Users U ON U.UserCode = A.CreatorID
+                            WHERE T.TagName = '".$row2['TagName']."'
+                            AND A.PostID NOT IN(SELECT PostID FROM Visited WHERE UserCode = '" . $_SESSION["UserCode"] . "')";
+                    $result3 = $conn->query($sql);
+                    if($result3->num_rows > 0){
+                        while($row3 = $result3->fetch_assoc()){
+                            addHorizontalCard($row3['PostID'], $Image[0], $row3['Title'], $row3['Name']);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    /*$sql = "SELECT DISTINCT A.PostID, A.Title, U.Name FROM Articles A
+            INNER JOIN Users U ON U.UserCode = A.CreatorID
+            INNER JOIN Tags T ON A.PostID = T.PostID
+            WHERE T.TagName = (SELECT T.TagName FROM Tags T
+                                INNER JOIN Visited V ON T.PostID = V.PostID
+                                WHERE V.UserCode = " . $_SESSION["UserCode"] .")
+            AND A.PostID NOT IN(SELECT PostID FROM Visited WHERE UserCode = '" . $_SESSION["UserCode"] . "')";
+
+
+    $sql = "SELECT A.PostID, A.Title, U.Name FROM Tags T
+            INNER JOIN Visited V ON T.PostID = V.PostID
+            INNER JOIN Articles A ON V.PostID = A.PostID
+            INNER JOIN Users U ON U.UserCode = A.CreatorID
+            WHERE DateLastVisited = (SELECT max(DateLastVisited) FROM Visited WHERE V.PostID = Visited.PostID)
+            AND V.UserCode = " . $_SESSION["UserCode"] . "" ORDER BY V.DateLastVisited DESC
+";
+
+
+
+
+
     $sql = "SELECT T.TagName FROM Tags T
             INNER JOIN Visited V ON T.PostID = V.PostID
             WHERE V.UserCode = " . $_SESSION["UserCode"] . " ORDER BY V.DateLastVisited DESC LIMIT 10";
@@ -45,7 +96,13 @@ function postsBySimilarTags() {
         echo '<div>
                   <p>No se han encontrado articulos recomendados</p>
               </div>';
-    }
+    }*/
+}
+
+function noResults(){
+    echo '<div>
+                  <p>No se han encontrado articulos recomendados</p>
+              </div>';
 }
 
 function postsBySimilarPeople() {

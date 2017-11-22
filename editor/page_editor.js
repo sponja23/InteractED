@@ -14,6 +14,7 @@ var onDialog = false;
 
 var $clipboard = null;
 
+var context_position = null;
 var layerOrder = [];
 
 $(document).ready(function() {
@@ -58,6 +59,11 @@ function init() {
             $(".dropdown-button").dropdown("close");
 
         $(contextMenuID + "-activator").dropdown("open");
+
+        context_menu_position = {
+            left: e.pageX,
+            top: e.pageY
+        };
 
         $(contextMenuID).css({
             display: "block",
@@ -343,7 +349,7 @@ function initDialogs() {
     });
 
     $("#custom-create-button").click(function() {
-        createCustom($("#custom-create-code"));
+        createCustom($("#custom-create-code").val());
     })
 }
 
