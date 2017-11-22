@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Add New Category</title>
+        <title>Crear categoria</title>
 
         <?php require "../include/head.html"; ?>
-
         <link rel="stylesheet" href="styles.css">
         <link rel="stylesheet" href="../css/input.css">
         <link rel="stylesheet" href="../css/font.css">
@@ -25,8 +24,8 @@
                 <div class="col s12 m6 offset-m3">
                     <div class="card-panel black-text">
                         <span id="logo" class="blue-text">InteractED</span>
-                        <h1 id="title">Add New Category*</h1>
-                        <p style="color:#757575">*Categories must be aproved by our moderators before being added</p>
+                        <h1 id="title">Crear categoria*</h1>
+                        <p style="color:#757575">*Las categorias deben ser aprobadas por nuestros moderadores</p>
                         <form id="new" action="result/" method="post" enctype="multipart/form-data">
                             <div class="file-field input-field">
                                 <div class="btn blue">
