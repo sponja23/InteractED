@@ -20,7 +20,8 @@ function postsByRatings() {
             addVerticalCard($row['PostID'], $Image[0], $row['Title'], $row['Name']);
         }
 
-        echo '</div>';
+        echo '</div>
+              <div class="divider"></div>';
     }
 }
 

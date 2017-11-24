@@ -27,12 +27,12 @@
 
                 <?php postsByRatings(); ?>
 
-                <div class="divider"></div>
-
                 <?php
                 include "include/connect.php";
 
-                $sql = "SELECT CategoryID, CategoryName FROM Categories WHERE Implemented = 1 ORDER BY CategoryName";
+                $sql = "SELECT CategoryID, CategoryName FROM Categories
+                        WHERE Implemented = 1 AND (SELECT count(*) FROM Articles WHERE CategoryID = Categories.CategoryID) > 0
+                        ORDER BY CategoryName";
                 $Categories = $conn->query($sql);
 
                 $CurrentRow = 1;

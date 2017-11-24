@@ -20,8 +20,8 @@
                 <div class="col s12 m6 offset-m3">
                     <div class="card">
                         <div class="card-content black-text">
-                            <span id="logo" class="blue-text">InteractED</span>
-                            <div class="input-field col s12">
+                            <span id="logo" class="blue-text col s12">InteractED</span>
+                            <div class="input-field col s12" style="margin-top: 36px;">
                                 <select id="level">
                                     <option value="" disabled selected>Elige una opci&oacute;n</option>
                                     <option value="0">B&aacute;sico</option>

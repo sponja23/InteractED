@@ -32,27 +32,29 @@ $Image = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
                             <a id="change" class="btn blue waves-effect waves-light" style="margin-left: 20px;">Cambiar</a>
                             <input id="image" name="image" type="file" class="hide">
                         </div>
-                        <div class="col s12 valign-wrapper" style="margin: 20px 0;">
-                            <p style="padding-left: 0.75rem;">
-                                <strong>Nivel: 
-                                    <?php switch($_SESSION['Level']) {
-                                            case 0:
-                                                echo "B&aacute;sico";
-                                            break;
-                                            case 1:
-                                                echo "Edici&oacute;n";
-                                            break;
-                                            case 2:
-                                                echo "Administrador";
-                                            break;
-                                            case 3:
-                                                echo "Nosotros";
-                                            break;
-                                        }
-                                    ?>
+                        <div class="col s12 valign-wrapper" style="margin-bottom: 20px;">
+                            <p style="margin-bottom: 1em;">
+                                <strong>Nivel:</strong>
+                                <?php
+                                switch($_SESSION["Level"]) {
+                                    case 0:
+                                        echo "B&aacute;sico";
+                                    break;
+                                    case 1:
+                                        echo "Edici&oacute;n";
+                                    break;
+                                    case 2:
+                                        echo "Administrador";
+                                    break;
+                                    case 3:
+                                        echo "Miembro del equipo";
+                                    break;
+                                }
+                                ?>
                                 </strong>
                             </p>
-                            <a href="../levelrequest/" id="lvlRequest" class="btn blue waves-effect waves-light" style="margin-left: 45px;">Solicitar Nivel</a>
+                            <a href="../levelrequest/" id="lvlRequest" class="btn blue waves-effect waves-light" style="margin-left: 16px;">Solicitar Nivel</a>
+                            <a href="../levelconfirm/" id="lvlConfirm" class="btn blue waves-effect waves-light" style="margin-left: 16px;">Solicitudes de Nivel</a>
                         </div>
                         <div class="input-field col s12 m6">
                             <input id="name" name="Name" type="text">

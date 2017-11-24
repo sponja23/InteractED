@@ -126,6 +126,13 @@ nav ul a:hover {
     margin-right: 0.5em;
 }
 
+#login {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: 2em;
+    margin-left: 0px;
+}
+
 #category-icon {
     margin: 0 0.5em;
 }
