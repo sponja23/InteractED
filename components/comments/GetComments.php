@@ -1,53 +1,50 @@
 <?php
-$File = "../../post/comments/" . $_POST['PostID'] . ".comments";
+function RemoveDownloadedComments($sql, $field) {
+    if ($_POST["DownloadedComments"] != "") {
+        $DownloadedComments = explode(';', $_POST["DownloadedComments"]);
 
-if (file_exists($File)) {
-    $Comments = json_decode(file_get_contents($File), true);
-
-    if ($_POST['DownloadedComments'] != "") {
-        $DownloadedComments = explode(';', $_POST['DownloadedComments']);
-
-        for ($i = 0; $i < count($DownloadedComments); $i++)
-            unset($Comments[$i]);
+        foreach ($DownloadedComments as $CommentID)
+            $sql .= " AND " . $field . " != " . $CommentID;
     }
 
-    foreach ($Comments as $Key => $Value)
-        if ($Key != "LastID")
-            $Users[] = $Comments[$Key]["UserCode"];
-
-    if (intval($Comments["LastID"]) > 0 && $Users != null) {
-        require "../../include/connect.php";
-
-        $Users = array_values(array_unique($Users));
-
-        $sql = "SELECT UserCode, Name FROM Users WHERE UserCode=" . $Users[0];
-
-        for ($i = 1; $i < count($Users); $i++)
-            $sql .= " OR UserCode=" . $Users[$i];
-
-        $result = $conn->query($sql);
-
-        $UserData = '{';
-
-        while ($row = $result->fetch_assoc()) {
-            $Extension = glob("../../images/users/" . $row["UserCode"] . ".*");
-            $Extension = pathinfo($Extension[0]);
-            $Extension = $Extension['extension'];
-
-            $UserData .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Extension":"' . $Extension . '"},';
-        }
-
-        $UserData = json_decode(substr($UserData, 0, -1) . '}', true);
-
-        $Data = array("Comments" => $Comments, "UserData" => $UserData);
-
-        echo json_encode($Data);
-    }
+    return $sql;
 }
-else {
-    if (!file_exists("../../post/comments/"))
-        mkdir("../../post/comments", 0777, true);
 
-    file_put_contents($File, '{"LastID":0}');
+require "../../include/connect.php";
+
+$sql = 'SELECT CommentID, UserCode, Comment FROM Comments WHERE MD5(PostID) = "' . $_POST["PostID"] . '"';
+$sql = RemoveDownloadedComments($sql, "CommentID");
+
+$result = $conn->query($sql);
+
+$Comments = '{';
+
+while ($row = $result->fetch_assoc())
+    $Comments .= '"' . $row["CommentID"] . '":{"UserCode":' . $row["UserCode"] . ',"Comment":"' . $row["Comment"] . '"},';
+
+$Comments = substr($Comments, 0, -1) . '}';
+
+$sql = 'SELECT DISTINCT U.UserCode, U.Name FROM Comments C
+        INNER JOIN Users U ON U.UserCode = C.UserCode
+        WHERE MD5(PostID) = "' . $_POST["PostID"] . '"';
+$sql = RemoveDownloadedComments($sql, "C.CommentID");
+
+$result = $conn->query($sql);
+
+$UserData = '{';
+
+while ($row = $result->fetch_assoc()) {
+    $Extension = glob("../../images/users/" . $row["UserCode"] . ".*");
+    $Extension = pathinfo($Extension[0]);
+    $Extension = $Extension["extension"];
+
+    $UserData .= '"' . $row["UserCode"] . '":{"Name":"' . $row["Name"] . '","Extension":"' . $Extension . '"},';
+}
+
+$UserData = substr($UserData, 0, -1) . '}';
+
+if ($Comments != '}') {
+    $Data = array("Comments" => json_decode($Comments), "UserData" => json_decode($UserData));
+    echo json_encode($Data);
 }
 ?>

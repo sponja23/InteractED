@@ -1,36 +1,24 @@
 <?php
 session_start();
 
-$File = "../../post/comments/" . $_POST['PostID'] . ".comments";
+require "../../include/connect.php";
 
-if (file_exists($File)) {
-    $Comments = json_decode(file_get_contents($File), true);
+$sql = 'INSERT INTO Comments (PostID, UserCode, Comment)
+        VALUES ((SELECT PostID FROM Articles WHERE MD5(PostID) = "' . $_POST["PostID"] . '"), ' . $_SESSION["UserCode"] . ', "' . $_POST["Comment"] . '")';
 
-    $Comments["LastID"] = intval($Comments["LastID"]) + 1;
-    $LastID = $Comments["LastID"];
+if ($conn->query($sql) === TRUE) {
+    $CommentID = $conn->insert_id;
 
-    $Comments[$LastID]["UserCode"] = $_SESSION['UserCode'];
-    $Comments[$LastID]["Comment"] = $_POST['Comment'];
-
-    file_put_contents($File, json_encode($Comments));
-
-    require "../../include/connect.php";
-
-    $sql = "SELECT Name FROM Users WHERE UserCode=" . $_SESSION['UserCode'];
+    $sql = "SELECT Name FROM Users WHERE UserCode = " . $_SESSION["UserCode"];
     $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $Image = glob("../../images/users/" . $_SESSION['UserCode'] . ".*");
+    $Extension = glob("../../images/users/" . $_SESSION["UserCode"] . ".*");
+    $Extension = pathinfo($Extension[0]);
+    $Extension = $Extension["extension"];
 
-            echo '{"CommentID":"' . $LastID . '","Name":"' . $row['Name'] . '","Image":"' . $Image[0] . '"}';
-        }
-    }
-}
-else {
-    if (!file_exists("../../post/comments/"))
-        mkdir("../../post/comments");
+    $Image = $_SESSION["UserCode"] . '.' . $Extension;
 
-    file_put_contents($File, '{"LastID":0}');
+    echo '{"CommentID":' . $CommentID . ',"Name":"' . $row["Name"] . '","Image":"' . $Image . '"}';
 }
 ?>

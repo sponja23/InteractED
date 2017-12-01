@@ -46,12 +46,12 @@ $.ajax({
                     success: function (response) {
                         var Data = JSON.parse(response);
 
+                        LoadedComments += Data.CommentID + ';';
+
                         AddComment("../images/users/" + Data.Image, Data.Name, Comment);
 
                         $( "#comment" ).val("").css("height", "auto");
                         $( "#publish" ).addClass( "disabled" );
-
-                        LoadedComments += Data.CommentID + ';';
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log(textStatus, errorThrown);
@@ -69,24 +69,22 @@ function LoadComments(PostID, DownloadedComments) {
     $.ajax({
         url: "../components/comments/GetComments.php",
         type: "POST",
-        data: { PostID: PostID, DownloadedComments: DownloadedComments } ,
+        data: { PostID: PostID, DownloadedComments: DownloadedComments.slice(0, -1) } ,
         success: function (response) {
             if (response != "") {
                 var Data = JSON.parse(response);
 
                 for (Entry in Data.Comments) {
-                    if (Entry != "LastID") {
-                        LoadedComments += Entry + ';';
+                    LoadedComments += Entry + ';';
 
-                        var ID = Data.Comments[Entry].UserCode;
-                        var Comment = Data.Comments[Entry].Comment;
+                    var ID = Data.Comments[Entry].UserCode;
+                    var Comment = Data.Comments[Entry].Comment;
 
-                        var Name = Data.UserData[ID].Name;
-                        var Image = "../images/users/" + ID + '.' + Data.UserData[ID].Extension;
-                        //var Time = "3 h"
+                    var Name = Data.UserData[ID].Name;
+                    var Image = "../images/users/" + ID + '.' + Data.UserData[ID].Extension;
+                    //var Time = "3 h"
 
-                        AddComment(Image, Name, Comment);
-                    }
+                    AddComment(Image, Name, Comment);
                 }
             }
         },
