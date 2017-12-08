@@ -1,43 +1,43 @@
 <?php
 session_start();
 
-if ($_POST['UserCode'] < $_SESSION['UserCode'])
-    $File = "chats/" . $_POST['UserCode'] . '-' . $_SESSION['UserCode'] . ".chat";
-else
-    $File = "chats/" . $_SESSION['UserCode'] . '-' . $_POST['UserCode'] . ".chat";
+function RemoveDownloadedMessages($sql, $field) {
+    if ($_POST["DownloadedMessages"] != "") {
+        $DownloadedMessages = explode(';', $_POST["DownloadedMessages"]);
 
-if (file_exists($File)) {
-    if ($_POST['Function'] == "Load") {
-        if ($_POST['DownloadedMessages'] != "") {
-            $Chat = json_decode(file_get_contents($File), true);
-
-            $DownloadedMessages = explode(';', $_POST['DownloadedMessages']);
-
-            for ($i = 0; $i < count($DownloadedMessages); $i++) {
-                unset($Chat[$i]);
-            }
-
-            echo json_encode($Chat);
-        }
-        else
-            echo file_get_contents($File);
+        foreach ($DownloadedMessages as $MessageID)
+            $sql .= " AND " . $field . " != " . $MessageID;
     }
-    else {
-        $Chat = json_decode(file_get_contents($File), true);
 
-        $Chat["LastID"] = intval($Chat["LastID"]) + 1;
-        $LastID = $Chat["LastID"];
+    return $sql;
+}
 
-        $Chat[$LastID]["UserCode"] = $_SESSION['UserCode'];
-        $Chat[$LastID]["Message"] = $_POST['Message'];
+require "../include/connect.php";
 
-        file_put_contents($File, json_encode($Chat));
+if ($_POST["Function"] == "Load") {
+    $sql = "SELECT MessageID, Message, (SenderUserCode = " . $_SESSION["UserCode"] . ") Sent FROM Chats
+            WHERE ((SenderUserCode = " . $_SESSION["UserCode"] . " AND ReceiverUserCode = " . $_POST["UserCode"] . ")
+            OR (SenderUserCode = " . $_POST["UserCode"] . " AND ReceiverUserCode = " . $_SESSION["UserCode"] . "))";
+    $sql = RemoveDownloadedMessages($sql, "MessageID");
 
-        echo $LastID;
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $Messages = '{';
+
+        while ($row = $result->fetch_assoc())
+            $Messages .= '"' . $row["MessageID"] . '":{"Message":"' . $row["Message"] . '","Sent":' . $row["Sent"] . '},';
+
+        echo substr($Messages, 0, -1) . '}';
     }
 }
-else {
-    mkdir("chats");
-    file_put_contents($File, '{"LastID":0}');
+else if ($_POST["Function"] == "Upload") {
+    $sql = 'INSERT INTO Chats (SenderUserCode, ReceiverUserCode, Message)
+            VALUES (' . $_SESSION["UserCode"] . ', ' . $_POST["UserCode"] . ', "' . $_POST["Message"] . '")';
+
+    if ($conn->query($sql) === TRUE)
+        echo $conn->insert_id;
 }
+
+$conn->close();
 ?>

@@ -1,47 +1,31 @@
 <?php
 session_start();
 
-$File = "users/" . $_SESSION['UserCode'] . ".chats";
+require "../include/connect.php";
 
-if (file_exists($File)) {
-    $Chats = json_decode(file_get_contents($File), true);
+$sql = "SELECT CASE WHEN C.SenderUserCode != " . $_SESSION["UserCode"] . " THEN C.SenderUserCode ELSE C.ReceiverUserCode END UserCode, U.Name, Message FROM Chats C
+        INNER JOIN Users U ON U.UserCode = CASE WHEN C.SenderUserCode != " . $_SESSION["UserCode"] . " THEN C.SenderUserCode ELSE C.ReceiverUserCode END
+        WHERE C.MessageID = (SELECT MAX(MessageID) FROM Chats WHERE (SenderUserCode = " . $_SESSION["UserCode"] . " AND ReceiverUserCode = UserCode) OR (SenderUserCode = UserCode AND ReceiverUserCode = " . $_SESSION["UserCode"] . "))
+        ORDER BY C.MessageID DESC";
+$result = $conn->query($sql);
 
-    require "../include/connect.php";
+if ($result->num_rows > 0) {
+    $Chats = '{';
 
-    foreach ($Chats["Chats"] as $Value)
-        $Users[] = $Value;
+    $MessageCount = 1;
 
-    $sql = "SELECT UserCode, Name FROM Users WHERE UserCode=" . $Users[0];
+    while ($row = $result->fetch_assoc()) {
+        $Extension = glob("../images/users/" . $row["UserCode"] . ".*");
+        $Extension = pathinfo($Extension[0]);
+        $Extension = $Extension["extension"];
 
-    for ($i = 1; $i < count($Users); $i++)
-        $sql .= " OR UserCode=" . $Users[$i];
+        $Chats .= '"' . $MessageCount . '":{"UserCode":"' . $row["UserCode"] . '","Name":"' . $row["Name"] . '","Extension":"' . $Extension . '","Message":"' . $row["Message"] . '"},';
 
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $UserData = '{';
-
-        while ($row = $result->fetch_assoc()) {
-            if ($row['UserCode'] < $_SESSION['UserCode'])
-                $ChatFile = "../chat/chats/" . $row['UserCode'] . '-' . $_SESSION['UserCode'] . ".chat";
-            else
-                $ChatFile = "../chat/chats/" . $_SESSION['UserCode'] . '-' . $row['UserCode'] . ".chat";
-
-            $SpecificChat = json_decode(file_get_contents($ChatFile), true);
-            $Message = $SpecificChat[$SpecificChat["LastID"]]["Message"];
-
-            $Extension = glob("../images/users/" . $row['UserCode'] . ".*");
-            $Extension = pathinfo($Extension[0]);
-            $Extension = $Extension['extension'];
-
-            $UserData .= '"' . $row['UserCode'] . '":{"Name":"' . $row['Name'] . '","Extension":"' . $Extension . '","Message":"' . $Message . '"},';
-        }
-
-        echo substr($UserData, 0, -1) . '}';
+        $MessageCount++;
     }
+
+    echo substr($Chats, 0, -1) . '}';
 }
-else {
-    mkdir("users");
-    file_put_contents($File, '{"Chats":[]}');
-}
+
+$conn->close();
 ?>

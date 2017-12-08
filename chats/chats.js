@@ -10,8 +10,10 @@ $.ajax({
         if (response != "") {
             var Chats = JSON.parse(response);
 
-            for (Entry in Chats)
-                AddChat(Entry, "../images/users/" + Entry + '.' + Chats[Entry].Extension, Chats[Entry].Name, Chats[Entry].Message);
+            for (Entry in Chats) {
+                var Image = "../images/users/" + Chats[Entry].UserCode + '.' + Chats[Entry].Extension;
+                AddChat(Chats[Entry].UserCode, Image, Chats[Entry].Name, Chats[Entry].Message);
+            }
         }
         else
             $( "#chats-wrapper" ).append('<p class="center-align">No tiene ningun chat, cree uno nuevo para empezar a hablar</p>');
@@ -44,7 +46,7 @@ $( "#user-close-icon" ).click(function() {
     $( "#user-search" ).val("").focus();
 });
 
-$( "#user-search" ).keydown(function() {
+$( "#user-search" ).on("input", function() {
     $( "#search-results" ).empty();
 
     if ($( "#user-search" ).val() != "")
@@ -53,7 +55,6 @@ $( "#user-search" ).keydown(function() {
             type: "POST",
             data: { Search: $( "#user-search" ).val() } ,
             success: function (response) {
-                console.log(response);
                 if (response != "") {
                     var Chats = JSON.parse(response);
 

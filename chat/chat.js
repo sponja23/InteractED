@@ -52,28 +52,24 @@ function LoadChat(DownloadedMessages) {
     $.ajax({
         url: "chat.php",
         type: "POST",
-        data: { Function: "Load", UserCode: UserCode, DownloadedMessages: DownloadedMessages } ,
+        data: { Function: "Load", UserCode: UserCode, DownloadedMessages: DownloadedMessages.slice(0, -1) } ,
         success: function (response) {
             if (response != "") {
                 var Chat = JSON.parse(response);
 
-                if (Chat.LastID > 0) {
-                    for (Entry in Chat) {
-                        if (Entry != "LastID") {
-                            LoadedMessages += Entry + ';';
+                for (Entry in Chat) {
+                    LoadedMessages += Entry + ';';
 
-                            if (Chat[Entry].UserCode == UserCode) {
-                                var Color = "grey";
-                                var ExtraClass = "left";
-                            }
-                            else {
-                                var Color = "blue";
-                                var ExtraClass = "right";
-                            }
-
-                            AddMessage(Chat[Entry].Message, Color, ExtraClass);
-                        }
+                    if (Chat[Entry].Sent == '1') {
+                        var Color = "blue";
+                        var ExtraClass = "right";
                     }
+                    else {
+                        var Color = "grey";
+                        var ExtraClass = "left";
+                    }
+
+                    AddMessage(Chat[Entry].Message, Color, ExtraClass);
                 }
             }
         },

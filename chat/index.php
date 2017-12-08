@@ -6,35 +6,13 @@ if(!isset($_SESSION["UserCode"]))
 
 require "../include/connect.php";
 
-$sql = 'SELECT Name FROM Users WHERE UserCode=' . $_GET["id"];
-
+$sql = "SELECT Name FROM Users WHERE UserCode = " . $_GET["id"];
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $Name2 = $row['Name'];
+$row = $result->fetch_assoc();
+$UserName = $row["Name"];
 
-        $Extension = glob("../images/users/" . $_GET["id"] . ".*");
-        $Extension = pathinfo($Extension[0]);
-        $Extension = $Extension['extension'];
-
-        $Image2 = "../images/users/" . $_GET["id"] . '.' . $Extension;
-    }
-}
-
-$File = "../chats/users/" . $_SESSION["UserCode"] . ".chats";
-
-if (file_exists($File)) {
-    $Chats = json_decode(file_get_contents($File), true);
-    $Chats["Chats"][count($Chats["Chats"])] = $_GET["id"];
-    file_put_contents($File, json_encode($Chats));
-}
-else {
-    if (!file_exists("../chats/users/"))
-        mkdir("../chats/users");
-
-    file_put_contents($File, '{"Chats":[' . $_GET["id"] . ']}');
-}
+$UserImage = glob("../images/users/" . $_GET["id"] . ".*");
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,8 +21,8 @@ else {
 
         <?php require "../include/head.html"; ?>
 
-        <link rel="stylesheet" href="../components/navigation/navigation.css">
         <link rel="stylesheet" href="chat.css">
+        <link rel="stylesheet" href="../components/navigation/navigation.css">
     </head>
     <body class="grey lighten-5">
         <?php require "../components/navigation/navigation.php"; ?>
@@ -54,9 +32,9 @@ else {
                 <div id="title" class="col s12 blue darken-3 valign-wrapper">
                     <a href="../chats"><i id="back" class="material-icons white-text">arrow_back</i></a>
                     <div id="image-wrapper">
-                        <img id="image" class="circle" src=<?= '"' . $Image2 . '"' ?>>
+                        <img id="image" class="circle" src=<?= '"' . $UserImage[0] . '"' ?>>
                     </div>
-                    <p id="user" class="white-text"><?= $Name2 ?></p>
+                    <p id="user" class="white-text"><?= $UserName ?></p>
                 </div>
 
                 <div id="messages" class="row"></div>
@@ -74,7 +52,7 @@ else {
 
         <?php require "../include/scripts.html"; ?>
 
-        <script src="../components/navigation/navigation.js"></script>
         <script src="chat.js"></script>
+        <script src="../components/navigation/navigation.js"></script>
     </body>
 </html>
