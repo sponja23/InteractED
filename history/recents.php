@@ -3,7 +3,7 @@ function GetRecents() {
     require "../include/connect.php";
     include "../post/functions.php";
 
-    $sql = 'SELECT A.PostID, A.Title, U.Name FROM Visited V
+    $sql = 'SELECT DISTINCT A.PostID, A.Title, U.Name FROM Visited V
             INNER JOIN Articles A ON A.PostID = V.PostID
             INNER JOIN Users U ON U.UserCode = A.CreatorID
             WHERE DateLastVisited = (SELECT max(DateLastVisited) FROM Visited WHERE V.PostID = Visited.PostID)
