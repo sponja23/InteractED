@@ -4,7 +4,7 @@ session_start();
 if (!isset($_SESSION["UserCode"]))
     header("Location: ../");
 
-$Image = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
+$Image1 = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,7 +28,7 @@ $Image = glob("../images/users/" . $_SESSION["UserCode"] . ".*");
                 <div class="card-panel black-text col s12">
                     <form id="update-account" action="update.php" method="post" enctype="multipart/form-data">
                         <div class="col s12 valign-wrapper" style="margin: 20px 0;">
-                            <img id="profile-image" src=<?= '"' . $Image[0] . '"' ?> class="circle" style="width: 100px; height: 100px;">
+                            <img id="profile-image" src=<?= '"' . $Image1[0] . '"' ?> class="circle" style="width: 100px; height: 100px;">
                             <a id="change" class="btn blue waves-effect waves-light" style="margin-left: 20px;">Cambiar</a>
                             <input id="image" name="image" type="file" class="hide">
                         </div>
