@@ -25,7 +25,9 @@
                 <div class="col s12 m6 offset-m3">
                     <div class="card">
                         <div class="card-content black-text">
-                            <span id="logo" class="blue-text">InteractED</span>
+                            <a href="../">
+                            	<span id="logo" class="blue-text">InteractED</span>
+                            </a>
                             <h1 id="title">Iniciar sesi&oacute;n</h1>
                             <div id="user-field" class="input-field">
                                 <input id="user" type="text">
